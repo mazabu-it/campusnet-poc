@@ -7,6 +7,12 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { UniversityHeroComponent } from '@/blocks/UniversityHero/Component'
+import { ProgramsShowcaseComponent } from '@/blocks/ProgramsShowcase/Component'
+import { RegistrationFormComponent } from '@/blocks/RegistrationForm/Component'
+import { DashboardStatsComponent } from '@/blocks/DashboardStats/Component'
+import { NewsEventsComponent } from '@/blocks/NewsEvents/Component'
+import { FacultyShowcaseComponent } from '@/blocks/FacultyShowcase/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -14,6 +20,12 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+  'university-hero': UniversityHeroComponent,
+  'programs-showcase': ProgramsShowcaseComponent,
+  'registration-form': RegistrationFormComponent,
+  'dashboard-stats': DashboardStatsComponent,
+  'news-events': NewsEventsComponent,
+  'faculty-showcase': FacultyShowcaseComponent,
 }
 
 export const RenderBlocks: React.FC<{

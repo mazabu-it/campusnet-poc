@@ -8,10 +8,10 @@ export const resetAndSeedEndpoint: Endpoint = {
 		try {
 			console.log("🔄 Starting database reset and demo seeding...");
 
-			// Clear all Campusnet data (in reverse dependency order)
+			// Clear all Campusnet data (in correct dependency order)
 			console.log("🗑️ Clearing existing data...");
 
-			// Clear grade aggregates
+			// First, clear all dependent data
 			const gradeAggregates = await req.payload.find({
 				collection: "grade-aggregates",
 				limit: 1000,
@@ -23,7 +23,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear scores
 			const scores = await req.payload.find({
 				collection: "scores",
 				limit: 1000,
@@ -35,7 +34,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear enrollments
 			const enrollments = await req.payload.find({
 				collection: "enrollments",
 				limit: 1000,
@@ -47,7 +45,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear assessments
 			const assessments = await req.payload.find({
 				collection: "assessments",
 				limit: 1000,
@@ -59,7 +56,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear assessment templates
 			const assessmentTemplates = await req.payload.find({
 				collection: "assessment-templates",
 				limit: 1000,
@@ -71,7 +67,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear course instances
 			const courseInstances = await req.payload.find({
 				collection: "course-instances",
 				limit: 1000,
@@ -83,7 +78,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear course variations
 			const courseVariations = await req.payload.find({
 				collection: "course-variations",
 				limit: 1000,
@@ -95,7 +89,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear courses
 			const courses = await req.payload.find({
 				collection: "courses",
 				limit: 1000,
@@ -107,7 +100,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear program years
 			const programYears = await req.payload.find({
 				collection: "program-years",
 				limit: 1000,
@@ -119,7 +111,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear programs
 			const programs = await req.payload.find({
 				collection: "programs",
 				limit: 1000,
@@ -131,7 +122,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear departments
 			const departments = await req.payload.find({
 				collection: "departments",
 				limit: 1000,
@@ -143,7 +133,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear faculties
 			const faculties = await req.payload.find({
 				collection: "faculties",
 				limit: 1000,
@@ -155,31 +144,7 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear academic calendars
-			const academicCalendars = await req.payload.find({
-				collection: "academic-calendars",
-				limit: 1000,
-			});
-			for (const calendar of academicCalendars.docs) {
-				await req.payload.delete({
-					collection: "academic-calendars",
-					id: calendar.id,
-				});
-			}
-
-			// Clear academic years
-			const academicYears = await req.payload.find({
-				collection: "academic-years",
-				limit: 1000,
-			});
-			for (const year of academicYears.docs) {
-				await req.payload.delete({
-					collection: "academic-years",
-					id: year.id,
-				});
-			}
-
-			// Clear universities
+			// Clear universities first to remove foreign key constraints
 			const universities = await req.payload.find({
 				collection: "universities",
 				limit: 1000,
@@ -191,7 +156,30 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear grading scales
+			// Clear academic calendars before academic years (since calendars reference years)
+			const academicCalendars = await req.payload.find({
+				collection: "academic-calendars",
+				limit: 1000,
+			});
+			for (const calendar of academicCalendars.docs) {
+				await req.payload.delete({
+					collection: "academic-calendars",
+					id: calendar.id,
+				});
+			}
+
+			// Now clear academic years (after calendars are cleared)
+			const academicYears = await req.payload.find({
+				collection: "academic-years",
+				limit: 1000,
+			});
+			for (const year of academicYears.docs) {
+				await req.payload.delete({
+					collection: "academic-years",
+					id: year.id,
+				});
+			}
+
 			const gradingScales = await req.payload.find({
 				collection: "grading-scales",
 				limit: 1000,
@@ -203,7 +191,6 @@ export const resetAndSeedEndpoint: Endpoint = {
 				});
 			}
 
-			// Clear diploma levels
 			const diplomaLevels = await req.payload.find({
 				collection: "diploma-levels",
 				limit: 1000,
@@ -262,9 +249,9 @@ export const resetAndSeedEndpoint: Endpoint = {
 						programs: programs.docs.length,
 						departments: departments.docs.length,
 						faculties: faculties.docs.length,
+						universities: universities.docs.length,
 						academicCalendars: academicCalendars.docs.length,
 						academicYears: academicYears.docs.length,
-						universities: universities.docs.length,
 						gradingScales: gradingScales.docs.length,
 						diplomaLevels: diplomaLevels.docs.length,
 						campusnetUsers: campusnetUsers.docs.length,
@@ -277,7 +264,10 @@ export const resetAndSeedEndpoint: Endpoint = {
 				{
 					success: false,
 					error: "Failed to reset and seed database",
-					details: error instanceof Error ? error.message : "Unknown error",
+					details:
+						error instanceof Error
+							? error.message
+							: "Unknown error",
 				},
 				{ status: 500 },
 			);

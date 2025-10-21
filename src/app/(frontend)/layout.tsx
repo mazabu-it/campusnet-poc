@@ -9,6 +9,8 @@ import { Footer } from "@/Footer/Component";
 import { Header } from "@/Header/Component";
 import { Providers } from "@/providers";
 import { InitTheme } from "@/providers/Theme/InitTheme";
+import { QueryProvider } from "@/providers/QueryProvider";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { mergeOpenGraph } from "@/utilities/mergeOpenGraph";
 import { cn } from "@/utilities/ui";
 
@@ -34,17 +36,21 @@ export default async function RootLayout({
 				<link href="/favicon.svg" rel="icon" type="image/svg+xml" />
 			</head>
 			<body>
-				<Providers>
-					<AdminBar
-						adminBarProps={{
-							preview: isEnabled,
-						}}
-					/>
+				<ErrorBoundary>
+					<QueryProvider>
+						<Providers>
+							<AdminBar
+								adminBarProps={{
+									preview: isEnabled,
+								}}
+							/>
 
-					<Header />
-					{children}
-					<Footer />
-				</Providers>
+							<Header />
+							{children}
+							<Footer />
+						</Providers>
+					</QueryProvider>
+				</ErrorBoundary>
 			</body>
 		</html>
 	);

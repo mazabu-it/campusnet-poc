@@ -1131,6 +1131,513 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		console.log("Sample grade aggregate created");
 
+		// 19. Create Client-Facing Site Pages with Blocks
+		console.log("Creating client-facing site pages...");
+
+		// Create Home Page with University Hero and Programs Showcase
+		await payload.create({
+			collection: "pages",
+			data: {
+				title: "Welcome to Demo University",
+				slug: "home",
+				hero: {
+					type: "none",
+				},
+				meta: {
+					title: "Demo University - Excellence in Education",
+					description:
+						"Join Demo University for world-class education and innovative programs",
+				},
+				layout: [
+					{
+						blockType: "university-hero",
+						title: "Welcome to Demo University",
+						subtitle:
+							"Empowering Tomorrow's Leaders Through Excellence in Education",
+						primaryButtonText: "Apply Now",
+						secondaryButtonText: "Learn More",
+						stats: [
+							{
+								icon: "lucide:graduation-cap",
+								value: "2,500+",
+								label: "Students",
+							},
+							{
+								icon: "lucide:users",
+								value: "150+",
+								label: "Faculty",
+							},
+							{
+								icon: "lucide:book-open",
+								value: "25+",
+								label: "Programs",
+							},
+							{
+								icon: "lucide:award",
+								value: "95%",
+								label: "Success Rate",
+							},
+						],
+					},
+					{
+						blockType: "programs-showcase",
+						title: "Our Academic Programs",
+						subtitle:
+							"Discover world-class programs designed to prepare you for success",
+						programs: [
+							{
+								name: "Bachelor of Software Engineering",
+								description:
+									"Comprehensive program covering software development, system design, and project management.",
+								icon: "lucide:code",
+								level: "Bachelor's",
+								duration: "4 Years",
+								credits: 120,
+								studentCount: "150+",
+							},
+							{
+								name: "Master of Computer Science",
+								description:
+									"Advanced studies in algorithms, machine learning, and distributed systems.",
+								icon: "lucide:cpu",
+								level: "Master's",
+								duration: "2 Years",
+								credits: 60,
+								studentCount: "75+",
+							},
+							{
+								name: "PhD in Information Technology",
+								description:
+									"Research-focused program for future technology leaders and innovators.",
+								icon: "lucide:microscope",
+								level: "Doctorate",
+								duration: "4-6 Years",
+								credits: 90,
+								studentCount: "25+",
+							},
+						],
+					},
+					{
+						blockType: "registration-form",
+						title: "Start Your Journey",
+						subtitle:
+							"Apply to Demo University and begin your path to success",
+						programs: [
+							{
+								label: "Bachelor of Software Engineering",
+								value: "bse",
+							},
+							{
+								label: "Master of Computer Science",
+								value: "mcs",
+							},
+							{
+								label: "PhD in Information Technology",
+								value: "phd-it",
+							},
+						],
+						academicYears: [
+							{ label: "Fall 2025", value: "fall-2025" },
+							{ label: "Spring 2026", value: "spring-2026" },
+							{ label: "Fall 2026", value: "fall-2026" },
+						],
+					},
+					{
+						blockType: "news-events",
+						title: "Latest News & Events",
+						subtitle:
+							"Stay updated with university news and upcoming events",
+						items: [
+							{
+								type: "news",
+								title: "New AI Research Center Opens",
+								excerpt:
+									"Demo University launches state-of-the-art AI research facility with $5M investment.",
+								date: faker.date
+									.recent({ days: 7 })
+									.toISOString(),
+								location: "Main Campus",
+							},
+							{
+								type: "event",
+								title: "Tech Innovation Summit 2025",
+								excerpt:
+									"Join industry leaders and students for a day of innovation and networking.",
+								date: faker.date
+									.future({ years: 1 })
+									.toISOString(),
+								location: "Conference Center",
+							},
+							{
+								type: "news",
+								title: "Student Wins National Coding Competition",
+								excerpt:
+									"Our student team secures first place in the prestigious National Coding Championship.",
+								date: faker.date
+									.recent({ days: 14 })
+									.toISOString(),
+								location: "Online",
+							},
+						],
+					},
+				],
+			},
+		});
+
+		// Create University Info Page
+		await payload.create({
+			collection: "pages",
+			data: {
+				title: "About Demo University",
+				slug: "university",
+				hero: {
+					type: "none",
+				},
+				meta: {
+					title: "About Demo University - Our Mission & Vision",
+					description:
+						"Learn about Demo University's mission, vision, and commitment to excellence",
+				},
+				layout: [
+					{
+						blockType: "university-hero",
+						title: "About Demo University",
+						subtitle: "Excellence in Education Since 1995",
+						primaryButtonText: "Visit Campus",
+						secondaryButtonText: "Contact Us",
+						stats: [
+							{
+								icon: "lucide:calendar",
+								value: "30+",
+								label: "Years of Excellence",
+							},
+							{
+								icon: "lucide:building",
+								value: "5",
+								label: "Campuses",
+							},
+							{
+								icon: "lucide:globe",
+								value: "50+",
+								label: "Countries",
+							},
+							{
+								icon: "lucide:trophy",
+								value: "100+",
+								label: "Awards",
+							},
+						],
+					},
+					{
+						blockType: "faculty-showcase",
+						title: "Meet Our Faculty",
+						subtitle: "World-class educators and researchers",
+						faculty: professors.slice(0, 6).map((professor) => ({
+							name: professor.name,
+							title: "Professor",
+							department: "Computer Science",
+							avatar: faker.image.avatar(),
+							bio: faker.lorem.paragraph(),
+							education: "PhD in Computer Science",
+							email: professor.email,
+							experience: faker.number.int({ min: 5, max: 20 }),
+							specializations: [
+								{ specialization: "Software Engineering" },
+								{ specialization: "Machine Learning" },
+								{ specialization: "Data Science" },
+							],
+						})),
+					},
+				],
+			},
+		});
+
+		// Create Dashboard Page
+		await payload.create({
+			collection: "pages",
+			data: {
+				title: "University Dashboard",
+				slug: "dashboard",
+				hero: {
+					type: "none",
+				},
+				meta: {
+					title: "University Dashboard - Analytics & Insights",
+					description:
+						"View university statistics and performance metrics",
+				},
+				layout: [
+					{
+						blockType: "dashboard-stats",
+						title: "University Analytics",
+						subtitle: "Key performance indicators and trends",
+						metrics: [
+							{
+								label: "Total Enrollments",
+								value: "2,547",
+								icon: "lucide:users",
+								trend: "up",
+								change: "+12%",
+							},
+							{
+								label: "Graduation Rate",
+								value: "94.2%",
+								icon: "lucide:graduation-cap",
+								trend: "up",
+								change: "+2.1%",
+							},
+							{
+								label: "Student Satisfaction",
+								value: "4.8/5",
+								icon: "lucide:star",
+								trend: "up",
+								change: "+0.3",
+							},
+							{
+								label: "Research Funding",
+								value: "$12.5M",
+								icon: "lucide:dollar-sign",
+								trend: "up",
+								change: "+18%",
+							},
+						],
+						enrollmentData: [
+							{ month: "Jan", enrollments: 45 },
+							{ month: "Feb", enrollments: 52 },
+							{ month: "Mar", enrollments: 48 },
+							{ month: "Apr", enrollments: 61 },
+							{ month: "May", enrollments: 55 },
+							{ month: "Jun", enrollments: 67 },
+						],
+						programData: [
+							{ name: "Software Engineering", value: 35 },
+							{ name: "Computer Science", value: 28 },
+							{ name: "Information Technology", value: 22 },
+							{ name: "Data Science", value: 15 },
+						],
+						goals: [
+							{
+								name: "Increase Enrollment",
+								description: "Target 3,000 students by 2026",
+								progress: 85,
+							},
+							{
+								name: "Research Excellence",
+								description: "Achieve top 10 research ranking",
+								progress: 72,
+							},
+							{
+								name: "Student Success",
+								description: "Maintain 95%+ graduation rate",
+								progress: 94,
+							},
+						],
+					},
+				],
+			},
+		});
+
+		// Create Registration Page
+		await payload.create({
+			collection: "pages",
+			data: {
+				title: "Student Registration",
+				slug: "registration",
+				hero: {
+					type: "none",
+				},
+				meta: {
+					title: "Student Registration - Apply to Demo University",
+					description:
+						"Complete your application to join Demo University",
+				},
+				layout: [
+					{
+						blockType: "registration-form",
+						title: "Apply to Demo University",
+						subtitle:
+							"Take the first step towards your future success",
+						programs: [
+							{
+								label: "Bachelor of Software Engineering",
+								value: "bse",
+							},
+							{
+								label: "Master of Computer Science",
+								value: "mcs",
+							},
+							{
+								label: "PhD in Information Technology",
+								value: "phd-it",
+							},
+							{ label: "Bachelor of Data Science", value: "bds" },
+							{
+								label: "Master of AI Engineering",
+								value: "maie",
+							},
+						],
+						academicYears: [
+							{ label: "Fall 2025", value: "fall-2025" },
+							{ label: "Spring 2026", value: "spring-2026" },
+							{ label: "Fall 2026", value: "fall-2026" },
+							{ label: "Spring 2027", value: "spring-2027" },
+						],
+					},
+				],
+			},
+		});
+
+		// Create News Page
+		await payload.create({
+			collection: "pages",
+			data: {
+				title: "News & Events",
+				slug: "news",
+				hero: {
+					type: "none",
+				},
+				meta: {
+					title: "News & Events - Demo University",
+					description:
+						"Stay updated with the latest news and events at Demo University",
+				},
+				layout: [
+					{
+						blockType: "news-events",
+						title: "University News & Events",
+						subtitle:
+							"Stay connected with campus life and achievements",
+						items: [
+							{
+								type: "news",
+								title: "University Receives Accreditation Renewal",
+								excerpt:
+									"Demo University has successfully renewed its accreditation for another 10 years.",
+								date: faker.date
+									.recent({ days: 3 })
+									.toISOString(),
+								location: "Main Campus",
+							},
+							{
+								type: "event",
+								title: "Annual Career Fair 2025",
+								excerpt:
+									"Connect with top employers and explore career opportunities.",
+								date: faker.date
+									.future({ years: 1 })
+									.toISOString(),
+								location: "Student Center",
+							},
+							{
+								type: "news",
+								title: "Research Grant Awarded",
+								excerpt:
+									"Faculty receives $2M grant for cybersecurity research project.",
+								date: faker.date
+									.recent({ days: 10 })
+									.toISOString(),
+								location: "Research Center",
+							},
+							{
+								type: "event",
+								title: "Alumni Reunion Weekend",
+								excerpt:
+									"Join fellow alumni for a weekend of networking and celebration.",
+								date: faker.date
+									.future({ years: 1 })
+									.toISOString(),
+								location: "Alumni Hall",
+							},
+							{
+								type: "news",
+								title: "New Student Housing Opens",
+								excerpt:
+									"Modern residence hall provides housing for 500 additional students.",
+								date: faker.date
+									.recent({ days: 21 })
+									.toISOString(),
+								location: "North Campus",
+							},
+							{
+								type: "event",
+								title: "Tech Innovation Conference",
+								excerpt:
+									"Industry leaders discuss the future of technology in education.",
+								date: faker.date
+									.future({ years: 1 })
+									.toISOString(),
+								location: "Conference Center",
+							},
+						],
+					},
+				],
+			},
+		});
+
+		// Create Faculty Page
+		await payload.create({
+			collection: "pages",
+			data: {
+				title: "Our Faculty",
+				slug: "faculty",
+				hero: {
+					type: "none",
+				},
+				meta: {
+					title: "Faculty - Meet Our Professors",
+					description:
+						"Learn about our distinguished faculty members and their expertise",
+				},
+				layout: [
+					{
+						blockType: "faculty-showcase",
+						title: "Meet Our Distinguished Faculty",
+						subtitle:
+							"World-class educators and researchers dedicated to student success",
+						faculty: professors.map((professor) => ({
+							name: professor.name,
+							title: faker.helpers.arrayElement([
+								"Professor",
+								"Associate Professor",
+								"Assistant Professor",
+								"Distinguished Professor",
+							]),
+							department: "Computer Science",
+							avatar: faker.image.avatar(),
+							bio: faker.lorem.paragraphs(2),
+							education: faker.helpers.arrayElement([
+								"PhD in Computer Science, MIT",
+								"PhD in Software Engineering, Stanford",
+								"PhD in Information Technology, Carnegie Mellon",
+								"PhD in Data Science, Berkeley",
+							]),
+							email: professor.email,
+							experience: faker.number.int({ min: 5, max: 25 }),
+							specializations: faker.helpers
+								.arrayElements(
+									[
+										"Software Engineering",
+										"Machine Learning",
+										"Data Science",
+										"Cybersecurity",
+										"Web Development",
+										"Mobile Development",
+										"Database Systems",
+										"Computer Networks",
+										"Human-Computer Interaction",
+										"Artificial Intelligence",
+									],
+									{ min: 2, max: 4 },
+								)
+								.map((spec) => ({ specialization: spec })),
+						})),
+					},
+				],
+			},
+		});
+
+		console.log("✅ Client-facing site pages created successfully!");
+
 		console.log("✅ Campusnet demo data seeding completed successfully!");
 		console.log("📊 Created:");
 		console.log("  - 1 University (Demo University)");
@@ -1149,6 +1656,12 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		console.log(`  - ${enrollments.length} Enrollments`);
 		console.log(`  - ${scoreCount} Scores`);
 		console.log("  - 3 Grade Aggregates");
+		console.log(
+			"  - 6 Client-Facing Pages (Home, University, Dashboard, Registration, News, Faculty)",
+		);
+		console.log(
+			"  - All Payload Blocks (University Hero, Programs Showcase, Registration Form, Dashboard Stats, News & Events, Faculty Showcase)",
+		);
 		console.log("");
 		console.log("🎓 Demo Credentials:");
 		console.log("  All users have password: password123");

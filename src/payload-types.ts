@@ -225,7 +225,305 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | {
+        /**
+         * Main headline for the hero section
+         */
+        title: string;
+        /**
+         * Subtitle or description text
+         */
+        subtitle: string;
+        /**
+         * Text for the primary call-to-action button
+         */
+        primaryButtonText?: string | null;
+        /**
+         * Text for the secondary button
+         */
+        secondaryButtonText?: string | null;
+        /**
+         * Statistics to display in the hero section
+         */
+        stats?:
+          | {
+              /**
+               * Iconify icon name (e.g., 'lucide:users')
+               */
+              icon: string;
+              /**
+               * Statistic value (e.g., '10,000+')
+               */
+              value: string;
+              /**
+               * Statistic label (e.g., 'Students')
+               */
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'university-hero';
+      }
+    | {
+        /**
+         * Section title
+         */
+        title: string;
+        /**
+         * Section subtitle or description
+         */
+        subtitle: string;
+        /**
+         * Programs to showcase
+         */
+        programs: {
+          /**
+           * Program name
+           */
+          name: string;
+          /**
+           * Program description
+           */
+          description: string;
+          /**
+           * Iconify icon name
+           */
+          icon: string;
+          /**
+           * Program level (e.g., Bachelor, Master)
+           */
+          level: string;
+          /**
+           * Program duration (e.g., '4 years')
+           */
+          duration: string;
+          /**
+           * Total credits required
+           */
+          credits: number;
+          /**
+           * Number of students (e.g., '500+')
+           */
+          studentCount: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'programs-showcase';
+      }
+    | {
+        /**
+         * Form section title
+         */
+        title: string;
+        /**
+         * Form section subtitle
+         */
+        subtitle: string;
+        /**
+         * Available programs for selection
+         */
+        programs: {
+          /**
+           * Display label for the program
+           */
+          label: string;
+          /**
+           * Value for the program option
+           */
+          value: string;
+          id?: string | null;
+        }[];
+        /**
+         * Available academic years
+         */
+        academicYears: {
+          /**
+           * Display label for the academic year
+           */
+          label: string;
+          /**
+           * Value for the academic year option
+           */
+          value: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'registration-form';
+      }
+    | {
+        /**
+         * Section title
+         */
+        title: string;
+        /**
+         * Section subtitle
+         */
+        subtitle: string;
+        /**
+         * Key metrics to display
+         */
+        metrics: {
+          /**
+           * Metric label
+           */
+          label: string;
+          /**
+           * Metric value
+           */
+          value: string;
+          /**
+           * Iconify icon name
+           */
+          icon: string;
+          trend: 'up' | 'down';
+          /**
+           * Change percentage (e.g., '+12%')
+           */
+          change: string;
+          id?: string | null;
+        }[];
+        /**
+         * Enrollment trend data
+         */
+        enrollmentData?:
+          | {
+              month: string;
+              enrollments: number;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Program distribution data
+         */
+        programData?:
+          | {
+              name: string;
+              value: number;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Academic goals progress
+         */
+        goals?:
+          | {
+              name: string;
+              description: string;
+              progress: number;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'dashboard-stats';
+      }
+    | {
+        /**
+         * Section title
+         */
+        title: string;
+        /**
+         * Section subtitle
+         */
+        subtitle: string;
+        /**
+         * News and events items
+         */
+        items: {
+          type: 'news' | 'event';
+          /**
+           * Item title
+           */
+          title: string;
+          /**
+           * Short description or excerpt
+           */
+          excerpt: string;
+          /**
+           * Publication or event date
+           */
+          date: string;
+          /**
+           * Location (for events) or source (for news)
+           */
+          location: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'news-events';
+      }
+    | {
+        /**
+         * Section title
+         */
+        title: string;
+        /**
+         * Section subtitle
+         */
+        subtitle: string;
+        /**
+         * Faculty members to showcase
+         */
+        faculty: {
+          /**
+           * Faculty member name
+           */
+          name: string;
+          /**
+           * Job title or position
+           */
+          title: string;
+          /**
+           * Department affiliation
+           */
+          department: string;
+          /**
+           * Avatar image URL
+           */
+          avatar?: string | null;
+          /**
+           * Short biography
+           */
+          bio: string;
+          /**
+           * Educational background
+           */
+          education: string;
+          /**
+           * Contact email
+           */
+          email: string;
+          /**
+           * Years of experience
+           */
+          experience: number;
+          /**
+           * Areas of specialization
+           */
+          specializations?:
+            | {
+                specialization: string;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faculty-showcase';
+      }
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -1785,6 +2083,151 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        'university-hero'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              primaryButtonText?: T;
+              secondaryButtonText?: T;
+              stats?:
+                | T
+                | {
+                    icon?: T;
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'programs-showcase'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              programs?:
+                | T
+                | {
+                    name?: T;
+                    description?: T;
+                    icon?: T;
+                    level?: T;
+                    duration?: T;
+                    credits?: T;
+                    studentCount?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'registration-form'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              programs?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              academicYears?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'dashboard-stats'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              metrics?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    icon?: T;
+                    trend?: T;
+                    change?: T;
+                    id?: T;
+                  };
+              enrollmentData?:
+                | T
+                | {
+                    month?: T;
+                    enrollments?: T;
+                    id?: T;
+                  };
+              programData?:
+                | T
+                | {
+                    name?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              goals?:
+                | T
+                | {
+                    name?: T;
+                    description?: T;
+                    progress?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'news-events'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              items?:
+                | T
+                | {
+                    type?: T;
+                    title?: T;
+                    excerpt?: T;
+                    date?: T;
+                    location?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'faculty-showcase'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              faculty?:
+                | T
+                | {
+                    name?: T;
+                    title?: T;
+                    department?: T;
+                    avatar?: T;
+                    bio?: T;
+                    education?: T;
+                    email?: T;
+                    experience?: T;
+                    specializations?:
+                      | T
+                      | {
+                          specialization?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T

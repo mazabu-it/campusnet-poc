@@ -7,6 +7,12 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { UniversityHeroBlock } from '../../blocks/UniversityHero/config'
+import { ProgramsShowcaseBlock } from '../../blocks/ProgramsShowcase/config'
+import { RegistrationFormBlock } from '../../blocks/RegistrationForm/config'
+import { DashboardStatsBlock } from '../../blocks/DashboardStats/config'
+import { NewsEventsBlock } from '../../blocks/NewsEvents/config'
+import { FacultyShowcaseBlock } from '../../blocks/FacultyShowcase/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -72,7 +78,19 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                CallToAction, 
+                Content, 
+                MediaBlock, 
+                Archive, 
+                FormBlock,
+                UniversityHeroBlock,
+                ProgramsShowcaseBlock,
+                RegistrationFormBlock,
+                DashboardStatsBlock,
+                NewsEventsBlock,
+                FacultyShowcaseBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,
