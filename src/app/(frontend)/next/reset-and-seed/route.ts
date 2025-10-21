@@ -4,7 +4,7 @@ export async function POST(_req: NextRequest) {
 	try {
 		// Call the Payload endpoint
 		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/api/reset-and-seed`,
+			`${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/reset-and-seed`,
 			{
 				method: "POST",
 				headers: {

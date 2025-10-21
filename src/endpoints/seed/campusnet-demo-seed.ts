@@ -459,8 +459,13 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				phone: "+1-555-0101",
 				officeLocation: "CS Building, Room 205",
 				officeHours: "Mon/Wed 2:00-4:00 PM",
-				specializations: ["Software Engineering", "Algorithms", "Data Structures"],
-				biography: "Dr. Johnson has 15 years of experience in software engineering and algorithm design.",
+				specializations: [
+					"Software Engineering",
+					"Algorithms",
+					"Data Structures",
+				],
+				biography:
+					"Dr. Johnson has 15 years of experience in software engineering and algorithm design.",
 				isActive: true,
 			},
 		});
@@ -574,7 +579,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				professors: [professor.id],
 			},
 		});
-
 
 		// 14. Create Assessment Templates
 		console.log("Creating assessment templates...");
