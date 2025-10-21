@@ -29,7 +29,9 @@ export class GradeCalculationEngine {
 	/**
 	 * Calculate final grade for an enrollment
 	 */
-	async calculateGrade(enrollmentId: string): Promise<GradeCalculationResult> {
+	async calculateGrade(
+		enrollmentId: string,
+	): Promise<GradeCalculationResult> {
 		const enrollment = await this.req.payload.findByID({
 			collection: "enrollments",
 			id: enrollmentId,
@@ -91,7 +93,8 @@ export class GradeCalculationEngine {
 		if (
 			typeof courseInstance.courseVariation === "object" &&
 			typeof courseInstance.courseVariation.department === "object" &&
-			typeof courseInstance.courseVariation.department.faculty === "object"
+			typeof courseInstance.courseVariation.department.faculty ===
+				"object"
 		) {
 			const faculty = courseInstance.courseVariation.department.faculty;
 			universityId =
@@ -110,7 +113,9 @@ export class GradeCalculationEngine {
 			});
 			const department = courseVariation.department;
 			const faculty =
-				typeof department === "object" ? department.faculty : department;
+				typeof department === "object"
+					? department.faculty
+					: department;
 			if (typeof faculty === "object") {
 				universityId =
 					typeof faculty.university === "object"
@@ -159,27 +164,33 @@ export class GradeCalculationEngine {
 
 		for (const template of templates) {
 			const score = scores.find(
-				(s) => (s as any).assessment.assessmentTemplate === template.id,
+				(s) =>
+					(s as { assessment: { assessmentTemplate: string } })
+						.assessment.assessmentTemplate === template.id,
 			);
 
-			const isMissing = !score && !(template as any).isOptional;
-			const isExcused = (score as any)?.isExcused || false;
+			const isMissing =
+				!score && !(template as { isOptional: boolean }).isOptional;
+			const isExcused =
+				(score as { isExcused?: boolean })?.isExcused || false;
 
 			if (isMissing && !template.isOptional) {
 				hasMissingRequired = true;
 			}
 
-			const scoreValue = (score as any)?.finalValue || 0;
-			const maxScore = (template as any).maxScore;
-			const weight = (template as any).weightPercent / 100;
+			const scoreValue =
+				(score as { finalValue?: number })?.finalValue || 0;
+			const maxScore = (template as { maxScore: number }).maxScore;
+			const weight =
+				(template as { weightPercent: number }).weightPercent / 100;
 
 			const contribution = isExcused ? 0 : scoreValue * weight;
 
 			breakdown.push({
-				assessmentTemplate: (template as any).id,
+				assessmentTemplate: (template as { id: string }).id,
 				score: scoreValue,
 				maxScore,
-				weight: (template as any).weightPercent,
+				weight: (template as { weightPercent: number }).weightPercent,
 				contribution,
 				isMissing,
 				isExcused,
@@ -192,27 +203,33 @@ export class GradeCalculationEngine {
 		}
 
 		// Calculate final numeric score
-		const finalNumeric = totalWeight > 0 ? totalWeightedScore / totalWeight : 0;
+		const finalNumeric =
+			totalWeight > 0 ? totalWeightedScore / totalWeight : 0;
 
 		// Apply rounding
 		const roundedNumeric = this.applyRounding(
 			finalNumeric,
-			(config as any).roundingRule,
-			(config as any).decimalPrecision,
+			(config as { roundingRule: string }).roundingRule,
+			(config as { decimalPrecision: number }).decimalPrecision,
 		);
 
 		// Determine letter grade and pass/fail
-		const gradeMapping = this.findGradeMapping(roundedNumeric, gradingScale);
+		const gradeMapping = this.findGradeMapping(
+			roundedNumeric,
+			gradingScale,
+		);
 
 		return {
 			finalNumeric: roundedNumeric,
-			finalLetter: (gradeMapping as any).letterGrade || "",
+			finalLetter:
+				(gradeMapping as { letterGrade?: string }).letterGrade || "",
 			passFail: hasMissingRequired
 				? "incomplete"
-				: (gradeMapping as any).isPassing
+				: (gradeMapping as { isPassing?: boolean }).isPassing
 					? "pass"
 					: "fail",
-			gpaPoints: (gradeMapping as any).numericGrade || 0,
+			gpaPoints:
+				(gradeMapping as { numericGrade?: number }).numericGrade || 0,
 			assessmentBreakdown: breakdown,
 			calculationMethod: "weighted-average" as const,
 		};
@@ -248,11 +265,12 @@ export class GradeCalculationEngine {
 		score: number,
 		gradingScale: Record<string, unknown>,
 	): Record<string, unknown> {
-		const mappings = (gradingScale as any).gradeMappings;
+		const mappings = (gradingScale as { gradeMappings: unknown[] })
+			.gradeMappings;
 		for (const mapping of mappings) {
 			if (
-				score >= (mapping as any).minScore &&
-				score <= (mapping as any).maxScore
+				score >= (mapping as { minScore: number }).minScore &&
+				score <= (mapping as { maxScore: number }).maxScore
 			) {
 				return mapping;
 			}
@@ -318,7 +336,7 @@ export class GradeCalculationEngine {
 				collection: "grade-aggregates",
 				id: existing.docs[0].id,
 				data: {
-					...(calculation as any),
+					...(calculation as Record<string, unknown>),
 					calculatedAt: new Date().toISOString(),
 				},
 			});
@@ -328,7 +346,7 @@ export class GradeCalculationEngine {
 				collection: "grade-aggregates",
 				data: {
 					enrollment: enrollmentId,
-					...(calculation as any),
+					...(calculation as Record<string, unknown>),
 					calculatedAt: new Date().toISOString(),
 				},
 			});

@@ -1,9 +1,9 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
-import path from "path";
 import { buildConfig, type PayloadRequest } from "payload";
 import sharp from "sharp"; // sharp-import
-import { fileURLToPath } from "url";
 import { defaultLexical } from "@/fields/defaultLexical";
 import { AcademicCalendar } from "./collections/AcademicCalendar";
 import { AcademicYear } from "./collections/AcademicYear";

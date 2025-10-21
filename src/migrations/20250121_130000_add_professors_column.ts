@@ -1,11 +1,11 @@
 import {
 	type MigrateDownArgs,
 	type MigrateUpArgs,
-	sql,
+	sql: _sql,
 } from "@payloadcms/db-vercel-postgres";
 
 export async function up({
-	db,
+	db: _db,
 	payload: _payload,
 	req: _req,
 }: MigrateUpArgs): Promise<void> {
@@ -17,7 +17,7 @@ export async function up({
 }
 
 export async function down({
-	db,
+	db: _db,
 	payload: _payload,
 	req: _req,
 }: MigrateDownArgs): Promise<void> {

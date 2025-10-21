@@ -14,7 +14,10 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 						gcTime: 5 * 60 * 1000, // 5 minutes
 						retry: (failureCount, error) => {
 							// Don't retry on 4xx errors
-							if (error instanceof Error && error.message.includes('4')) {
+							if (
+								error instanceof Error &&
+								error.message.includes("4")
+							) {
 								return false;
 							}
 							return failureCount < 3;
@@ -24,7 +27,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 						retry: false,
 					},
 				},
-			})
+			}),
 	);
 
 	return (

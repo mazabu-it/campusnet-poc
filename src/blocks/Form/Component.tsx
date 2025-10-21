@@ -156,8 +156,7 @@ export const FormBlock: React.FC<
 						<form id={formID} onSubmit={handleSubmit(onSubmit)}>
 							<div className="mb-4 last:mb-0">
 								{formFromProps?.fields?.map((field, index) => {
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any
-									const Field: React.FC<any> =
+									const Field: React.FC<unknown> =
 										fields?.[
 											field.blockType as keyof typeof fields
 										];

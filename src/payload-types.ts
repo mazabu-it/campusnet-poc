@@ -13,1759 +13,1904 @@
  * via the `definition` "supportedTimezones".
  */
 export type SupportedTimezones =
-  | 'Pacific/Midway'
-  | 'Pacific/Niue'
-  | 'Pacific/Honolulu'
-  | 'Pacific/Rarotonga'
-  | 'America/Anchorage'
-  | 'Pacific/Gambier'
-  | 'America/Los_Angeles'
-  | 'America/Tijuana'
-  | 'America/Denver'
-  | 'America/Phoenix'
-  | 'America/Chicago'
-  | 'America/Guatemala'
-  | 'America/New_York'
-  | 'America/Bogota'
-  | 'America/Caracas'
-  | 'America/Santiago'
-  | 'America/Buenos_Aires'
-  | 'America/Sao_Paulo'
-  | 'Atlantic/South_Georgia'
-  | 'Atlantic/Azores'
-  | 'Atlantic/Cape_Verde'
-  | 'Europe/London'
-  | 'Europe/Berlin'
-  | 'Africa/Lagos'
-  | 'Europe/Athens'
-  | 'Africa/Cairo'
-  | 'Europe/Moscow'
-  | 'Asia/Riyadh'
-  | 'Asia/Dubai'
-  | 'Asia/Baku'
-  | 'Asia/Karachi'
-  | 'Asia/Tashkent'
-  | 'Asia/Calcutta'
-  | 'Asia/Dhaka'
-  | 'Asia/Almaty'
-  | 'Asia/Jakarta'
-  | 'Asia/Bangkok'
-  | 'Asia/Shanghai'
-  | 'Asia/Singapore'
-  | 'Asia/Tokyo'
-  | 'Asia/Seoul'
-  | 'Australia/Brisbane'
-  | 'Australia/Sydney'
-  | 'Pacific/Guam'
-  | 'Pacific/Noumea'
-  | 'Pacific/Auckland'
-  | 'Pacific/Fiji';
+	| "Pacific/Midway"
+	| "Pacific/Niue"
+	| "Pacific/Honolulu"
+	| "Pacific/Rarotonga"
+	| "America/Anchorage"
+	| "Pacific/Gambier"
+	| "America/Los_Angeles"
+	| "America/Tijuana"
+	| "America/Denver"
+	| "America/Phoenix"
+	| "America/Chicago"
+	| "America/Guatemala"
+	| "America/New_York"
+	| "America/Bogota"
+	| "America/Caracas"
+	| "America/Santiago"
+	| "America/Buenos_Aires"
+	| "America/Sao_Paulo"
+	| "Atlantic/South_Georgia"
+	| "Atlantic/Azores"
+	| "Atlantic/Cape_Verde"
+	| "Europe/London"
+	| "Europe/Berlin"
+	| "Africa/Lagos"
+	| "Europe/Athens"
+	| "Africa/Cairo"
+	| "Europe/Moscow"
+	| "Asia/Riyadh"
+	| "Asia/Dubai"
+	| "Asia/Baku"
+	| "Asia/Karachi"
+	| "Asia/Tashkent"
+	| "Asia/Calcutta"
+	| "Asia/Dhaka"
+	| "Asia/Almaty"
+	| "Asia/Jakarta"
+	| "Asia/Bangkok"
+	| "Asia/Shanghai"
+	| "Asia/Singapore"
+	| "Asia/Tokyo"
+	| "Asia/Seoul"
+	| "Australia/Brisbane"
+	| "Australia/Sydney"
+	| "Pacific/Guam"
+	| "Pacific/Noumea"
+	| "Pacific/Auckland"
+	| "Pacific/Fiji";
 
 export interface Config {
-  auth: {
-    users: UserAuthOperations;
-  };
-  blocks: {};
-  collections: {
-    pages: Page;
-    posts: Post;
-    media: Media;
-    categories: Category;
-    users: User;
-    universities: University;
-    faculties: Faculty;
-    departments: Department;
-    'diploma-levels': DiplomaLevel;
-    programs: Program;
-    'academic-years': AcademicYear;
-    'program-years': ProgramYear;
-    courses: Course;
-    'course-variations': CourseVariation;
-    'course-instances': CourseInstance;
-    'grading-scales': GradingScale;
-    'academic-calendars': AcademicCalendar;
-    'assessment-templates': AssessmentTemplate;
-    assessments: Assessment;
-    enrollments: Enrollment;
-    scores: Score;
-    'grade-aggregates': GradeAggregate;
-    redirects: Redirect;
-    forms: Form;
-    'form-submissions': FormSubmission;
-    search: Search;
-    'payload-jobs': PayloadJob;
-    'payload-locked-documents': PayloadLockedDocument;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
-  };
-  collectionsJoins: {};
-  collectionsSelect: {
-    pages: PagesSelect<false> | PagesSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    users: UsersSelect<false> | UsersSelect<true>;
-    universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
-    faculties: FacultiesSelect<false> | FacultiesSelect<true>;
-    departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
-    'diploma-levels': DiplomaLevelsSelect<false> | DiplomaLevelsSelect<true>;
-    programs: ProgramsSelect<false> | ProgramsSelect<true>;
-    'academic-years': AcademicYearsSelect<false> | AcademicYearsSelect<true>;
-    'program-years': ProgramYearsSelect<false> | ProgramYearsSelect<true>;
-    courses: CoursesSelect<false> | CoursesSelect<true>;
-    'course-variations': CourseVariationsSelect<false> | CourseVariationsSelect<true>;
-    'course-instances': CourseInstancesSelect<false> | CourseInstancesSelect<true>;
-    'grading-scales': GradingScalesSelect<false> | GradingScalesSelect<true>;
-    'academic-calendars': AcademicCalendarsSelect<false> | AcademicCalendarsSelect<true>;
-    'assessment-templates': AssessmentTemplatesSelect<false> | AssessmentTemplatesSelect<true>;
-    assessments: AssessmentsSelect<false> | AssessmentsSelect<true>;
-    enrollments: EnrollmentsSelect<false> | EnrollmentsSelect<true>;
-    scores: ScoresSelect<false> | ScoresSelect<true>;
-    'grade-aggregates': GradeAggregatesSelect<false> | GradeAggregatesSelect<true>;
-    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
-    forms: FormsSelect<false> | FormsSelect<true>;
-    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
-    search: SearchSelect<false> | SearchSelect<true>;
-    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
-  };
-  db: {
-    defaultIDType: number;
-  };
-  globals: {
-    header: Header;
-    footer: Footer;
-  };
-  globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>;
-    footer: FooterSelect<false> | FooterSelect<true>;
-  };
-  locale: null;
-  user: User & {
-    collection: 'users';
-  };
-  jobs: {
-    tasks: {
-      schedulePublish: TaskSchedulePublish;
-      inline: {
-        input: unknown;
-        output: unknown;
-      };
-    };
-    workflows: unknown;
-  };
+	auth: {
+		users: UserAuthOperations;
+	};
+	blocks: {};
+	collections: {
+		pages: Page;
+		posts: Post;
+		media: Media;
+		categories: Category;
+		users: User;
+		universities: University;
+		faculties: Faculty;
+		departments: Department;
+		"diploma-levels": DiplomaLevel;
+		programs: Program;
+		"academic-years": AcademicYear;
+		"program-years": ProgramYear;
+		courses: Course;
+		"course-variations": CourseVariation;
+		"course-instances": CourseInstance;
+		"grading-scales": GradingScale;
+		"academic-calendars": AcademicCalendar;
+		"assessment-templates": AssessmentTemplate;
+		assessments: Assessment;
+		enrollments: Enrollment;
+		scores: Score;
+		"grade-aggregates": GradeAggregate;
+		redirects: Redirect;
+		forms: Form;
+		"form-submissions": FormSubmission;
+		search: Search;
+		"payload-jobs": PayloadJob;
+		"payload-locked-documents": PayloadLockedDocument;
+		"payload-preferences": PayloadPreference;
+		"payload-migrations": PayloadMigration;
+	};
+	collectionsJoins: {};
+	collectionsSelect: {
+		pages: PagesSelect<false> | PagesSelect<true>;
+		posts: PostsSelect<false> | PostsSelect<true>;
+		media: MediaSelect<false> | MediaSelect<true>;
+		categories: CategoriesSelect<false> | CategoriesSelect<true>;
+		users: UsersSelect<false> | UsersSelect<true>;
+		universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+		faculties: FacultiesSelect<false> | FacultiesSelect<true>;
+		departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
+		"diploma-levels":
+			| DiplomaLevelsSelect<false>
+			| DiplomaLevelsSelect<true>;
+		programs: ProgramsSelect<false> | ProgramsSelect<true>;
+		"academic-years":
+			| AcademicYearsSelect<false>
+			| AcademicYearsSelect<true>;
+		"program-years": ProgramYearsSelect<false> | ProgramYearsSelect<true>;
+		courses: CoursesSelect<false> | CoursesSelect<true>;
+		"course-variations":
+			| CourseVariationsSelect<false>
+			| CourseVariationsSelect<true>;
+		"course-instances":
+			| CourseInstancesSelect<false>
+			| CourseInstancesSelect<true>;
+		"grading-scales":
+			| GradingScalesSelect<false>
+			| GradingScalesSelect<true>;
+		"academic-calendars":
+			| AcademicCalendarsSelect<false>
+			| AcademicCalendarsSelect<true>;
+		"assessment-templates":
+			| AssessmentTemplatesSelect<false>
+			| AssessmentTemplatesSelect<true>;
+		assessments: AssessmentsSelect<false> | AssessmentsSelect<true>;
+		enrollments: EnrollmentsSelect<false> | EnrollmentsSelect<true>;
+		scores: ScoresSelect<false> | ScoresSelect<true>;
+		"grade-aggregates":
+			| GradeAggregatesSelect<false>
+			| GradeAggregatesSelect<true>;
+		redirects: RedirectsSelect<false> | RedirectsSelect<true>;
+		forms: FormsSelect<false> | FormsSelect<true>;
+		"form-submissions":
+			| FormSubmissionsSelect<false>
+			| FormSubmissionsSelect<true>;
+		search: SearchSelect<false> | SearchSelect<true>;
+		"payload-jobs": PayloadJobsSelect<false> | PayloadJobsSelect<true>;
+		"payload-locked-documents":
+			| PayloadLockedDocumentsSelect<false>
+			| PayloadLockedDocumentsSelect<true>;
+		"payload-preferences":
+			| PayloadPreferencesSelect<false>
+			| PayloadPreferencesSelect<true>;
+		"payload-migrations":
+			| PayloadMigrationsSelect<false>
+			| PayloadMigrationsSelect<true>;
+	};
+	db: {
+		defaultIDType: number;
+	};
+	globals: {
+		header: Header;
+		footer: Footer;
+	};
+	globalsSelect: {
+		header: HeaderSelect<false> | HeaderSelect<true>;
+		footer: FooterSelect<false> | FooterSelect<true>;
+	};
+	locale: null;
+	user: User & {
+		collection: "users";
+	};
+	jobs: {
+		tasks: {
+			schedulePublish: TaskSchedulePublish;
+			inline: {
+				input: unknown;
+				output: unknown;
+			};
+		};
+		workflows: unknown;
+	};
 }
 export interface UserAuthOperations {
-  forgotPassword: {
-    email: string;
-    password: string;
-  };
-  login: {
-    email: string;
-    password: string;
-  };
-  registerFirstUser: {
-    email: string;
-    password: string;
-  };
-  unlock: {
-    email: string;
-    password: string;
-  };
+	forgotPassword: {
+		email: string;
+		password: string;
+	};
+	login: {
+		email: string;
+		password: string;
+	};
+	registerFirstUser: {
+		email: string;
+		password: string;
+	};
+	unlock: {
+		email: string;
+		password: string;
+	};
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
-  title: string;
-  hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    richText?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: number | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
-    media?: (number | null) | Media;
-  };
-  layout: (
-    | CallToActionBlock
-    | ContentBlock
-    | MediaBlock
-    | ArchiveBlock
-    | FormBlock
-    | {
-        /**
-         * Main headline for the hero section
-         */
-        title: string;
-        /**
-         * Subtitle or description text
-         */
-        subtitle: string;
-        /**
-         * Text for the primary call-to-action button
-         */
-        primaryButtonText?: string | null;
-        /**
-         * Text for the secondary button
-         */
-        secondaryButtonText?: string | null;
-        /**
-         * Statistics to display in the hero section
-         */
-        stats?:
-          | {
-              /**
-               * Iconify icon name (e.g., 'lucide:users')
-               */
-              icon: string;
-              /**
-               * Statistic value (e.g., '10,000+')
-               */
-              value: string;
-              /**
-               * Statistic label (e.g., 'Students')
-               */
-              label: string;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'university-hero';
-      }
-    | {
-        /**
-         * Section title
-         */
-        title: string;
-        /**
-         * Section subtitle or description
-         */
-        subtitle: string;
-        /**
-         * Programs to showcase
-         */
-        programs: {
-          /**
-           * Program name
-           */
-          name: string;
-          /**
-           * Program description
-           */
-          description: string;
-          /**
-           * Iconify icon name
-           */
-          icon: string;
-          /**
-           * Program level (e.g., Bachelor, Master)
-           */
-          level: string;
-          /**
-           * Program duration (e.g., '4 years')
-           */
-          duration: string;
-          /**
-           * Total credits required
-           */
-          credits: number;
-          /**
-           * Number of students (e.g., '500+')
-           */
-          studentCount: string;
-          id?: string | null;
-        }[];
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'programs-showcase';
-      }
-    | {
-        /**
-         * Form section title
-         */
-        title: string;
-        /**
-         * Form section subtitle
-         */
-        subtitle: string;
-        /**
-         * Available programs for selection
-         */
-        programs: {
-          /**
-           * Display label for the program
-           */
-          label: string;
-          /**
-           * Value for the program option
-           */
-          value: string;
-          id?: string | null;
-        }[];
-        /**
-         * Available academic years
-         */
-        academicYears: {
-          /**
-           * Display label for the academic year
-           */
-          label: string;
-          /**
-           * Value for the academic year option
-           */
-          value: string;
-          id?: string | null;
-        }[];
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'registration-form';
-      }
-    | {
-        /**
-         * Section title
-         */
-        title: string;
-        /**
-         * Section subtitle
-         */
-        subtitle: string;
-        /**
-         * Key metrics to display
-         */
-        metrics: {
-          /**
-           * Metric label
-           */
-          label: string;
-          /**
-           * Metric value
-           */
-          value: string;
-          /**
-           * Iconify icon name
-           */
-          icon: string;
-          trend: 'up' | 'down';
-          /**
-           * Change percentage (e.g., '+12%')
-           */
-          change: string;
-          id?: string | null;
-        }[];
-        /**
-         * Enrollment trend data
-         */
-        enrollmentData?:
-          | {
-              month: string;
-              enrollments: number;
-              id?: string | null;
-            }[]
-          | null;
-        /**
-         * Program distribution data
-         */
-        programData?:
-          | {
-              name: string;
-              value: number;
-              id?: string | null;
-            }[]
-          | null;
-        /**
-         * Academic goals progress
-         */
-        goals?:
-          | {
-              name: string;
-              description: string;
-              progress: number;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'dashboard-stats';
-      }
-    | {
-        /**
-         * Section title
-         */
-        title: string;
-        /**
-         * Section subtitle
-         */
-        subtitle: string;
-        /**
-         * News and events items
-         */
-        items: {
-          type: 'news' | 'event';
-          /**
-           * Item title
-           */
-          title: string;
-          /**
-           * Short description or excerpt
-           */
-          excerpt: string;
-          /**
-           * Publication or event date
-           */
-          date: string;
-          /**
-           * Location (for events) or source (for news)
-           */
-          location: string;
-          id?: string | null;
-        }[];
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'news-events';
-      }
-    | {
-        /**
-         * Section title
-         */
-        title: string;
-        /**
-         * Section subtitle
-         */
-        subtitle: string;
-        /**
-         * Faculty members to showcase
-         */
-        faculty: {
-          /**
-           * Faculty member name
-           */
-          name: string;
-          /**
-           * Job title or position
-           */
-          title: string;
-          /**
-           * Department affiliation
-           */
-          department: string;
-          /**
-           * Avatar image URL
-           */
-          avatar?: string | null;
-          /**
-           * Short biography
-           */
-          bio: string;
-          /**
-           * Educational background
-           */
-          education: string;
-          /**
-           * Contact email
-           */
-          email: string;
-          /**
-           * Years of experience
-           */
-          experience: number;
-          /**
-           * Areas of specialization
-           */
-          specializations?:
-            | {
-                specialization: string;
-                id?: string | null;
-              }[]
-            | null;
-          id?: string | null;
-        }[];
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'faculty-showcase';
-      }
-  )[];
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+	id: number;
+	title: string;
+	hero: {
+		type: "none" | "highImpact" | "mediumImpact" | "lowImpact";
+		richText?: {
+			root: {
+				type: string;
+				children: {
+					type: any;
+					version: number;
+					[k: string]: unknown;
+				}[];
+				direction: ("ltr" | "rtl") | null;
+				format:
+					| "left"
+					| "start"
+					| "center"
+					| "right"
+					| "end"
+					| "justify"
+					| "";
+				indent: number;
+				version: number;
+			};
+			[k: string]: unknown;
+		} | null;
+		links?:
+			| {
+					link: {
+						type?: ("reference" | "custom") | null;
+						newTab?: boolean | null;
+						reference?:
+							| ({
+									relationTo: "pages";
+									value: number | Page;
+							  } | null)
+							| ({
+									relationTo: "posts";
+									value: number | Post;
+							  } | null);
+						url?: string | null;
+						label: string;
+						/**
+						 * Choose how the link should be rendered.
+						 */
+						appearance?: ("default" | "outline") | null;
+					};
+					id?: string | null;
+			  }[]
+			| null;
+		media?: (number | null) | Media;
+	};
+	layout: (
+		| CallToActionBlock
+		| ContentBlock
+		| MediaBlock
+		| ArchiveBlock
+		| FormBlock
+		| {
+				/**
+				 * Main headline for the hero section
+				 */
+				title: string;
+				/**
+				 * Subtitle or description text
+				 */
+				subtitle: string;
+				/**
+				 * Text for the primary call-to-action button
+				 */
+				primaryButtonText?: string | null;
+				/**
+				 * Text for the secondary button
+				 */
+				secondaryButtonText?: string | null;
+				/**
+				 * Statistics to display in the hero section
+				 */
+				stats?:
+					| {
+							/**
+							 * Iconify icon name (e.g., 'lucide:users')
+							 */
+							icon: string;
+							/**
+							 * Statistic value (e.g., '10,000+')
+							 */
+							value: string;
+							/**
+							 * Statistic label (e.g., 'Students')
+							 */
+							label: string;
+							id?: string | null;
+					  }[]
+					| null;
+				id?: string | null;
+				blockName?: string | null;
+				blockType: "university-hero";
+		  }
+		| {
+				/**
+				 * Section title
+				 */
+				title: string;
+				/**
+				 * Section subtitle or description
+				 */
+				subtitle: string;
+				/**
+				 * Programs to showcase
+				 */
+				programs: {
+					/**
+					 * Program name
+					 */
+					name: string;
+					/**
+					 * Program description
+					 */
+					description: string;
+					/**
+					 * Iconify icon name
+					 */
+					icon: string;
+					/**
+					 * Program level (e.g., Bachelor, Master)
+					 */
+					level: string;
+					/**
+					 * Program duration (e.g., '4 years')
+					 */
+					duration: string;
+					/**
+					 * Total credits required
+					 */
+					credits: number;
+					/**
+					 * Number of students (e.g., '500+')
+					 */
+					studentCount: string;
+					id?: string | null;
+				}[];
+				id?: string | null;
+				blockName?: string | null;
+				blockType: "programs-showcase";
+		  }
+		| {
+				/**
+				 * Form section title
+				 */
+				title: string;
+				/**
+				 * Form section subtitle
+				 */
+				subtitle: string;
+				/**
+				 * Available programs for selection
+				 */
+				programs: {
+					/**
+					 * Display label for the program
+					 */
+					label: string;
+					/**
+					 * Value for the program option
+					 */
+					value: string;
+					id?: string | null;
+				}[];
+				/**
+				 * Available academic years
+				 */
+				academicYears: {
+					/**
+					 * Display label for the academic year
+					 */
+					label: string;
+					/**
+					 * Value for the academic year option
+					 */
+					value: string;
+					id?: string | null;
+				}[];
+				id?: string | null;
+				blockName?: string | null;
+				blockType: "registration-form";
+		  }
+		| {
+				/**
+				 * Section title
+				 */
+				title: string;
+				/**
+				 * Section subtitle
+				 */
+				subtitle: string;
+				/**
+				 * Key metrics to display
+				 */
+				metrics: {
+					/**
+					 * Metric label
+					 */
+					label: string;
+					/**
+					 * Metric value
+					 */
+					value: string;
+					/**
+					 * Iconify icon name
+					 */
+					icon: string;
+					trend: "up" | "down";
+					/**
+					 * Change percentage (e.g., '+12%')
+					 */
+					change: string;
+					id?: string | null;
+				}[];
+				/**
+				 * Enrollment trend data
+				 */
+				enrollmentData?:
+					| {
+							month: string;
+							enrollments: number;
+							id?: string | null;
+					  }[]
+					| null;
+				/**
+				 * Program distribution data
+				 */
+				programData?:
+					| {
+							name: string;
+							value: number;
+							id?: string | null;
+					  }[]
+					| null;
+				/**
+				 * Academic goals progress
+				 */
+				goals?:
+					| {
+							name: string;
+							description: string;
+							progress: number;
+							id?: string | null;
+					  }[]
+					| null;
+				id?: string | null;
+				blockName?: string | null;
+				blockType: "dashboard-stats";
+		  }
+		| {
+				/**
+				 * Section title
+				 */
+				title: string;
+				/**
+				 * Section subtitle
+				 */
+				subtitle: string;
+				/**
+				 * News and events items
+				 */
+				items: {
+					type: "news" | "event";
+					/**
+					 * Item title
+					 */
+					title: string;
+					/**
+					 * Short description or excerpt
+					 */
+					excerpt: string;
+					/**
+					 * Publication or event date
+					 */
+					date: string;
+					/**
+					 * Location (for events) or source (for news)
+					 */
+					location: string;
+					id?: string | null;
+				}[];
+				id?: string | null;
+				blockName?: string | null;
+				blockType: "news-events";
+		  }
+		| {
+				/**
+				 * Section title
+				 */
+				title: string;
+				/**
+				 * Section subtitle
+				 */
+				subtitle: string;
+				/**
+				 * Faculty members to showcase
+				 */
+				faculty: {
+					/**
+					 * Faculty member name
+					 */
+					name: string;
+					/**
+					 * Job title or position
+					 */
+					title: string;
+					/**
+					 * Department affiliation
+					 */
+					department: string;
+					/**
+					 * Avatar image URL
+					 */
+					avatar?: string | null;
+					/**
+					 * Short biography
+					 */
+					bio: string;
+					/**
+					 * Educational background
+					 */
+					education: string;
+					/**
+					 * Contact email
+					 */
+					email: string;
+					/**
+					 * Years of experience
+					 */
+					experience: number;
+					/**
+					 * Areas of specialization
+					 */
+					specializations?:
+						| {
+								specialization: string;
+								id?: string | null;
+						  }[]
+						| null;
+					id?: string | null;
+				}[];
+				id?: string | null;
+				blockName?: string | null;
+				blockType: "faculty-showcase";
+		  }
+	)[];
+	meta?: {
+		title?: string | null;
+		/**
+		 * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+		 */
+		image?: (number | null) | Media;
+		description?: string | null;
+	};
+	publishedAt?: string | null;
+	/**
+	 * When enabled, the slug will auto-generate from the title field on save and autosave.
+	 */
+	generateSlug?: boolean | null;
+	slug: string;
+	updatedAt: string;
+	createdAt: string;
+	_status?: ("draft" | "published") | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
-  id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+	id: number;
+	title: string;
+	heroImage?: (number | null) | Media;
+	content: {
+		root: {
+			type: string;
+			children: {
+				type: any;
+				version: number;
+				[k: string]: unknown;
+			}[];
+			direction: ("ltr" | "rtl") | null;
+			format:
+				| "left"
+				| "start"
+				| "center"
+				| "right"
+				| "end"
+				| "justify"
+				| "";
+			indent: number;
+			version: number;
+		};
+		[k: string]: unknown;
+	};
+	relatedPosts?: (number | Post)[] | null;
+	categories?: (number | Category)[] | null;
+	meta?: {
+		title?: string | null;
+		/**
+		 * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+		 */
+		image?: (number | null) | Media;
+		description?: string | null;
+	};
+	publishedAt?: string | null;
+	authors?: (number | User)[] | null;
+	populatedAuthors?:
+		| {
+				id?: string | null;
+				name?: string | null;
+		  }[]
+		| null;
+	/**
+	 * When enabled, the slug will auto-generate from the title field on save and autosave.
+	 */
+	generateSlug?: boolean | null;
+	slug: string;
+	updatedAt: string;
+	createdAt: string;
+	_status?: ("draft" | "published") | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
-  alt?: string | null;
-  caption?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    square?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    small?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    medium?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    large?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    xlarge?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    og?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
+	id: number;
+	alt?: string | null;
+	caption?: {
+		root: {
+			type: string;
+			children: {
+				type: any;
+				version: number;
+				[k: string]: unknown;
+			}[];
+			direction: ("ltr" | "rtl") | null;
+			format:
+				| "left"
+				| "start"
+				| "center"
+				| "right"
+				| "end"
+				| "justify"
+				| "";
+			indent: number;
+			version: number;
+		};
+		[k: string]: unknown;
+	} | null;
+	updatedAt: string;
+	createdAt: string;
+	url?: string | null;
+	thumbnailURL?: string | null;
+	filename?: string | null;
+	mimeType?: string | null;
+	filesize?: number | null;
+	width?: number | null;
+	height?: number | null;
+	focalX?: number | null;
+	focalY?: number | null;
+	sizes?: {
+		thumbnail?: {
+			url?: string | null;
+			width?: number | null;
+			height?: number | null;
+			mimeType?: string | null;
+			filesize?: number | null;
+			filename?: string | null;
+		};
+		square?: {
+			url?: string | null;
+			width?: number | null;
+			height?: number | null;
+			mimeType?: string | null;
+			filesize?: number | null;
+			filename?: string | null;
+		};
+		small?: {
+			url?: string | null;
+			width?: number | null;
+			height?: number | null;
+			mimeType?: string | null;
+			filesize?: number | null;
+			filename?: string | null;
+		};
+		medium?: {
+			url?: string | null;
+			width?: number | null;
+			height?: number | null;
+			mimeType?: string | null;
+			filesize?: number | null;
+			filename?: string | null;
+		};
+		large?: {
+			url?: string | null;
+			width?: number | null;
+			height?: number | null;
+			mimeType?: string | null;
+			filesize?: number | null;
+			filename?: string | null;
+		};
+		xlarge?: {
+			url?: string | null;
+			width?: number | null;
+			height?: number | null;
+			mimeType?: string | null;
+			filesize?: number | null;
+			filename?: string | null;
+		};
+		og?: {
+			url?: string | null;
+			width?: number | null;
+			height?: number | null;
+			mimeType?: string | null;
+			filesize?: number | null;
+			filename?: string | null;
+		};
+	};
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
-  id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	title: string;
+	/**
+	 * When enabled, the slug will auto-generate from the title field on save and autosave.
+	 */
+	generateSlug?: boolean | null;
+	slug: string;
+	parent?: (number | null) | Category;
+	breadcrumbs?:
+		| {
+				doc?: (number | null) | Category;
+				url?: string | null;
+				label?: string | null;
+				id?: string | null;
+		  }[]
+		| null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
-  name: string;
-  firstName?: string | null;
-  lastName?: string | null;
-  /**
-   * Student ID number (if applicable)
-   */
-  studentId?: string | null;
-  /**
-   * Employee ID number (if applicable)
-   */
-  employeeId?: string | null;
-  role:
-    | 'super-admin'
-    | 'admin'
-    | 'rector-dean'
-    | 'faculty-staff'
-    | 'department-staff'
-    | 'professor'
-    | 'assistant'
-    | 'student';
-  /**
-   * Primary university affiliation
-   */
-  university?: (number | null) | University;
-  /**
-   * Faculty affiliation (if applicable)
-   */
-  faculty?: (number | null) | Faculty;
-  /**
-   * Department affiliation (if applicable)
-   */
-  department?: (number | null) | Department;
-  /**
-   * Program enrollment (for students)
-   */
-  program?: (number | null) | Program;
-  /**
-   * Current program year (for students)
-   */
-  programYear?: (number | null) | ProgramYear;
-  profile?: {
-    dateOfBirth?: string | null;
-    phone?: string | null;
-    address?: string | null;
-    emergencyContact?: {
-      name?: string | null;
-      relationship?: string | null;
-      phone?: string | null;
-      email?: string | null;
-    };
-  };
-  academicInfo?: {
-    /**
-     * Date of enrollment (for students)
-     */
-    enrollmentDate?: string | null;
-    /**
-     * Expected graduation date (for students)
-     */
-    expectedGraduation?: string | null;
-    status?: ('active' | 'inactive' | 'graduated' | 'withdrawn' | 'suspended') | null;
-    /**
-     * Current GPA (for students)
-     */
-    gpa?: number | null;
-    /**
-     * Total credits earned (for students)
-     */
-    totalCreditsEarned?: number | null;
-  };
-  permissions?: {
-    /**
-     * Can impersonate other users (Super Admin only)
-     */
-    canImpersonate?: boolean | null;
-    /**
-     * Can manage user accounts
-     */
-    canManageUsers?: boolean | null;
-    /**
-     * Can manage courses and assessments
-     */
-    canManageCourses?: boolean | null;
-    /**
-     * Can enter and modify grades
-     */
-    canGrade?: boolean | null;
-    /**
-     * Can view reports and analytics
-     */
-    canViewReports?: boolean | null;
-    scope?: ('university' | 'faculty' | 'department' | 'program' | 'course' | 'self') | null;
-  };
-  isActive?: boolean | null;
-  lastLoginAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
+	id: number;
+	name: string;
+	firstName?: string | null;
+	lastName?: string | null;
+	/**
+	 * Student ID number (if applicable)
+	 */
+	studentId?: string | null;
+	/**
+	 * Employee ID number (if applicable)
+	 */
+	employeeId?: string | null;
+	role:
+		| "super-admin"
+		| "admin"
+		| "rector-dean"
+		| "faculty-staff"
+		| "department-staff"
+		| "professor"
+		| "assistant"
+		| "student";
+	/**
+	 * Primary university affiliation
+	 */
+	university?: (number | null) | University;
+	/**
+	 * Faculty affiliation (if applicable)
+	 */
+	faculty?: (number | null) | Faculty;
+	/**
+	 * Department affiliation (if applicable)
+	 */
+	department?: (number | null) | Department;
+	/**
+	 * Program enrollment (for students)
+	 */
+	program?: (number | null) | Program;
+	/**
+	 * Current program year (for students)
+	 */
+	programYear?: (number | null) | ProgramYear;
+	profile?: {
+		dateOfBirth?: string | null;
+		phone?: string | null;
+		address?: string | null;
+		emergencyContact?: {
+			name?: string | null;
+			relationship?: string | null;
+			phone?: string | null;
+			email?: string | null;
+		};
+	};
+	academicInfo?: {
+		/**
+		 * Date of enrollment (for students)
+		 */
+		enrollmentDate?: string | null;
+		/**
+		 * Expected graduation date (for students)
+		 */
+		expectedGraduation?: string | null;
+		status?:
+			| ("active" | "inactive" | "graduated" | "withdrawn" | "suspended")
+			| null;
+		/**
+		 * Current GPA (for students)
+		 */
+		gpa?: number | null;
+		/**
+		 * Total credits earned (for students)
+		 */
+		totalCreditsEarned?: number | null;
+	};
+	permissions?: {
+		/**
+		 * Can impersonate other users (Super Admin only)
+		 */
+		canImpersonate?: boolean | null;
+		/**
+		 * Can manage user accounts
+		 */
+		canManageUsers?: boolean | null;
+		/**
+		 * Can manage courses and assessments
+		 */
+		canManageCourses?: boolean | null;
+		/**
+		 * Can enter and modify grades
+		 */
+		canGrade?: boolean | null;
+		/**
+		 * Can view reports and analytics
+		 */
+		canViewReports?: boolean | null;
+		scope?:
+			| (
+					| "university"
+					| "faculty"
+					| "department"
+					| "program"
+					| "course"
+					| "self"
+			  )
+			| null;
+	};
+	isActive?: boolean | null;
+	lastLoginAt?: string | null;
+	updatedAt: string;
+	createdAt: string;
+	email: string;
+	resetPasswordToken?: string | null;
+	resetPasswordExpiration?: string | null;
+	salt?: string | null;
+	hash?: string | null;
+	loginAttempts?: number | null;
+	lockUntil?: string | null;
+	sessions?:
+		| {
+				id: string;
+				createdAt?: string | null;
+				expiresAt: string;
+		  }[]
+		| null;
+	password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "universities".
  */
 export interface University {
-  id: number;
-  name: string;
-  code: string;
-  description?: string | null;
-  locale: 'en' | 'nl' | 'fr' | 'de';
-  timezone: string;
-  gradingScale: number | GradingScale;
-  academicCalendar: number | AcademicCalendar;
-  configuration?: {
-    roundingRule?: ('bankers' | 'round-half-up' | 'round-half-down') | null;
-    decimalPrecision?: number | null;
-    retakePolicy?: {
-      maxRetakes?: number | null;
-      weightRepl?: ('replace' | 'average' | 'best') | null;
-      capRule?: ('none' | 'pass-cap' | 'max-cap') | null;
-    };
-    assessWindows?: {
-      defaultOpenDays?: number | null;
-      defaultCloseDays?: number | null;
-      latePolicy?: ('allow' | 'penalty' | 'deny') | null;
-    };
-    reportConfig?: {
-      headerBranding?: (number | null) | Media;
-      footerText?: string | null;
-      signatureRequired?: boolean | null;
-      watermarking?: boolean | null;
-      exportFormat?: ('pdf' | 'pdf-excel') | null;
-    };
-  };
-  isActive?: boolean | null;
-  contactInfo?: {
-    address?: string | null;
-    phone?: string | null;
-    email?: string | null;
-    website?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	name: string;
+	code: string;
+	description?: string | null;
+	locale: "en" | "nl" | "fr" | "de";
+	timezone: string;
+	gradingScale: number | GradingScale;
+	academicCalendar: number | AcademicCalendar;
+	configuration?: {
+		roundingRule?: ("bankers" | "round-half-up" | "round-half-down") | null;
+		decimalPrecision?: number | null;
+		retakePolicy?: {
+			maxRetakes?: number | null;
+			weightRepl?: ("replace" | "average" | "best") | null;
+			capRule?: ("none" | "pass-cap" | "max-cap") | null;
+		};
+		assessWindows?: {
+			defaultOpenDays?: number | null;
+			defaultCloseDays?: number | null;
+			latePolicy?: ("allow" | "penalty" | "deny") | null;
+		};
+		reportConfig?: {
+			headerBranding?: (number | null) | Media;
+			footerText?: string | null;
+			signatureRequired?: boolean | null;
+			watermarking?: boolean | null;
+			exportFormat?: ("pdf" | "pdf-excel") | null;
+		};
+	};
+	isActive?: boolean | null;
+	contactInfo?: {
+		address?: string | null;
+		phone?: string | null;
+		email?: string | null;
+		website?: string | null;
+	};
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "grading-scales".
  */
 export interface GradingScale {
-  id: number;
-  name: string;
-  description?: string | null;
-  scaleType: 'numeric-100' | 'numeric-20' | 'letter' | 'pass-fail' | 'custom';
-  gradeMappings?:
-    | {
-        minScore: number;
-        maxScore: number;
-        /**
-         * Letter grade (e.g., A+, A, B+, etc.)
-         */
-        letterGrade?: string | null;
-        /**
-         * Numeric equivalent (e.g., 4.0, 3.7, etc.)
-         */
-        numericGrade?: number | null;
-        isPassing?: boolean | null;
-        /**
-         * Grade description (e.g., Excellent, Good, etc.)
-         */
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Minimum score/grade required to pass
-   */
-  passThreshold: number;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	name: string;
+	description?: string | null;
+	scaleType: "numeric-100" | "numeric-20" | "letter" | "pass-fail" | "custom";
+	gradeMappings?:
+		| {
+				minScore: number;
+				maxScore: number;
+				/**
+				 * Letter grade (e.g., A+, A, B+, etc.)
+				 */
+				letterGrade?: string | null;
+				/**
+				 * Numeric equivalent (e.g., 4.0, 3.7, etc.)
+				 */
+				numericGrade?: number | null;
+				isPassing?: boolean | null;
+				/**
+				 * Grade description (e.g., Excellent, Good, etc.)
+				 */
+				description?: string | null;
+				id?: string | null;
+		  }[]
+		| null;
+	/**
+	 * Minimum score/grade required to pass
+	 */
+	passThreshold: number;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "academic-calendars".
  */
 export interface AcademicCalendar {
-  id: number;
-  name: string;
-  academicYear: number | AcademicYear;
-  importantDates?:
-    | {
-        name: string;
-        date: string;
-        type:
-          | 'enrollment-start'
-          | 'enrollment-end'
-          | 'classes-start'
-          | 'classes-end'
-          | 'exam-start'
-          | 'exam-end'
-          | 'grade-deadline'
-          | 'holiday'
-          | 'other';
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	name: string;
+	academicYear: number | AcademicYear;
+	importantDates?:
+		| {
+				name: string;
+				date: string;
+				type:
+					| "enrollment-start"
+					| "enrollment-end"
+					| "classes-start"
+					| "classes-end"
+					| "exam-start"
+					| "exam-end"
+					| "grade-deadline"
+					| "holiday"
+					| "other";
+				description?: string | null;
+				id?: string | null;
+		  }[]
+		| null;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "academic-years".
  */
 export interface AcademicYear {
-  id: number;
-  /**
-   * e.g., 2025-2026
-   */
-  yearLabel: string;
-  startDate: string;
-  endDate: string;
-  semesters?:
-    | {
-        name: string;
-        startDate: string;
-        endDate: string;
-        isActive?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  isActive?: boolean | null;
-  description?: string | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	/**
+	 * e.g., 2025-2026
+	 */
+	yearLabel: string;
+	startDate: string;
+	endDate: string;
+	semesters?:
+		| {
+				name: string;
+				startDate: string;
+				endDate: string;
+				isActive?: boolean | null;
+				id?: string | null;
+		  }[]
+		| null;
+	isActive?: boolean | null;
+	description?: string | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faculties".
  */
 export interface Faculty {
-  id: number;
-  university: number | University;
-  name: string;
-  code: string;
-  description?: string | null;
-  dean?: (number | null) | User;
-  contactInfo?: {
-    address?: string | null;
-    phone?: string | null;
-    email?: string | null;
-  };
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	university: number | University;
+	name: string;
+	code: string;
+	description?: string | null;
+	dean?: (number | null) | User;
+	contactInfo?: {
+		address?: string | null;
+		phone?: string | null;
+		email?: string | null;
+	};
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "departments".
  */
 export interface Department {
-  id: number;
-  faculty: number | Faculty;
-  name: string;
-  code: string;
-  description?: string | null;
-  head?: (number | null) | User;
-  contactInfo?: {
-    address?: string | null;
-    phone?: string | null;
-    email?: string | null;
-  };
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	faculty: number | Faculty;
+	name: string;
+	code: string;
+	description?: string | null;
+	head?: (number | null) | User;
+	contactInfo?: {
+		address?: string | null;
+		phone?: string | null;
+		email?: string | null;
+	};
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "programs".
  */
 export interface Program {
-  id: number;
-  department: number | Department;
-  name: string;
-  code: string;
-  description?: string | null;
-  diplomaLevel: number | DiplomaLevel;
-  duration: number;
-  curriculumRules: {
-    totalCreditsRequired: number;
-    electiveCreditsAllowed?: number | null;
-    maxCreditsPerSemester?: number | null;
-    minCreditsPerSemester?: number | null;
-    prerequisiteRules?: string | null;
-  };
-  programDirector?: (number | null) | User;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	department: number | Department;
+	name: string;
+	code: string;
+	description?: string | null;
+	diplomaLevel: number | DiplomaLevel;
+	duration: number;
+	curriculumRules: {
+		totalCreditsRequired: number;
+		electiveCreditsAllowed?: number | null;
+		maxCreditsPerSemester?: number | null;
+		minCreditsPerSemester?: number | null;
+		prerequisiteRules?: string | null;
+	};
+	programDirector?: (number | null) | User;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "diploma-levels".
  */
 export interface DiplomaLevel {
-  id: number;
-  name: string;
-  code: string;
-  level: 'bachelor' | 'master' | 'phd' | 'certificate' | 'diploma' | 'other';
-  description?: string | null;
-  typicalDuration?: number | null;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	name: string;
+	code: string;
+	level: "bachelor" | "master" | "phd" | "certificate" | "diploma" | "other";
+	description?: string | null;
+	typicalDuration?: number | null;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "program-years".
  */
 export interface ProgramYear {
-  id: number;
-  program: number | Program;
-  yearNumber: number;
-  /**
-   * Auto-generated from program and year number
-   */
-  title?: string | null;
-  requiredCredits: number;
-  electiveCreditsAllowed?: number | null;
-  description?: string | null;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	program: number | Program;
+	yearNumber: number;
+	/**
+	 * Auto-generated from program and year number
+	 */
+	title?: string | null;
+	requiredCredits: number;
+	electiveCreditsAllowed?: number | null;
+	description?: string | null;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cta';
+	richText?: {
+		root: {
+			type: string;
+			children: {
+				type: any;
+				version: number;
+				[k: string]: unknown;
+			}[];
+			direction: ("ltr" | "rtl") | null;
+			format:
+				| "left"
+				| "start"
+				| "center"
+				| "right"
+				| "end"
+				| "justify"
+				| "";
+			indent: number;
+			version: number;
+		};
+		[k: string]: unknown;
+	} | null;
+	links?:
+		| {
+				link: {
+					type?: ("reference" | "custom") | null;
+					newTab?: boolean | null;
+					reference?:
+						| ({
+								relationTo: "pages";
+								value: number | Page;
+						  } | null)
+						| ({
+								relationTo: "posts";
+								value: number | Post;
+						  } | null);
+					url?: string | null;
+					label: string;
+					/**
+					 * Choose how the link should be rendered.
+					 */
+					appearance?: ("default" | "outline") | null;
+				};
+				id?: string | null;
+		  }[]
+		| null;
+	id?: string | null;
+	blockName?: string | null;
+	blockType: "cta";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock".
  */
 export interface ContentBlock {
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'content';
+	columns?:
+		| {
+				size?: ("oneThird" | "half" | "twoThirds" | "full") | null;
+				richText?: {
+					root: {
+						type: string;
+						children: {
+							type: any;
+							version: number;
+							[k: string]: unknown;
+						}[];
+						direction: ("ltr" | "rtl") | null;
+						format:
+							| "left"
+							| "start"
+							| "center"
+							| "right"
+							| "end"
+							| "justify"
+							| "";
+						indent: number;
+						version: number;
+					};
+					[k: string]: unknown;
+				} | null;
+				enableLink?: boolean | null;
+				link?: {
+					type?: ("reference" | "custom") | null;
+					newTab?: boolean | null;
+					reference?:
+						| ({
+								relationTo: "pages";
+								value: number | Page;
+						  } | null)
+						| ({
+								relationTo: "posts";
+								value: number | Post;
+						  } | null);
+					url?: string | null;
+					label: string;
+					/**
+					 * Choose how the link should be rendered.
+					 */
+					appearance?: ("default" | "outline") | null;
+				};
+				id?: string | null;
+		  }[]
+		| null;
+	id?: string | null;
+	blockName?: string | null;
+	blockType: "content";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: number | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
+	media: number | Media;
+	id?: string | null;
+	blockName?: string | null;
+	blockType: "mediaBlock";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ArchiveBlock".
  */
 export interface ArchiveBlock {
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (number | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'archive';
+	introContent?: {
+		root: {
+			type: string;
+			children: {
+				type: any;
+				version: number;
+				[k: string]: unknown;
+			}[];
+			direction: ("ltr" | "rtl") | null;
+			format:
+				| "left"
+				| "start"
+				| "center"
+				| "right"
+				| "end"
+				| "justify"
+				| "";
+			indent: number;
+			version: number;
+		};
+		[k: string]: unknown;
+	} | null;
+	populateBy?: ("collection" | "selection") | null;
+	relationTo?: "posts" | null;
+	categories?: (number | Category)[] | null;
+	limit?: number | null;
+	selectedDocs?:
+		| {
+				relationTo: "posts";
+				value: number | Post;
+		  }[]
+		| null;
+	id?: string | null;
+	blockName?: string | null;
+	blockType: "archive";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: number | Form;
-  enableIntro?: boolean | null;
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'formBlock';
+	form: number | Form;
+	enableIntro?: boolean | null;
+	introContent?: {
+		root: {
+			type: string;
+			children: {
+				type: any;
+				version: number;
+				[k: string]: unknown;
+			}[];
+			direction: ("ltr" | "rtl") | null;
+			format:
+				| "left"
+				| "start"
+				| "center"
+				| "right"
+				| "end"
+				| "justify"
+				| "";
+			indent: number;
+			version: number;
+		};
+		[k: string]: unknown;
+	} | null;
+	id?: string | null;
+	blockName?: string | null;
+	blockType: "formBlock";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
 export interface Form {
-  id: number;
-  title: string;
-  fields?:
-    | (
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            defaultValue?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'checkbox';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'country';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'email';
-          }
-        | {
-            message?: {
-              root: {
-                type: string;
-                children: {
-                  type: any;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'message';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: number | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'number';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: string | null;
-            placeholder?: string | null;
-            options?:
-              | {
-                  label: string;
-                  value: string;
-                  id?: string | null;
-                }[]
-              | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'select';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'state';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: string | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'text';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: string | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'textarea';
-          }
-      )[]
-    | null;
-  submitButtonLabel?: string | null;
-  /**
-   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
-   */
-  confirmationType?: ('message' | 'redirect') | null;
-  confirmationMessage?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  redirect?: {
-    url: string;
-  };
-  /**
-   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
-   */
-  emails?:
-    | {
-        emailTo?: string | null;
-        cc?: string | null;
-        bcc?: string | null;
-        replyTo?: string | null;
-        emailFrom?: string | null;
-        subject: string;
-        /**
-         * Enter the message that should be sent in this email.
-         */
-        message?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	title: string;
+	fields?:
+		| (
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						required?: boolean | null;
+						defaultValue?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "checkbox";
+				  }
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						required?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "country";
+				  }
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						required?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "email";
+				  }
+				| {
+						message?: {
+							root: {
+								type: string;
+								children: {
+									type: any;
+									version: number;
+									[k: string]: unknown;
+								}[];
+								direction: ("ltr" | "rtl") | null;
+								format:
+									| "left"
+									| "start"
+									| "center"
+									| "right"
+									| "end"
+									| "justify"
+									| "";
+								indent: number;
+								version: number;
+							};
+							[k: string]: unknown;
+						} | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "message";
+				  }
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						defaultValue?: number | null;
+						required?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "number";
+				  }
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						defaultValue?: string | null;
+						placeholder?: string | null;
+						options?:
+							| {
+									label: string;
+									value: string;
+									id?: string | null;
+							  }[]
+							| null;
+						required?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "select";
+				  }
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						required?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "state";
+				  }
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						defaultValue?: string | null;
+						required?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "text";
+				  }
+				| {
+						name: string;
+						label?: string | null;
+						width?: number | null;
+						defaultValue?: string | null;
+						required?: boolean | null;
+						id?: string | null;
+						blockName?: string | null;
+						blockType: "textarea";
+				  }
+		  )[]
+		| null;
+	submitButtonLabel?: string | null;
+	/**
+	 * Choose whether to display an on-page message or redirect to a different page after they submit the form.
+	 */
+	confirmationType?: ("message" | "redirect") | null;
+	confirmationMessage?: {
+		root: {
+			type: string;
+			children: {
+				type: any;
+				version: number;
+				[k: string]: unknown;
+			}[];
+			direction: ("ltr" | "rtl") | null;
+			format:
+				| "left"
+				| "start"
+				| "center"
+				| "right"
+				| "end"
+				| "justify"
+				| "";
+			indent: number;
+			version: number;
+		};
+		[k: string]: unknown;
+	} | null;
+	redirect?: {
+		url: string;
+	};
+	/**
+	 * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
+	 */
+	emails?:
+		| {
+				emailTo?: string | null;
+				cc?: string | null;
+				bcc?: string | null;
+				replyTo?: string | null;
+				emailFrom?: string | null;
+				subject: string;
+				/**
+				 * Enter the message that should be sent in this email.
+				 */
+				message?: {
+					root: {
+						type: string;
+						children: {
+							type: any;
+							version: number;
+							[k: string]: unknown;
+						}[];
+						direction: ("ltr" | "rtl") | null;
+						format:
+							| "left"
+							| "start"
+							| "center"
+							| "right"
+							| "end"
+							| "justify"
+							| "";
+						indent: number;
+						version: number;
+					};
+					[k: string]: unknown;
+				} | null;
+				id?: string | null;
+		  }[]
+		| null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "courses".
  */
 export interface Course {
-  id: number;
-  code: string;
-  title: string;
-  description?: string | null;
-  credits: number;
-  owningDepartment: number | Department;
-  prerequisites?: (number | Course)[] | null;
-  courseType?: ('required' | 'elective' | 'optional') | null;
-  learningOutcomes?:
-    | {
-        outcome: string;
-        id?: string | null;
-      }[]
-    | null;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	code: string;
+	title: string;
+	description?: string | null;
+	credits: number;
+	owningDepartment: number | Department;
+	prerequisites?: (number | Course)[] | null;
+	courseType?: ("required" | "elective" | "optional") | null;
+	learningOutcomes?:
+		| {
+				outcome: string;
+				id?: string | null;
+		  }[]
+		| null;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "course-variations".
  */
 export interface CourseVariation {
-  id: number;
-  course: number | Course;
-  department: number | Department;
-  programYear?: (number | null) | ProgramYear;
-  /**
-   * Department-specific course code variant
-   */
-  codeVariant: string;
-  /**
-   * Department-specific course title variant
-   */
-  titleVariant?: string | null;
-  /**
-   * Department-specific course description
-   */
-  descriptionVariant?: string | null;
-  locale?: ('en' | 'nl' | 'fr' | 'de') | null;
-  /**
-   * Override credits for this variation (optional)
-   */
-  credits?: number | null;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	course: number | Course;
+	department: number | Department;
+	programYear?: (number | null) | ProgramYear;
+	/**
+	 * Department-specific course code variant
+	 */
+	codeVariant: string;
+	/**
+	 * Department-specific course title variant
+	 */
+	titleVariant?: string | null;
+	/**
+	 * Department-specific course description
+	 */
+	descriptionVariant?: string | null;
+	locale?: ("en" | "nl" | "fr" | "de") | null;
+	/**
+	 * Override credits for this variation (optional)
+	 */
+	credits?: number | null;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "course-instances".
  */
 export interface CourseInstance {
-  id: number;
-  courseVariation: number | CourseVariation;
-  academicYear: number | AcademicYear;
-  /**
-   * Auto-generated title for this instance
-   */
-  instanceTitle?: string | null;
-  /**
-   * Professors assigned to this course instance
-   */
-  professors?: (number | User)[] | null;
-  assistants?: (number | User)[] | null;
-  maxEnrollment?: number | null;
-  currentEnrollment?: number | null;
-  schedule?: {
-    days?: ('monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday')[] | null;
-    /**
-     * Format: HH:MM (e.g., 09:00)
-     */
-    startTime?: string | null;
-    /**
-     * Format: HH:MM (e.g., 11:00)
-     */
-    endTime?: string | null;
-    room?: string | null;
-  };
-  status?: ('planning' | 'open' | 'closed' | 'in-progress' | 'completed' | 'cancelled') | null;
-  notes?: string | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	courseVariation: number | CourseVariation;
+	academicYear: number | AcademicYear;
+	/**
+	 * Auto-generated title for this instance
+	 */
+	instanceTitle?: string | null;
+	/**
+	 * Professors assigned to this course instance
+	 */
+	professors?: (number | User)[] | null;
+	assistants?: (number | User)[] | null;
+	maxEnrollment?: number | null;
+	currentEnrollment?: number | null;
+	schedule?: {
+		days?:
+			| (
+					| "monday"
+					| "tuesday"
+					| "wednesday"
+					| "thursday"
+					| "friday"
+					| "saturday"
+					| "sunday"
+			  )[]
+			| null;
+		/**
+		 * Format: HH:MM (e.g., 09:00)
+		 */
+		startTime?: string | null;
+		/**
+		 * Format: HH:MM (e.g., 11:00)
+		 */
+		endTime?: string | null;
+		room?: string | null;
+	};
+	status?:
+		| (
+				| "planning"
+				| "open"
+				| "closed"
+				| "in-progress"
+				| "completed"
+				| "cancelled"
+		  )
+		| null;
+	notes?: string | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "assessment-templates".
  */
 export interface AssessmentTemplate {
-  id: number;
-  courseInstance: number | CourseInstance;
-  name: string;
-  description?: string | null;
-  /**
-   * Percentage weight of this assessment in final grade
-   */
-  weightPercent: number;
-  /**
-   * Minimum possible score
-   */
-  minScore?: number | null;
-  /**
-   * Maximum possible score
-   */
-  maxScore: number;
-  /**
-   * If true, missing scores are not counted as zero
-   */
-  isOptional?: boolean | null;
-  assessmentType: 'exam' | 'quiz' | 'assignment' | 'project' | 'presentation' | 'lab' | 'participation' | 'other';
-  /**
-   * Instructions for students
-   */
-  instructions?: string | null;
-  rubric?:
-    | {
-        criteria: string;
-        description?: string | null;
-        maxPoints: number;
-        id?: string | null;
-      }[]
-    | null;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	courseInstance: number | CourseInstance;
+	name: string;
+	description?: string | null;
+	/**
+	 * Percentage weight of this assessment in final grade
+	 */
+	weightPercent: number;
+	/**
+	 * Minimum possible score
+	 */
+	minScore?: number | null;
+	/**
+	 * Maximum possible score
+	 */
+	maxScore: number;
+	/**
+	 * If true, missing scores are not counted as zero
+	 */
+	isOptional?: boolean | null;
+	assessmentType:
+		| "exam"
+		| "quiz"
+		| "assignment"
+		| "project"
+		| "presentation"
+		| "lab"
+		| "participation"
+		| "other";
+	/**
+	 * Instructions for students
+	 */
+	instructions?: string | null;
+	rubric?:
+		| {
+				criteria: string;
+				description?: string | null;
+				maxPoints: number;
+				id?: string | null;
+		  }[]
+		| null;
+	isActive?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "assessments".
  */
 export interface Assessment {
-  id: number;
-  assessmentTemplate: number | AssessmentTemplate;
-  title: string;
-  description?: string | null;
-  date: string;
-  /**
-   * Start time (HH:MM format)
-   */
-  startTime?: string | null;
-  /**
-   * End time (HH:MM format)
-   */
-  endTime?: string | null;
-  location?: string | null;
-  status: 'draft' | 'open' | 'locked' | 'published';
-  submissionWindow?: {
-    /**
-     * When students can start submitting
-     */
-    opensAt?: string | null;
-    /**
-     * When submissions close
-     */
-    closesAt?: string | null;
-    lateSubmissionAllowed?: boolean | null;
-    /**
-     * Penalty percentage for late submissions
-     */
-    latePenaltyPercent?: number | null;
-  };
-  gradingWindow?: {
-    /**
-     * When grading can begin
-     */
-    opensAt?: string | null;
-    /**
-     * When grading must be completed
-     */
-    closesAt?: string | null;
-    allowLateGrading?: boolean | null;
-  };
-  /**
-   * Specific instructions for this assessment instance
-   */
-  instructions?: string | null;
-  /**
-   * Internal notes for staff
-   */
-  notes?: string | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	assessmentTemplate: number | AssessmentTemplate;
+	title: string;
+	description?: string | null;
+	date: string;
+	/**
+	 * Start time (HH:MM format)
+	 */
+	startTime?: string | null;
+	/**
+	 * End time (HH:MM format)
+	 */
+	endTime?: string | null;
+	location?: string | null;
+	status: "draft" | "open" | "locked" | "published";
+	submissionWindow?: {
+		/**
+		 * When students can start submitting
+		 */
+		opensAt?: string | null;
+		/**
+		 * When submissions close
+		 */
+		closesAt?: string | null;
+		lateSubmissionAllowed?: boolean | null;
+		/**
+		 * Penalty percentage for late submissions
+		 */
+		latePenaltyPercent?: number | null;
+	};
+	gradingWindow?: {
+		/**
+		 * When grading can begin
+		 */
+		opensAt?: string | null;
+		/**
+		 * When grading must be completed
+		 */
+		closesAt?: string | null;
+		allowLateGrading?: boolean | null;
+	};
+	/**
+	 * Specific instructions for this assessment instance
+	 */
+	instructions?: string | null;
+	/**
+	 * Internal notes for staff
+	 */
+	notes?: string | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enrollments".
  */
 export interface Enrollment {
-  id: number;
-  student: number | User;
-  courseInstance: number | CourseInstance;
-  /**
-   * Auto-generated title
-   */
-  enrollmentTitle?: string | null;
-  status: 'pending' | 'active' | 'dropped' | 'completed' | 'failed' | 'withdrawn';
-  enrolledAt?: string | null;
-  droppedAt?: string | null;
-  completedAt?: string | null;
-  enrollmentType?: ('required' | 'elective' | 'optional') | null;
-  /**
-   * Credits earned (may differ from course credits)
-   */
-  creditsEarned?: number | null;
-  /**
-   * Internal notes about this enrollment
-   */
-  notes?: string | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	student: number | User;
+	courseInstance: number | CourseInstance;
+	/**
+	 * Auto-generated title
+	 */
+	enrollmentTitle?: string | null;
+	status:
+		| "pending"
+		| "active"
+		| "dropped"
+		| "completed"
+		| "failed"
+		| "withdrawn";
+	enrolledAt?: string | null;
+	droppedAt?: string | null;
+	completedAt?: string | null;
+	enrollmentType?: ("required" | "elective" | "optional") | null;
+	/**
+	 * Credits earned (may differ from course credits)
+	 */
+	creditsEarned?: number | null;
+	/**
+	 * Internal notes about this enrollment
+	 */
+	notes?: string | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "scores".
  */
 export interface Score {
-  id: number;
-  assessment: number | Assessment;
-  student: number | User;
-  /**
-   * Auto-generated title
-   */
-  scoreTitle?: string | null;
-  /**
-   * Raw score value
-   */
-  value: number;
-  /**
-   * Maximum possible score (from assessment template)
-   */
-  maxValue?: number | null;
-  /**
-   * Calculated percentage
-   */
-  percentage?: number | null;
-  isLate?: boolean | null;
-  /**
-   * Penalty percentage applied for late submission
-   */
-  latePenaltyApplied?: number | null;
-  /**
-   * Final score after penalties
-   */
-  finalValue?: number | null;
-  gradedBy: number | User;
-  gradedAt?: string | null;
-  /**
-   * Feedback for the student
-   */
-  feedback?: string | null;
-  /**
-   * Internal notes for staff
-   */
-  notes?: string | null;
-  /**
-   * If true, this score is excused and not counted
-   */
-  isExcused?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	assessment: number | Assessment;
+	student: number | User;
+	/**
+	 * Auto-generated title
+	 */
+	scoreTitle?: string | null;
+	/**
+	 * Raw score value
+	 */
+	value: number;
+	/**
+	 * Maximum possible score (from assessment template)
+	 */
+	maxValue?: number | null;
+	/**
+	 * Calculated percentage
+	 */
+	percentage?: number | null;
+	isLate?: boolean | null;
+	/**
+	 * Penalty percentage applied for late submission
+	 */
+	latePenaltyApplied?: number | null;
+	/**
+	 * Final score after penalties
+	 */
+	finalValue?: number | null;
+	gradedBy: number | User;
+	gradedAt?: string | null;
+	/**
+	 * Feedback for the student
+	 */
+	feedback?: string | null;
+	/**
+	 * Internal notes for staff
+	 */
+	notes?: string | null;
+	/**
+	 * If true, this score is excused and not counted
+	 */
+	isExcused?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "grade-aggregates".
  */
 export interface GradeAggregate {
-  id: number;
-  enrollment: number | Enrollment;
-  /**
-   * Auto-generated title
-   */
-  gradeTitle?: string | null;
-  /**
-   * Final numeric grade
-   */
-  finalNumeric?: number | null;
-  /**
-   * Final letter grade
-   */
-  finalLetter?: string | null;
-  passFail: 'pass' | 'fail' | 'incomplete';
-  /**
-   * GPA points (e.g., 4.0, 3.7, etc.)
-   */
-  gpaPoints?: number | null;
-  calculationMethod?: ('weighted-average' | 'simple-average' | 'best-score' | 'manual-override') | null;
-  assessmentBreakdown?:
-    | {
-        assessmentTemplate: number | AssessmentTemplate;
-        score?: number | null;
-        maxScore?: number | null;
-        weight?: number | null;
-        /**
-         * Contribution to final grade
-         */
-        contribution?: number | null;
-        isMissing?: boolean | null;
-        isExcused?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Notes about grade calculation or special circumstances
-   */
-  decisionNotes?: string | null;
-  calculatedAt?: string | null;
-  calculatedBy?: (number | null) | User;
-  /**
-   * Whether this grade has been published to the student
-   */
-  isPublished?: boolean | null;
-  publishedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	enrollment: number | Enrollment;
+	/**
+	 * Auto-generated title
+	 */
+	gradeTitle?: string | null;
+	/**
+	 * Final numeric grade
+	 */
+	finalNumeric?: number | null;
+	/**
+	 * Final letter grade
+	 */
+	finalLetter?: string | null;
+	passFail: "pass" | "fail" | "incomplete";
+	/**
+	 * GPA points (e.g., 4.0, 3.7, etc.)
+	 */
+	gpaPoints?: number | null;
+	calculationMethod?:
+		| (
+				| "weighted-average"
+				| "simple-average"
+				| "best-score"
+				| "manual-override"
+		  )
+		| null;
+	assessmentBreakdown?:
+		| {
+				assessmentTemplate: number | AssessmentTemplate;
+				score?: number | null;
+				maxScore?: number | null;
+				weight?: number | null;
+				/**
+				 * Contribution to final grade
+				 */
+				contribution?: number | null;
+				isMissing?: boolean | null;
+				isExcused?: boolean | null;
+				id?: string | null;
+		  }[]
+		| null;
+	/**
+	 * Notes about grade calculation or special circumstances
+	 */
+	decisionNotes?: string | null;
+	calculatedAt?: string | null;
+	calculatedBy?: (number | null) | User;
+	/**
+	 * Whether this grade has been published to the student
+	 */
+	isPublished?: boolean | null;
+	publishedAt?: string | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
-  id: number;
-  /**
-   * You will need to rebuild the website when changing this field.
-   */
-  from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
-    url?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	/**
+	 * You will need to rebuild the website when changing this field.
+	 */
+	from: string;
+	to?: {
+		type?: ("reference" | "custom") | null;
+		reference?:
+			| ({
+					relationTo: "pages";
+					value: number | Page;
+			  } | null)
+			| ({
+					relationTo: "posts";
+					value: number | Post;
+			  } | null);
+		url?: string | null;
+	};
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: number;
-  form: number | Form;
-  submissionData?:
-    | {
-        field: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	form: number | Form;
+	submissionData?:
+		| {
+				field: string;
+				value: string;
+				id?: string | null;
+		  }[]
+		| null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.
@@ -1774,1608 +1919,1614 @@ export interface FormSubmission {
  * via the `definition` "search".
  */
 export interface Search {
-  id: number;
-  title?: string | null;
-  priority?: number | null;
-  doc: {
-    relationTo: 'posts';
-    value: number | Post;
-  };
-  slug?: string | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: (number | null) | Media;
-  };
-  categories?:
-    | {
-        relationTo?: string | null;
-        categoryID?: string | null;
-        title?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	title?: string | null;
+	priority?: number | null;
+	doc: {
+		relationTo: "posts";
+		value: number | Post;
+	};
+	slug?: string | null;
+	meta?: {
+		title?: string | null;
+		description?: string | null;
+		image?: (number | null) | Media;
+	};
+	categories?:
+		| {
+				relationTo?: string | null;
+				categoryID?: string | null;
+				title?: string | null;
+				id?: string | null;
+		  }[]
+		| null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: number;
-  /**
-   * Input data provided to the job
-   */
-  input?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  taskStatus?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  completedAt?: string | null;
-  totalTried?: number | null;
-  /**
-   * If hasError is true this job will not be retried
-   */
-  hasError?: boolean | null;
-  /**
-   * If hasError is true, this is the error that caused it
-   */
-  error?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  /**
-   * Task execution log
-   */
-  log?:
-    | {
-        executedAt: string;
-        completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
-        taskID: string;
-        input?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        output?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        state: 'failed' | 'succeeded';
-        error?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        id?: string | null;
-      }[]
-    | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
-  queue?: string | null;
-  waitUntil?: string | null;
-  processing?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	/**
+	 * Input data provided to the job
+	 */
+	input?:
+		| {
+				[k: string]: unknown;
+		  }
+		| unknown[]
+		| string
+		| number
+		| boolean
+		| null;
+	taskStatus?:
+		| {
+				[k: string]: unknown;
+		  }
+		| unknown[]
+		| string
+		| number
+		| boolean
+		| null;
+	completedAt?: string | null;
+	totalTried?: number | null;
+	/**
+	 * If hasError is true this job will not be retried
+	 */
+	hasError?: boolean | null;
+	/**
+	 * If hasError is true, this is the error that caused it
+	 */
+	error?:
+		| {
+				[k: string]: unknown;
+		  }
+		| unknown[]
+		| string
+		| number
+		| boolean
+		| null;
+	/**
+	 * Task execution log
+	 */
+	log?:
+		| {
+				executedAt: string;
+				completedAt: string;
+				taskSlug: "inline" | "schedulePublish";
+				taskID: string;
+				input?:
+					| {
+							[k: string]: unknown;
+					  }
+					| unknown[]
+					| string
+					| number
+					| boolean
+					| null;
+				output?:
+					| {
+							[k: string]: unknown;
+					  }
+					| unknown[]
+					| string
+					| number
+					| boolean
+					| null;
+				state: "failed" | "succeeded";
+				error?:
+					| {
+							[k: string]: unknown;
+					  }
+					| unknown[]
+					| string
+					| number
+					| boolean
+					| null;
+				id?: string | null;
+		  }[]
+		| null;
+	taskSlug?: ("inline" | "schedulePublish") | null;
+	queue?: string | null;
+	waitUntil?: string | null;
+	processing?: boolean | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
-  document?:
-    | ({
-        relationTo: 'pages';
-        value: number | Page;
-      } | null)
-    | ({
-        relationTo: 'posts';
-        value: number | Post;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'categories';
-        value: number | Category;
-      } | null)
-    | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
-        relationTo: 'universities';
-        value: number | University;
-      } | null)
-    | ({
-        relationTo: 'faculties';
-        value: number | Faculty;
-      } | null)
-    | ({
-        relationTo: 'departments';
-        value: number | Department;
-      } | null)
-    | ({
-        relationTo: 'diploma-levels';
-        value: number | DiplomaLevel;
-      } | null)
-    | ({
-        relationTo: 'programs';
-        value: number | Program;
-      } | null)
-    | ({
-        relationTo: 'academic-years';
-        value: number | AcademicYear;
-      } | null)
-    | ({
-        relationTo: 'program-years';
-        value: number | ProgramYear;
-      } | null)
-    | ({
-        relationTo: 'courses';
-        value: number | Course;
-      } | null)
-    | ({
-        relationTo: 'course-variations';
-        value: number | CourseVariation;
-      } | null)
-    | ({
-        relationTo: 'course-instances';
-        value: number | CourseInstance;
-      } | null)
-    | ({
-        relationTo: 'grading-scales';
-        value: number | GradingScale;
-      } | null)
-    | ({
-        relationTo: 'academic-calendars';
-        value: number | AcademicCalendar;
-      } | null)
-    | ({
-        relationTo: 'assessment-templates';
-        value: number | AssessmentTemplate;
-      } | null)
-    | ({
-        relationTo: 'assessments';
-        value: number | Assessment;
-      } | null)
-    | ({
-        relationTo: 'enrollments';
-        value: number | Enrollment;
-      } | null)
-    | ({
-        relationTo: 'scores';
-        value: number | Score;
-      } | null)
-    | ({
-        relationTo: 'grade-aggregates';
-        value: number | GradeAggregate;
-      } | null)
-    | ({
-        relationTo: 'redirects';
-        value: number | Redirect;
-      } | null)
-    | ({
-        relationTo: 'forms';
-        value: number | Form;
-      } | null)
-    | ({
-        relationTo: 'form-submissions';
-        value: number | FormSubmission;
-      } | null)
-    | ({
-        relationTo: 'search';
-        value: number | Search;
-      } | null)
-    | ({
-        relationTo: 'payload-jobs';
-        value: number | PayloadJob;
-      } | null);
-  globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	document?:
+		| ({
+				relationTo: "pages";
+				value: number | Page;
+		  } | null)
+		| ({
+				relationTo: "posts";
+				value: number | Post;
+		  } | null)
+		| ({
+				relationTo: "media";
+				value: number | Media;
+		  } | null)
+		| ({
+				relationTo: "categories";
+				value: number | Category;
+		  } | null)
+		| ({
+				relationTo: "users";
+				value: number | User;
+		  } | null)
+		| ({
+				relationTo: "universities";
+				value: number | University;
+		  } | null)
+		| ({
+				relationTo: "faculties";
+				value: number | Faculty;
+		  } | null)
+		| ({
+				relationTo: "departments";
+				value: number | Department;
+		  } | null)
+		| ({
+				relationTo: "diploma-levels";
+				value: number | DiplomaLevel;
+		  } | null)
+		| ({
+				relationTo: "programs";
+				value: number | Program;
+		  } | null)
+		| ({
+				relationTo: "academic-years";
+				value: number | AcademicYear;
+		  } | null)
+		| ({
+				relationTo: "program-years";
+				value: number | ProgramYear;
+		  } | null)
+		| ({
+				relationTo: "courses";
+				value: number | Course;
+		  } | null)
+		| ({
+				relationTo: "course-variations";
+				value: number | CourseVariation;
+		  } | null)
+		| ({
+				relationTo: "course-instances";
+				value: number | CourseInstance;
+		  } | null)
+		| ({
+				relationTo: "grading-scales";
+				value: number | GradingScale;
+		  } | null)
+		| ({
+				relationTo: "academic-calendars";
+				value: number | AcademicCalendar;
+		  } | null)
+		| ({
+				relationTo: "assessment-templates";
+				value: number | AssessmentTemplate;
+		  } | null)
+		| ({
+				relationTo: "assessments";
+				value: number | Assessment;
+		  } | null)
+		| ({
+				relationTo: "enrollments";
+				value: number | Enrollment;
+		  } | null)
+		| ({
+				relationTo: "scores";
+				value: number | Score;
+		  } | null)
+		| ({
+				relationTo: "grade-aggregates";
+				value: number | GradeAggregate;
+		  } | null)
+		| ({
+				relationTo: "redirects";
+				value: number | Redirect;
+		  } | null)
+		| ({
+				relationTo: "forms";
+				value: number | Form;
+		  } | null)
+		| ({
+				relationTo: "form-submissions";
+				value: number | FormSubmission;
+		  } | null)
+		| ({
+				relationTo: "search";
+				value: number | Search;
+		  } | null)
+		| ({
+				relationTo: "payload-jobs";
+				value: number | PayloadJob;
+		  } | null);
+	globalSlug?: string | null;
+	user: {
+		relationTo: "users";
+		value: number | User;
+	};
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  key?: string | null;
-  value?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	user: {
+		relationTo: "users";
+		value: number | User;
+	};
+	key?: string | null;
+	value?:
+		| {
+				[k: string]: unknown;
+		  }
+		| unknown[]
+		| string
+		| number
+		| boolean
+		| null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
-  name?: string | null;
-  batch?: number | null;
-  updatedAt: string;
-  createdAt: string;
+	id: number;
+	name?: string | null;
+	batch?: number | null;
+	updatedAt: string;
+	createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  title?: T;
-  hero?:
-    | T
-    | {
-        type?: T;
-        richText?: T;
-        links?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                    appearance?: T;
-                  };
-              id?: T;
-            };
-        media?: T;
-      };
-  layout?:
-    | T
-    | {
-        cta?: T | CallToActionBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
-        archive?: T | ArchiveBlockSelect<T>;
-        formBlock?: T | FormBlockSelect<T>;
-        'university-hero'?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              primaryButtonText?: T;
-              secondaryButtonText?: T;
-              stats?:
-                | T
-                | {
-                    icon?: T;
-                    value?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        'programs-showcase'?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              programs?:
-                | T
-                | {
-                    name?: T;
-                    description?: T;
-                    icon?: T;
-                    level?: T;
-                    duration?: T;
-                    credits?: T;
-                    studentCount?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        'registration-form'?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              programs?:
-                | T
-                | {
-                    label?: T;
-                    value?: T;
-                    id?: T;
-                  };
-              academicYears?:
-                | T
-                | {
-                    label?: T;
-                    value?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        'dashboard-stats'?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              metrics?:
-                | T
-                | {
-                    label?: T;
-                    value?: T;
-                    icon?: T;
-                    trend?: T;
-                    change?: T;
-                    id?: T;
-                  };
-              enrollmentData?:
-                | T
-                | {
-                    month?: T;
-                    enrollments?: T;
-                    id?: T;
-                  };
-              programData?:
-                | T
-                | {
-                    name?: T;
-                    value?: T;
-                    id?: T;
-                  };
-              goals?:
-                | T
-                | {
-                    name?: T;
-                    description?: T;
-                    progress?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        'news-events'?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              items?:
-                | T
-                | {
-                    type?: T;
-                    title?: T;
-                    excerpt?: T;
-                    date?: T;
-                    location?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        'faculty-showcase'?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              faculty?:
-                | T
-                | {
-                    name?: T;
-                    title?: T;
-                    department?: T;
-                    avatar?: T;
-                    bio?: T;
-                    education?: T;
-                    email?: T;
-                    experience?: T;
-                    specializations?:
-                      | T
-                      | {
-                          specialization?: T;
-                          id?: T;
-                        };
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-      };
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  generateSlug?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+	title?: T;
+	hero?:
+		| T
+		| {
+				type?: T;
+				richText?: T;
+				links?:
+					| T
+					| {
+							link?:
+								| T
+								| {
+										type?: T;
+										newTab?: T;
+										reference?: T;
+										url?: T;
+										label?: T;
+										appearance?: T;
+								  };
+							id?: T;
+					  };
+				media?: T;
+		  };
+	layout?:
+		| T
+		| {
+				cta?: T | CallToActionBlockSelect<T>;
+				content?: T | ContentBlockSelect<T>;
+				mediaBlock?: T | MediaBlockSelect<T>;
+				archive?: T | ArchiveBlockSelect<T>;
+				formBlock?: T | FormBlockSelect<T>;
+				"university-hero"?:
+					| T
+					| {
+							title?: T;
+							subtitle?: T;
+							primaryButtonText?: T;
+							secondaryButtonText?: T;
+							stats?:
+								| T
+								| {
+										icon?: T;
+										value?: T;
+										label?: T;
+										id?: T;
+								  };
+							id?: T;
+							blockName?: T;
+					  };
+				"programs-showcase"?:
+					| T
+					| {
+							title?: T;
+							subtitle?: T;
+							programs?:
+								| T
+								| {
+										name?: T;
+										description?: T;
+										icon?: T;
+										level?: T;
+										duration?: T;
+										credits?: T;
+										studentCount?: T;
+										id?: T;
+								  };
+							id?: T;
+							blockName?: T;
+					  };
+				"registration-form"?:
+					| T
+					| {
+							title?: T;
+							subtitle?: T;
+							programs?:
+								| T
+								| {
+										label?: T;
+										value?: T;
+										id?: T;
+								  };
+							academicYears?:
+								| T
+								| {
+										label?: T;
+										value?: T;
+										id?: T;
+								  };
+							id?: T;
+							blockName?: T;
+					  };
+				"dashboard-stats"?:
+					| T
+					| {
+							title?: T;
+							subtitle?: T;
+							metrics?:
+								| T
+								| {
+										label?: T;
+										value?: T;
+										icon?: T;
+										trend?: T;
+										change?: T;
+										id?: T;
+								  };
+							enrollmentData?:
+								| T
+								| {
+										month?: T;
+										enrollments?: T;
+										id?: T;
+								  };
+							programData?:
+								| T
+								| {
+										name?: T;
+										value?: T;
+										id?: T;
+								  };
+							goals?:
+								| T
+								| {
+										name?: T;
+										description?: T;
+										progress?: T;
+										id?: T;
+								  };
+							id?: T;
+							blockName?: T;
+					  };
+				"news-events"?:
+					| T
+					| {
+							title?: T;
+							subtitle?: T;
+							items?:
+								| T
+								| {
+										type?: T;
+										title?: T;
+										excerpt?: T;
+										date?: T;
+										location?: T;
+										id?: T;
+								  };
+							id?: T;
+							blockName?: T;
+					  };
+				"faculty-showcase"?:
+					| T
+					| {
+							title?: T;
+							subtitle?: T;
+							faculty?:
+								| T
+								| {
+										name?: T;
+										title?: T;
+										department?: T;
+										avatar?: T;
+										bio?: T;
+										education?: T;
+										email?: T;
+										experience?: T;
+										specializations?:
+											| T
+											| {
+													specialization?: T;
+													id?: T;
+											  };
+										id?: T;
+								  };
+							id?: T;
+							blockName?: T;
+					  };
+		  };
+	meta?:
+		| T
+		| {
+				title?: T;
+				image?: T;
+				description?: T;
+		  };
+	publishedAt?: T;
+	generateSlug?: T;
+	slug?: T;
+	updatedAt?: T;
+	createdAt?: T;
+	_status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock_select".
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
+	richText?: T;
+	links?:
+		| T
+		| {
+				link?:
+					| T
+					| {
+							type?: T;
+							newTab?: T;
+							reference?: T;
+							url?: T;
+							label?: T;
+							appearance?: T;
+					  };
+				id?: T;
+		  };
+	id?: T;
+	blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock_select".
  */
 export interface ContentBlockSelect<T extends boolean = true> {
-  columns?:
-    | T
-    | {
-        size?: T;
-        richText?: T;
-        enableLink?: T;
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
+	columns?:
+		| T
+		| {
+				size?: T;
+				richText?: T;
+				enableLink?: T;
+				link?:
+					| T
+					| {
+							type?: T;
+							newTab?: T;
+							reference?: T;
+							url?: T;
+							label?: T;
+							appearance?: T;
+					  };
+				id?: T;
+		  };
+	id?: T;
+	blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "MediaBlock_select".
  */
 export interface MediaBlockSelect<T extends boolean = true> {
-  media?: T;
-  id?: T;
-  blockName?: T;
+	media?: T;
+	id?: T;
+	blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ArchiveBlock_select".
  */
 export interface ArchiveBlockSelect<T extends boolean = true> {
-  introContent?: T;
-  populateBy?: T;
-  relationTo?: T;
-  categories?: T;
-  limit?: T;
-  selectedDocs?: T;
-  id?: T;
-  blockName?: T;
+	introContent?: T;
+	populateBy?: T;
+	relationTo?: T;
+	categories?: T;
+	limit?: T;
+	selectedDocs?: T;
+	id?: T;
+	blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
-  form?: T;
-  enableIntro?: T;
-  introContent?: T;
-  id?: T;
-  blockName?: T;
+	form?: T;
+	enableIntro?: T;
+	introContent?: T;
+	id?: T;
+	blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
-  generateSlug?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+	title?: T;
+	heroImage?: T;
+	content?: T;
+	relatedPosts?: T;
+	categories?: T;
+	meta?:
+		| T
+		| {
+				title?: T;
+				image?: T;
+				description?: T;
+		  };
+	publishedAt?: T;
+	authors?: T;
+	populatedAuthors?:
+		| T
+		| {
+				id?: T;
+				name?: T;
+		  };
+	generateSlug?: T;
+	slug?: T;
+	updatedAt?: T;
+	createdAt?: T;
+	_status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  caption?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        square?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        small?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        medium?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        large?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        xlarge?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        og?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
+	alt?: T;
+	caption?: T;
+	updatedAt?: T;
+	createdAt?: T;
+	url?: T;
+	thumbnailURL?: T;
+	filename?: T;
+	mimeType?: T;
+	filesize?: T;
+	width?: T;
+	height?: T;
+	focalX?: T;
+	focalY?: T;
+	sizes?:
+		| T
+		| {
+				thumbnail?:
+					| T
+					| {
+							url?: T;
+							width?: T;
+							height?: T;
+							mimeType?: T;
+							filesize?: T;
+							filename?: T;
+					  };
+				square?:
+					| T
+					| {
+							url?: T;
+							width?: T;
+							height?: T;
+							mimeType?: T;
+							filesize?: T;
+							filename?: T;
+					  };
+				small?:
+					| T
+					| {
+							url?: T;
+							width?: T;
+							height?: T;
+							mimeType?: T;
+							filesize?: T;
+							filename?: T;
+					  };
+				medium?:
+					| T
+					| {
+							url?: T;
+							width?: T;
+							height?: T;
+							mimeType?: T;
+							filesize?: T;
+							filename?: T;
+					  };
+				large?:
+					| T
+					| {
+							url?: T;
+							width?: T;
+							height?: T;
+							mimeType?: T;
+							filesize?: T;
+							filename?: T;
+					  };
+				xlarge?:
+					| T
+					| {
+							url?: T;
+							width?: T;
+							height?: T;
+							mimeType?: T;
+							filesize?: T;
+							filename?: T;
+					  };
+				og?:
+					| T
+					| {
+							url?: T;
+							width?: T;
+							height?: T;
+							mimeType?: T;
+							filesize?: T;
+							filename?: T;
+					  };
+		  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
-  title?: T;
-  generateSlug?: T;
-  slug?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
+	title?: T;
+	generateSlug?: T;
+	slug?: T;
+	parent?: T;
+	breadcrumbs?:
+		| T
+		| {
+				doc?: T;
+				url?: T;
+				label?: T;
+				id?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  firstName?: T;
-  lastName?: T;
-  studentId?: T;
-  employeeId?: T;
-  role?: T;
-  university?: T;
-  faculty?: T;
-  department?: T;
-  program?: T;
-  programYear?: T;
-  profile?:
-    | T
-    | {
-        dateOfBirth?: T;
-        phone?: T;
-        address?: T;
-        emergencyContact?:
-          | T
-          | {
-              name?: T;
-              relationship?: T;
-              phone?: T;
-              email?: T;
-            };
-      };
-  academicInfo?:
-    | T
-    | {
-        enrollmentDate?: T;
-        expectedGraduation?: T;
-        status?: T;
-        gpa?: T;
-        totalCreditsEarned?: T;
-      };
-  permissions?:
-    | T
-    | {
-        canImpersonate?: T;
-        canManageUsers?: T;
-        canManageCourses?: T;
-        canGrade?: T;
-        canViewReports?: T;
-        scope?: T;
-      };
-  isActive?: T;
-  lastLoginAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+	name?: T;
+	firstName?: T;
+	lastName?: T;
+	studentId?: T;
+	employeeId?: T;
+	role?: T;
+	university?: T;
+	faculty?: T;
+	department?: T;
+	program?: T;
+	programYear?: T;
+	profile?:
+		| T
+		| {
+				dateOfBirth?: T;
+				phone?: T;
+				address?: T;
+				emergencyContact?:
+					| T
+					| {
+							name?: T;
+							relationship?: T;
+							phone?: T;
+							email?: T;
+					  };
+		  };
+	academicInfo?:
+		| T
+		| {
+				enrollmentDate?: T;
+				expectedGraduation?: T;
+				status?: T;
+				gpa?: T;
+				totalCreditsEarned?: T;
+		  };
+	permissions?:
+		| T
+		| {
+				canImpersonate?: T;
+				canManageUsers?: T;
+				canManageCourses?: T;
+				canGrade?: T;
+				canViewReports?: T;
+				scope?: T;
+		  };
+	isActive?: T;
+	lastLoginAt?: T;
+	updatedAt?: T;
+	createdAt?: T;
+	email?: T;
+	resetPasswordToken?: T;
+	resetPasswordExpiration?: T;
+	salt?: T;
+	hash?: T;
+	loginAttempts?: T;
+	lockUntil?: T;
+	sessions?:
+		| T
+		| {
+				id?: T;
+				createdAt?: T;
+				expiresAt?: T;
+		  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "universities_select".
  */
 export interface UniversitiesSelect<T extends boolean = true> {
-  name?: T;
-  code?: T;
-  description?: T;
-  locale?: T;
-  timezone?: T;
-  gradingScale?: T;
-  academicCalendar?: T;
-  configuration?:
-    | T
-    | {
-        roundingRule?: T;
-        decimalPrecision?: T;
-        retakePolicy?:
-          | T
-          | {
-              maxRetakes?: T;
-              weightRepl?: T;
-              capRule?: T;
-            };
-        assessWindows?:
-          | T
-          | {
-              defaultOpenDays?: T;
-              defaultCloseDays?: T;
-              latePolicy?: T;
-            };
-        reportConfig?:
-          | T
-          | {
-              headerBranding?: T;
-              footerText?: T;
-              signatureRequired?: T;
-              watermarking?: T;
-              exportFormat?: T;
-            };
-      };
-  isActive?: T;
-  contactInfo?:
-    | T
-    | {
-        address?: T;
-        phone?: T;
-        email?: T;
-        website?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
+	name?: T;
+	code?: T;
+	description?: T;
+	locale?: T;
+	timezone?: T;
+	gradingScale?: T;
+	academicCalendar?: T;
+	configuration?:
+		| T
+		| {
+				roundingRule?: T;
+				decimalPrecision?: T;
+				retakePolicy?:
+					| T
+					| {
+							maxRetakes?: T;
+							weightRepl?: T;
+							capRule?: T;
+					  };
+				assessWindows?:
+					| T
+					| {
+							defaultOpenDays?: T;
+							defaultCloseDays?: T;
+							latePolicy?: T;
+					  };
+				reportConfig?:
+					| T
+					| {
+							headerBranding?: T;
+							footerText?: T;
+							signatureRequired?: T;
+							watermarking?: T;
+							exportFormat?: T;
+					  };
+		  };
+	isActive?: T;
+	contactInfo?:
+		| T
+		| {
+				address?: T;
+				phone?: T;
+				email?: T;
+				website?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faculties_select".
  */
 export interface FacultiesSelect<T extends boolean = true> {
-  university?: T;
-  name?: T;
-  code?: T;
-  description?: T;
-  dean?: T;
-  contactInfo?:
-    | T
-    | {
-        address?: T;
-        phone?: T;
-        email?: T;
-      };
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	university?: T;
+	name?: T;
+	code?: T;
+	description?: T;
+	dean?: T;
+	contactInfo?:
+		| T
+		| {
+				address?: T;
+				phone?: T;
+				email?: T;
+		  };
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "departments_select".
  */
 export interface DepartmentsSelect<T extends boolean = true> {
-  faculty?: T;
-  name?: T;
-  code?: T;
-  description?: T;
-  head?: T;
-  contactInfo?:
-    | T
-    | {
-        address?: T;
-        phone?: T;
-        email?: T;
-      };
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	faculty?: T;
+	name?: T;
+	code?: T;
+	description?: T;
+	head?: T;
+	contactInfo?:
+		| T
+		| {
+				address?: T;
+				phone?: T;
+				email?: T;
+		  };
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "diploma-levels_select".
  */
 export interface DiplomaLevelsSelect<T extends boolean = true> {
-  name?: T;
-  code?: T;
-  level?: T;
-  description?: T;
-  typicalDuration?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	name?: T;
+	code?: T;
+	level?: T;
+	description?: T;
+	typicalDuration?: T;
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "programs_select".
  */
 export interface ProgramsSelect<T extends boolean = true> {
-  department?: T;
-  name?: T;
-  code?: T;
-  description?: T;
-  diplomaLevel?: T;
-  duration?: T;
-  curriculumRules?:
-    | T
-    | {
-        totalCreditsRequired?: T;
-        electiveCreditsAllowed?: T;
-        maxCreditsPerSemester?: T;
-        minCreditsPerSemester?: T;
-        prerequisiteRules?: T;
-      };
-  programDirector?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	department?: T;
+	name?: T;
+	code?: T;
+	description?: T;
+	diplomaLevel?: T;
+	duration?: T;
+	curriculumRules?:
+		| T
+		| {
+				totalCreditsRequired?: T;
+				electiveCreditsAllowed?: T;
+				maxCreditsPerSemester?: T;
+				minCreditsPerSemester?: T;
+				prerequisiteRules?: T;
+		  };
+	programDirector?: T;
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "academic-years_select".
  */
 export interface AcademicYearsSelect<T extends boolean = true> {
-  yearLabel?: T;
-  startDate?: T;
-  endDate?: T;
-  semesters?:
-    | T
-    | {
-        name?: T;
-        startDate?: T;
-        endDate?: T;
-        isActive?: T;
-        id?: T;
-      };
-  isActive?: T;
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	yearLabel?: T;
+	startDate?: T;
+	endDate?: T;
+	semesters?:
+		| T
+		| {
+				name?: T;
+				startDate?: T;
+				endDate?: T;
+				isActive?: T;
+				id?: T;
+		  };
+	isActive?: T;
+	description?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "program-years_select".
  */
 export interface ProgramYearsSelect<T extends boolean = true> {
-  program?: T;
-  yearNumber?: T;
-  title?: T;
-  requiredCredits?: T;
-  electiveCreditsAllowed?: T;
-  description?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	program?: T;
+	yearNumber?: T;
+	title?: T;
+	requiredCredits?: T;
+	electiveCreditsAllowed?: T;
+	description?: T;
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "courses_select".
  */
 export interface CoursesSelect<T extends boolean = true> {
-  code?: T;
-  title?: T;
-  description?: T;
-  credits?: T;
-  owningDepartment?: T;
-  prerequisites?: T;
-  courseType?: T;
-  learningOutcomes?:
-    | T
-    | {
-        outcome?: T;
-        id?: T;
-      };
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	code?: T;
+	title?: T;
+	description?: T;
+	credits?: T;
+	owningDepartment?: T;
+	prerequisites?: T;
+	courseType?: T;
+	learningOutcomes?:
+		| T
+		| {
+				outcome?: T;
+				id?: T;
+		  };
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "course-variations_select".
  */
 export interface CourseVariationsSelect<T extends boolean = true> {
-  course?: T;
-  department?: T;
-  programYear?: T;
-  codeVariant?: T;
-  titleVariant?: T;
-  descriptionVariant?: T;
-  locale?: T;
-  credits?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	course?: T;
+	department?: T;
+	programYear?: T;
+	codeVariant?: T;
+	titleVariant?: T;
+	descriptionVariant?: T;
+	locale?: T;
+	credits?: T;
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "course-instances_select".
  */
 export interface CourseInstancesSelect<T extends boolean = true> {
-  courseVariation?: T;
-  academicYear?: T;
-  instanceTitle?: T;
-  professors?: T;
-  assistants?: T;
-  maxEnrollment?: T;
-  currentEnrollment?: T;
-  schedule?:
-    | T
-    | {
-        days?: T;
-        startTime?: T;
-        endTime?: T;
-        room?: T;
-      };
-  status?: T;
-  notes?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	courseVariation?: T;
+	academicYear?: T;
+	instanceTitle?: T;
+	professors?: T;
+	assistants?: T;
+	maxEnrollment?: T;
+	currentEnrollment?: T;
+	schedule?:
+		| T
+		| {
+				days?: T;
+				startTime?: T;
+				endTime?: T;
+				room?: T;
+		  };
+	status?: T;
+	notes?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "grading-scales_select".
  */
 export interface GradingScalesSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  scaleType?: T;
-  gradeMappings?:
-    | T
-    | {
-        minScore?: T;
-        maxScore?: T;
-        letterGrade?: T;
-        numericGrade?: T;
-        isPassing?: T;
-        description?: T;
-        id?: T;
-      };
-  passThreshold?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	name?: T;
+	description?: T;
+	scaleType?: T;
+	gradeMappings?:
+		| T
+		| {
+				minScore?: T;
+				maxScore?: T;
+				letterGrade?: T;
+				numericGrade?: T;
+				isPassing?: T;
+				description?: T;
+				id?: T;
+		  };
+	passThreshold?: T;
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "academic-calendars_select".
  */
 export interface AcademicCalendarsSelect<T extends boolean = true> {
-  name?: T;
-  academicYear?: T;
-  importantDates?:
-    | T
-    | {
-        name?: T;
-        date?: T;
-        type?: T;
-        description?: T;
-        id?: T;
-      };
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	name?: T;
+	academicYear?: T;
+	importantDates?:
+		| T
+		| {
+				name?: T;
+				date?: T;
+				type?: T;
+				description?: T;
+				id?: T;
+		  };
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "assessment-templates_select".
  */
 export interface AssessmentTemplatesSelect<T extends boolean = true> {
-  courseInstance?: T;
-  name?: T;
-  description?: T;
-  weightPercent?: T;
-  minScore?: T;
-  maxScore?: T;
-  isOptional?: T;
-  assessmentType?: T;
-  instructions?: T;
-  rubric?:
-    | T
-    | {
-        criteria?: T;
-        description?: T;
-        maxPoints?: T;
-        id?: T;
-      };
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	courseInstance?: T;
+	name?: T;
+	description?: T;
+	weightPercent?: T;
+	minScore?: T;
+	maxScore?: T;
+	isOptional?: T;
+	assessmentType?: T;
+	instructions?: T;
+	rubric?:
+		| T
+		| {
+				criteria?: T;
+				description?: T;
+				maxPoints?: T;
+				id?: T;
+		  };
+	isActive?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "assessments_select".
  */
 export interface AssessmentsSelect<T extends boolean = true> {
-  assessmentTemplate?: T;
-  title?: T;
-  description?: T;
-  date?: T;
-  startTime?: T;
-  endTime?: T;
-  location?: T;
-  status?: T;
-  submissionWindow?:
-    | T
-    | {
-        opensAt?: T;
-        closesAt?: T;
-        lateSubmissionAllowed?: T;
-        latePenaltyPercent?: T;
-      };
-  gradingWindow?:
-    | T
-    | {
-        opensAt?: T;
-        closesAt?: T;
-        allowLateGrading?: T;
-      };
-  instructions?: T;
-  notes?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	assessmentTemplate?: T;
+	title?: T;
+	description?: T;
+	date?: T;
+	startTime?: T;
+	endTime?: T;
+	location?: T;
+	status?: T;
+	submissionWindow?:
+		| T
+		| {
+				opensAt?: T;
+				closesAt?: T;
+				lateSubmissionAllowed?: T;
+				latePenaltyPercent?: T;
+		  };
+	gradingWindow?:
+		| T
+		| {
+				opensAt?: T;
+				closesAt?: T;
+				allowLateGrading?: T;
+		  };
+	instructions?: T;
+	notes?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enrollments_select".
  */
 export interface EnrollmentsSelect<T extends boolean = true> {
-  student?: T;
-  courseInstance?: T;
-  enrollmentTitle?: T;
-  status?: T;
-  enrolledAt?: T;
-  droppedAt?: T;
-  completedAt?: T;
-  enrollmentType?: T;
-  creditsEarned?: T;
-  notes?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	student?: T;
+	courseInstance?: T;
+	enrollmentTitle?: T;
+	status?: T;
+	enrolledAt?: T;
+	droppedAt?: T;
+	completedAt?: T;
+	enrollmentType?: T;
+	creditsEarned?: T;
+	notes?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "scores_select".
  */
 export interface ScoresSelect<T extends boolean = true> {
-  assessment?: T;
-  student?: T;
-  scoreTitle?: T;
-  value?: T;
-  maxValue?: T;
-  percentage?: T;
-  isLate?: T;
-  latePenaltyApplied?: T;
-  finalValue?: T;
-  gradedBy?: T;
-  gradedAt?: T;
-  feedback?: T;
-  notes?: T;
-  isExcused?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	assessment?: T;
+	student?: T;
+	scoreTitle?: T;
+	value?: T;
+	maxValue?: T;
+	percentage?: T;
+	isLate?: T;
+	latePenaltyApplied?: T;
+	finalValue?: T;
+	gradedBy?: T;
+	gradedAt?: T;
+	feedback?: T;
+	notes?: T;
+	isExcused?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "grade-aggregates_select".
  */
 export interface GradeAggregatesSelect<T extends boolean = true> {
-  enrollment?: T;
-  gradeTitle?: T;
-  finalNumeric?: T;
-  finalLetter?: T;
-  passFail?: T;
-  gpaPoints?: T;
-  calculationMethod?: T;
-  assessmentBreakdown?:
-    | T
-    | {
-        assessmentTemplate?: T;
-        score?: T;
-        maxScore?: T;
-        weight?: T;
-        contribution?: T;
-        isMissing?: T;
-        isExcused?: T;
-        id?: T;
-      };
-  decisionNotes?: T;
-  calculatedAt?: T;
-  calculatedBy?: T;
-  isPublished?: T;
-  publishedAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	enrollment?: T;
+	gradeTitle?: T;
+	finalNumeric?: T;
+	finalLetter?: T;
+	passFail?: T;
+	gpaPoints?: T;
+	calculationMethod?: T;
+	assessmentBreakdown?:
+		| T
+		| {
+				assessmentTemplate?: T;
+				score?: T;
+				maxScore?: T;
+				weight?: T;
+				contribution?: T;
+				isMissing?: T;
+				isExcused?: T;
+				id?: T;
+		  };
+	decisionNotes?: T;
+	calculatedAt?: T;
+	calculatedBy?: T;
+	isPublished?: T;
+	publishedAt?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
-  from?: T;
-  to?:
-    | T
-    | {
-        type?: T;
-        reference?: T;
-        url?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
+	from?: T;
+	to?:
+		| T
+		| {
+				type?: T;
+				reference?: T;
+				url?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms_select".
  */
 export interface FormsSelect<T extends boolean = true> {
-  title?: T;
-  fields?:
-    | T
-    | {
-        checkbox?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              defaultValue?: T;
-              id?: T;
-              blockName?: T;
-            };
-        country?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        email?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        message?:
-          | T
-          | {
-              message?: T;
-              id?: T;
-              blockName?: T;
-            };
-        number?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        select?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              placeholder?: T;
-              options?:
-                | T
-                | {
-                    label?: T;
-                    value?: T;
-                    id?: T;
-                  };
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        state?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        text?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        textarea?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  submitButtonLabel?: T;
-  confirmationType?: T;
-  confirmationMessage?: T;
-  redirect?:
-    | T
-    | {
-        url?: T;
-      };
-  emails?:
-    | T
-    | {
-        emailTo?: T;
-        cc?: T;
-        bcc?: T;
-        replyTo?: T;
-        emailFrom?: T;
-        subject?: T;
-        message?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
+	title?: T;
+	fields?:
+		| T
+		| {
+				checkbox?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							required?: T;
+							defaultValue?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				country?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							required?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				email?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							required?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				message?:
+					| T
+					| {
+							message?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				number?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							defaultValue?: T;
+							required?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				select?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							defaultValue?: T;
+							placeholder?: T;
+							options?:
+								| T
+								| {
+										label?: T;
+										value?: T;
+										id?: T;
+								  };
+							required?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				state?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							required?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				text?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							defaultValue?: T;
+							required?: T;
+							id?: T;
+							blockName?: T;
+					  };
+				textarea?:
+					| T
+					| {
+							name?: T;
+							label?: T;
+							width?: T;
+							defaultValue?: T;
+							required?: T;
+							id?: T;
+							blockName?: T;
+					  };
+		  };
+	submitButtonLabel?: T;
+	confirmationType?: T;
+	confirmationMessage?: T;
+	redirect?:
+		| T
+		| {
+				url?: T;
+		  };
+	emails?:
+		| T
+		| {
+				emailTo?: T;
+				cc?: T;
+				bcc?: T;
+				replyTo?: T;
+				emailFrom?: T;
+				subject?: T;
+				message?: T;
+				id?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions_select".
  */
 export interface FormSubmissionsSelect<T extends boolean = true> {
-  form?: T;
-  submissionData?:
-    | T
-    | {
-        field?: T;
-        value?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
+	form?: T;
+	submissionData?:
+		| T
+		| {
+				field?: T;
+				value?: T;
+				id?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "search_select".
  */
 export interface SearchSelect<T extends boolean = true> {
-  title?: T;
-  priority?: T;
-  doc?: T;
-  slug?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  categories?:
-    | T
-    | {
-        relationTo?: T;
-        categoryID?: T;
-        title?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
+	title?: T;
+	priority?: T;
+	doc?: T;
+	slug?: T;
+	meta?:
+		| T
+		| {
+				title?: T;
+				description?: T;
+				image?: T;
+		  };
+	categories?:
+		| T
+		| {
+				relationTo?: T;
+				categoryID?: T;
+				title?: T;
+				id?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs_select".
  */
 export interface PayloadJobsSelect<T extends boolean = true> {
-  input?: T;
-  taskStatus?: T;
-  completedAt?: T;
-  totalTried?: T;
-  hasError?: T;
-  error?: T;
-  log?:
-    | T
-    | {
-        executedAt?: T;
-        completedAt?: T;
-        taskSlug?: T;
-        taskID?: T;
-        input?: T;
-        output?: T;
-        state?: T;
-        error?: T;
-        id?: T;
-      };
-  taskSlug?: T;
-  queue?: T;
-  waitUntil?: T;
-  processing?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	input?: T;
+	taskStatus?: T;
+	completedAt?: T;
+	totalTried?: T;
+	hasError?: T;
+	error?: T;
+	log?:
+		| T
+		| {
+				executedAt?: T;
+				completedAt?: T;
+				taskSlug?: T;
+				taskID?: T;
+				input?: T;
+				output?: T;
+				state?: T;
+				error?: T;
+				id?: T;
+		  };
+	taskSlug?: T;
+	queue?: T;
+	waitUntil?: T;
+	processing?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T;
-  globalSlug?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	document?: T;
+	globalSlug?: T;
+	user?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T;
-  key?: T;
-  value?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	user?: T;
+	key?: T;
+	value?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T;
-  batch?: T;
-  updatedAt?: T;
-  createdAt?: T;
+	name?: T;
+	batch?: T;
+	updatedAt?: T;
+	createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
-  id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+	id: number;
+	navItems?:
+		| {
+				link: {
+					type?: ("reference" | "custom") | null;
+					newTab?: boolean | null;
+					reference?:
+						| ({
+								relationTo: "pages";
+								value: number | Page;
+						  } | null)
+						| ({
+								relationTo: "posts";
+								value: number | Post;
+						  } | null);
+					url?: string | null;
+					label: string;
+				};
+				id?: string | null;
+		  }[]
+		| null;
+	updatedAt?: string | null;
+	createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+	id: number;
+	navItems?:
+		| {
+				link: {
+					type?: ("reference" | "custom") | null;
+					newTab?: boolean | null;
+					reference?:
+						| ({
+								relationTo: "pages";
+								value: number | Page;
+						  } | null)
+						| ({
+								relationTo: "posts";
+								value: number | Post;
+						  } | null);
+					url?: string | null;
+					label: string;
+				};
+				id?: string | null;
+		  }[]
+		| null;
+	updatedAt?: string | null;
+	createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+	navItems?:
+		| T
+		| {
+				link?:
+					| T
+					| {
+							type?: T;
+							newTab?: T;
+							reference?: T;
+							url?: T;
+							label?: T;
+					  };
+				id?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
+	globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+	navItems?:
+		| T
+		| {
+				link?:
+					| T
+					| {
+							type?: T;
+							newTab?: T;
+							reference?: T;
+							url?: T;
+							label?: T;
+					  };
+				id?: T;
+		  };
+	updatedAt?: T;
+	createdAt?: T;
+	globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskSchedulePublish".
  */
 export interface TaskSchedulePublish {
-  input: {
-    type?: ('publish' | 'unpublish') | null;
-    locale?: string | null;
-    doc?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
-    global?: string | null;
-    user?: (number | null) | User;
-  };
-  output?: unknown;
+	input: {
+		type?: ("publish" | "unpublish") | null;
+		locale?: string | null;
+		doc?:
+			| ({
+					relationTo: "pages";
+					value: number | Page;
+			  } | null)
+			| ({
+					relationTo: "posts";
+					value: number | Post;
+			  } | null);
+		global?: string | null;
+		user?: (number | null) | User;
+	};
+	output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "BannerBlock".
  */
 export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
+	style: "info" | "warning" | "error" | "success";
+	content: {
+		root: {
+			type: string;
+			children: {
+				type: any;
+				version: number;
+				[k: string]: unknown;
+			}[];
+			direction: ("ltr" | "rtl") | null;
+			format:
+				| "left"
+				| "start"
+				| "center"
+				| "right"
+				| "end"
+				| "justify"
+				| "";
+			indent: number;
+			version: number;
+		};
+		[k: string]: unknown;
+	};
+	id?: string | null;
+	blockName?: string | null;
+	blockType: "banner";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CodeBlock".
  */
 export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
+	language?: ("typescript" | "javascript" | "css") | null;
+	code: string;
+	id?: string | null;
+	blockName?: string | null;
+	blockType: "code";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown;
+	[k: string]: unknown;
 }
 
-
-declare module 'payload' {
-  export interface GeneratedTypes extends Config {}
+declare module "payload" {
+	export interface GeneratedTypes extends Config {}
 }

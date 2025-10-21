@@ -36,7 +36,7 @@ export const queryKeys = {
 // API functions
 const api = {
 	// User
-	getUser: async (): Promise<any> => {
+	getUser: async (): Promise<unknown> => {
 		const response = await fetch(`${API_BASE}/api/users/me`, {
 			credentials: "include",
 		});
@@ -45,7 +45,7 @@ const api = {
 	},
 
 	// Courses
-	getCourses: async (): Promise<any[]> => {
+	getCourses: async (): Promise<unknown[]> => {
 		const response = await fetch(`${API_BASE}/api/courses`, {
 			credentials: "include",
 		});
@@ -55,7 +55,7 @@ const api = {
 	},
 
 	// Course Instances
-	getCourseInstances: async (): Promise<any[]> => {
+	getCourseInstances: async (): Promise<unknown[]> => {
 		const response = await fetch(`${API_BASE}/api/course-instances`, {
 			credentials: "include",
 		});
@@ -65,7 +65,7 @@ const api = {
 	},
 
 	// Enrollments
-	getEnrollments: async (): Promise<any[]> => {
+	getEnrollments: async (): Promise<unknown[]> => {
 		const response = await fetch(`${API_BASE}/api/enrollments`, {
 			credentials: "include",
 		});
@@ -74,7 +74,7 @@ const api = {
 		return data.docs || [];
 	},
 
-	getStudentEnrollments: async (studentId: string): Promise<any[]> => {
+	getStudentEnrollments: async (studentId: string): Promise<unknown[]> => {
 		const response = await fetch(
 			`${API_BASE}/api/enrollments?where[student][equals]=${studentId}`,
 			{
@@ -88,7 +88,7 @@ const api = {
 	},
 
 	// Assessments
-	getAssessments: async (): Promise<any[]> => {
+	getAssessments: async (): Promise<unknown[]> => {
 		const response = await fetch(`${API_BASE}/api/assessments`, {
 			credentials: "include",
 		});
@@ -98,7 +98,7 @@ const api = {
 	},
 
 	// Scores
-	getScores: async (): Promise<any[]> => {
+	getScores: async (): Promise<unknown[]> => {
 		const response = await fetch(`${API_BASE}/api/scores`, {
 			credentials: "include",
 		});
@@ -108,7 +108,7 @@ const api = {
 	},
 
 	// Grade Aggregates
-	getGradeAggregates: async (): Promise<any[]> => {
+	getGradeAggregates: async (): Promise<unknown[]> => {
 		const response = await fetch(`${API_BASE}/api/grade-aggregates`, {
 			credentials: "include",
 		});

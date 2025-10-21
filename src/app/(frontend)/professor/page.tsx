@@ -130,7 +130,8 @@ export default function ProfessorDashboard() {
 				const enrollmentsData = await enrollmentsResponse.json();
 				const studentIds =
 					enrollmentsData.docs?.map(
-						(enrollment: any) => enrollment.student,
+						(enrollment: unknown) =>
+							(enrollment as { student: string }).student,
 					) || [];
 
 				if (studentIds.length > 0) {

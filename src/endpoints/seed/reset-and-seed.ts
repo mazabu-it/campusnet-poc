@@ -220,7 +220,7 @@ export const resetAndSeedEndpoint: Endpoint = {
 				limit: 1000,
 			});
 			for (const user of campusnetUsers.docs) {
-				if (user && user.id) {
+				if (user?.id) {
 					await req.payload.delete({
 						collection: "users",
 						id: user.id,
@@ -234,7 +234,7 @@ export const resetAndSeedEndpoint: Endpoint = {
 				limit: 1000,
 			});
 			for (const page of pages.docs) {
-				if (page && page.id) {
+				if (page?.id) {
 					await req.payload.delete({
 						collection: "pages",
 						id: page.id,

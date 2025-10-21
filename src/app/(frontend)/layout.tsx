@@ -7,7 +7,7 @@ import type React from "react";
 import { AdminBar } from "@/components/AdminBar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FooterComponent } from "@/Footer/Component";
-import { Header } from "@/Header/Component";
+import { HeaderComponent } from "@/Header/Component";
 import { Providers } from "@/providers";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { InitTheme } from "@/providers/Theme/InitTheme";
@@ -45,7 +45,7 @@ export default async function RootLayout({
 								}}
 							/>
 
-							<Header />
+							<HeaderComponent />
 							{children}
 							<FooterComponent />
 						</Providers>

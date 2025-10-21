@@ -111,7 +111,7 @@ export class ErrorBoundary extends React.Component<
 				const FallbackComponent = this.props.fallback;
 				return (
 					<FallbackComponent
-						error={this.state.error!}
+						error={this.state.error || new Error("Unknown error")}
 						resetError={this.resetError}
 					/>
 				);
@@ -119,7 +119,7 @@ export class ErrorBoundary extends React.Component<
 
 			return (
 				<DefaultErrorFallback
-					error={this.state.error!}
+					error={this.state.error || new Error("Unknown error")}
 					resetError={this.resetError}
 				/>
 			);
@@ -265,7 +265,9 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({
 						</Button>
 						<Button
 							variant="outline"
-							onClick={() => (window.location.href = "/")}
+							onClick={() => {
+								window.location.href = "/";
+							}}
 							className="sm:col-span-1"
 						>
 							<Icon icon="lucide:home" className="w-4 h-4 mr-2" />

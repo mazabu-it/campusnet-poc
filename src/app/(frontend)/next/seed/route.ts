@@ -25,7 +25,10 @@ export async function POST(): Promise<Response> {
 
 		return Response.json({ success: true });
 	} catch (e) {
-		payload.logger.error({ err: e, message: "Error seeding Campusnet data" });
+		payload.logger.error({
+			err: e,
+			message: "Error seeding Campusnet data",
+		});
 		return new Response("Error seeding Campusnet data.", { status: 500 });
 	}
 }

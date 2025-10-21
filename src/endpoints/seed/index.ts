@@ -19,7 +19,10 @@ export const seedCampusnetEndpoint: Endpoint = {
 				{
 					success: false,
 					error: "Failed to seed Campusnet demo data",
-					details: error instanceof Error ? error.message : "Unknown error",
+					details:
+						error instanceof Error
+							? error.message
+							: "Unknown error",
 				},
 				{ status: 500 },
 			);

@@ -209,7 +209,7 @@ interface AcademicState {
 export const useAcademicStore = create<AcademicState>()(
 	devtools(
 		persist(
-			immer((set, get) => ({
+			immer((set, _get) => ({
 				courses: [],
 				grades: [],
 				gpa: 0,
@@ -228,7 +228,7 @@ export const useAcademicStore = create<AcademicState>()(
 								const gradePoints = getGradePoints(grade.grade);
 								return sum + gradePoints;
 							}, 0) / grades.length;
-						state.gpa = isNaN(gpa) ? 0 : gpa;
+						state.gpa = Number.isNaN(gpa) ? 0 : gpa;
 					}),
 				calculateGPA: () =>
 					set((state) => {
@@ -237,7 +237,7 @@ export const useAcademicStore = create<AcademicState>()(
 								const gradePoints = getGradePoints(grade.grade);
 								return sum + gradePoints;
 							}, 0) / state.grades.length;
-						state.gpa = isNaN(gpa) ? 0 : gpa;
+						state.gpa = Number.isNaN(gpa) ? 0 : gpa;
 					}),
 				setCurrentSemester: (semester) =>
 					set((state) => {
@@ -296,9 +296,9 @@ const getGradePoints = (grade: string): number => {
 
 // Form Store
 interface FormState {
-	forms: Record<string, any>;
-	setFormData: (formId: string, data: any) => void;
-	getFormData: (formId: string) => any;
+	forms: Record<string, unknown>;
+	setFormData: (formId: string, data: unknown) => void;
+	getFormData: (formId: string) => unknown;
 	clearForm: (formId: string) => void;
 	clearAllForms: () => void;
 }
@@ -334,10 +334,10 @@ interface AnalyticsState {
 		id: string;
 		type: string;
 		timestamp: Date;
-		data: any;
+		data: unknown;
 	}>;
 	trackPageView: (page: string) => void;
-	trackInteraction: (type: string, data: any) => void;
+	trackInteraction: (type: string, data: unknown) => void;
 	getPageViews: (page?: string) => number;
 	getInteractionCount: (type?: string) => number;
 }
@@ -345,7 +345,7 @@ interface AnalyticsState {
 export const useAnalyticsStore = create<AnalyticsState>()(
 	devtools(
 		persist(
-			immer((set, get) => ({
+			immer((set, _get) => ({
 				pageViews: {},
 				userInteractions: [],
 				trackPageView: (page) =>

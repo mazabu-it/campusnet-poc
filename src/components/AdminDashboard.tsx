@@ -137,7 +137,9 @@ export function AdminDashboard() {
 	};
 
 	const getStatusColor = (isActive: boolean) => {
-		return isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+		return isActive
+			? "bg-green-100 text-green-800"
+			: "bg-red-100 text-red-800";
 	};
 
 	if (loading) {
@@ -151,9 +153,12 @@ export function AdminDashboard() {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<div className="mb-8">
-				<h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+				<h1 className="text-3xl font-bold text-gray-900">
+					Admin Dashboard
+				</h1>
 				<p className="text-gray-600 mt-2">
-					Manage universities, faculties, departments, programs, and users
+					Manage universities, faculties, departments, programs, and
+					users
 				</p>
 			</div>
 
@@ -172,7 +177,11 @@ export function AdminDashboard() {
 							<button
 								type="button"
 								key={tab.key}
-								onClick={() => setActiveTab(tab.key as any)}
+								onClick={() =>
+									setActiveTab(
+										tab.key as "overview" | "users",
+									)
+								}
 								className={`py-2 px-1 border-b-2 font-medium text-sm ${
 									activeTab === tab.key
 										? "border-blue-500 text-blue-600"
@@ -200,9 +209,15 @@ export function AdminDashboard() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="text-2xl font-bold">{universities.length}</div>
+								<div className="text-2xl font-bold">
+									{universities.length}
+								</div>
 								<p className="text-xs text-gray-600">
-									{universities.filter((u) => u.isActive).length} active
+									{
+										universities.filter((u) => u.isActive)
+											.length
+									}{" "}
+									active
 								</p>
 							</CardContent>
 						</Card>
@@ -213,9 +228,12 @@ export function AdminDashboard() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="text-2xl font-bold">{faculties.length}</div>
+								<div className="text-2xl font-bold">
+									{faculties.length}
+								</div>
 								<p className="text-xs text-gray-600">
-									{faculties.filter((f) => f.isActive).length} active
+									{faculties.filter((f) => f.isActive).length}{" "}
+									active
 								</p>
 							</CardContent>
 						</Card>
@@ -226,9 +244,15 @@ export function AdminDashboard() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="text-2xl font-bold">{departments.length}</div>
+								<div className="text-2xl font-bold">
+									{departments.length}
+								</div>
 								<p className="text-xs text-gray-600">
-									{departments.filter((d) => d.isActive).length} active
+									{
+										departments.filter((d) => d.isActive)
+											.length
+									}{" "}
+									active
 								</p>
 							</CardContent>
 						</Card>
@@ -239,9 +263,12 @@ export function AdminDashboard() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="text-2xl font-bold">{programs.length}</div>
+								<div className="text-2xl font-bold">
+									{programs.length}
+								</div>
 								<p className="text-xs text-gray-600">
-									{programs.filter((p) => p.isActive).length} active
+									{programs.filter((p) => p.isActive).length}{" "}
+									active
 								</p>
 							</CardContent>
 						</Card>
@@ -257,7 +284,8 @@ export function AdminDashboard() {
 									{Object.entries(
 										users.reduce(
 											(acc, user) => {
-												acc[user.role] = (acc[user.role] || 0) + 1;
+												acc[user.role] =
+													(acc[user.role] || 0) + 1;
 												return acc;
 											},
 											{} as Record<string, number>,
@@ -270,7 +298,9 @@ export function AdminDashboard() {
 											<span className="text-sm capitalize">
 												{role.replace("-", " ")}
 											</span>
-											<Badge variant="outline">{count}</Badge>
+											<Badge variant="outline">
+												{count}
+											</Badge>
 										</div>
 									))}
 								</div>
@@ -326,10 +356,18 @@ export function AdminDashboard() {
 											</p>
 										</div>
 										<div className="flex items-center space-x-2">
-											<Badge className={getStatusColor(university.isActive)}>
-												{university.isActive ? "Active" : "Inactive"}
+											<Badge
+												className={getStatusColor(
+													university.isActive,
+												)}
+											>
+												{university.isActive
+													? "Active"
+													: "Inactive"}
 											</Badge>
-											<Badge variant="outline">{university.locale}</Badge>
+											<Badge variant="outline">
+												{university.locale}
+											</Badge>
 										</div>
 									</div>
 								</CardHeader>
@@ -353,7 +391,9 @@ export function AdminDashboard() {
 			{activeTab === "users" && (
 				<div className="space-y-6">
 					<div className="flex justify-between items-center">
-						<h2 className="text-2xl font-semibold text-gray-900">Users</h2>
+						<h2 className="text-2xl font-semibold text-gray-900">
+							Users
+						</h2>
 						<Button
 							onClick={() => {
 								/* Create user */
@@ -365,19 +405,36 @@ export function AdminDashboard() {
 
 					<div className="grid gap-4">
 						{users.map((user) => (
-							<Card key={user.id} className="hover:shadow-lg transition-shadow">
+							<Card
+								key={user.id}
+								className="hover:shadow-lg transition-shadow"
+							>
 								<CardHeader>
 									<div className="flex items-center justify-between">
 										<div>
-											<CardTitle className="text-lg">{user.name}</CardTitle>
-											<p className="text-sm text-gray-600">{user.email}</p>
+											<CardTitle className="text-lg">
+												{user.name}
+											</CardTitle>
+											<p className="text-sm text-gray-600">
+												{user.email}
+											</p>
 										</div>
 										<div className="flex items-center space-x-2">
-											<Badge className={getRoleColor(user.role)}>
+											<Badge
+												className={getRoleColor(
+													user.role,
+												)}
+											>
 												{user.role.replace("-", " ")}
 											</Badge>
-											<Badge className={getStatusColor(user.isActive)}>
-												{user.isActive ? "Active" : "Inactive"}
+											<Badge
+												className={getStatusColor(
+													user.isActive,
+												)}
+											>
+												{user.isActive
+													? "Active"
+													: "Inactive"}
 											</Badge>
 										</div>
 									</div>
@@ -385,8 +442,12 @@ export function AdminDashboard() {
 								<CardContent>
 									<div className="text-sm text-gray-600">
 										<p>University: {user.university}</p>
-										{user.faculty && <p>Faculty: {user.faculty}</p>}
-										{user.department && <p>Department: {user.department}</p>}
+										{user.faculty && (
+											<p>Faculty: {user.faculty}</p>
+										)}
+										{user.department && (
+											<p>Department: {user.department}</p>
+										)}
 									</div>
 									<div className="flex justify-end space-x-2 mt-4">
 										<Button variant="outline" size="sm">

@@ -307,22 +307,34 @@ export default function UniversityHomepage() {
 							</h4>
 							<ul className="space-y-2 text-gray-400">
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/admissions"
+										className="hover:text-white"
+									>
 										Admissions
 									</a>
 								</li>
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/programs"
+										className="hover:text-white"
+									>
 										Programs
 									</a>
 								</li>
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/financial-aid"
+										className="hover:text-white"
+									>
 										Financial Aid
 									</a>
 								</li>
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/campus-life"
+										className="hover:text-white"
+									>
 										Campus Life
 									</a>
 								</li>
@@ -334,22 +346,34 @@ export default function UniversityHomepage() {
 							</h4>
 							<ul className="space-y-2 text-gray-400">
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/undergraduate"
+										className="hover:text-white"
+									>
 										Undergraduate
 									</a>
 								</li>
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/graduate"
+										className="hover:text-white"
+									>
 										Graduate
 									</a>
 								</li>
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/research"
+										className="hover:text-white"
+									>
 										Research
 									</a>
 								</li>
 								<li>
-									<a href="#" className="hover:text-white">
+									<a
+										href="/libraries"
+										className="hover:text-white"
+									>
 										Libraries
 									</a>
 								</li>

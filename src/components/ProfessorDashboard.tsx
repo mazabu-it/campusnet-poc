@@ -49,7 +49,9 @@ interface StudentScore {
 }
 
 export function ProfessorDashboard() {
-	const [courseInstances, setCourseInstances] = useState<CourseInstance[]>([]);
+	const [courseInstances, setCourseInstances] = useState<CourseInstance[]>(
+		[],
+	);
 	const [assessments, setAssessments] = useState<Assessment[]>([]);
 	const [_selectedCourse, setSelectedCourse] = useState<string>("");
 	const [selectedAssessment, setSelectedAssessment] = useState<string>("");
@@ -92,7 +94,9 @@ export function ProfessorDashboard() {
 
 	const fetchStudentScores = async (assessmentId: string) => {
 		try {
-			const response = await fetch(`/api/scores?assessment=${assessmentId}`);
+			const response = await fetch(
+				`/api/scores?assessment=${assessmentId}`,
+			);
 			const data = await response.json();
 			setStudentScores(data.docs || []);
 		} catch (error) {
@@ -219,7 +223,9 @@ export function ProfessorDashboard() {
 			{/* Courses Tab */}
 			{activeTab === "courses" && (
 				<div className="space-y-6">
-					<h2 className="text-2xl font-semibold text-gray-900">My Courses</h2>
+					<h2 className="text-2xl font-semibold text-gray-900">
+						My Courses
+					</h2>
 					<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 						{courseInstances.map((course) => (
 							<Card
@@ -227,10 +233,18 @@ export function ProfessorDashboard() {
 								className="hover:shadow-lg transition-shadow"
 							>
 								<CardHeader>
-									<CardTitle className="text-lg">{course.title}</CardTitle>
+									<CardTitle className="text-lg">
+										{course.title}
+									</CardTitle>
 									<div className="flex items-center justify-between">
-										<span className="text-sm text-gray-600">{course.code}</span>
-										<Badge className={getStatusColor(course.status)}>
+										<span className="text-sm text-gray-600">
+											{course.code}
+										</span>
+										<Badge
+											className={getStatusColor(
+												course.status,
+											)}
+										>
 											{course.status}
 										</Badge>
 									</div>
@@ -238,14 +252,21 @@ export function ProfessorDashboard() {
 								<CardContent>
 									<div className="space-y-2">
 										<div className="flex justify-between text-sm">
-											<span className="text-gray-600">Academic Year:</span>
-											<span className="font-medium">{course.academicYear}</span>
+											<span className="text-gray-600">
+												Academic Year:
+											</span>
+											<span className="font-medium">
+												{course.academicYear}
+											</span>
 										</div>
 										<div className="flex justify-between text-sm">
-											<span className="text-gray-600">Enrollment:</span>
+											<span className="text-gray-600">
+												Enrollment:
+											</span>
 											<span className="font-medium">
 												{course.currentEnrollment}
-												{course.maxEnrollment && `/${course.maxEnrollment}`}
+												{course.maxEnrollment &&
+													`/${course.maxEnrollment}`}
 											</span>
 										</div>
 									</div>
@@ -254,7 +275,9 @@ export function ProfessorDashboard() {
 											variant="outline"
 											size="sm"
 											className="w-full"
-											onClick={() => handleCourseSelect(course.id)}
+											onClick={() =>
+												handleCourseSelect(course.id)
+											}
 										>
 											Manage Course
 										</Button>
@@ -294,16 +317,26 @@ export function ProfessorDashboard() {
 											<CardTitle className="text-lg">
 												{assessment.title}
 											</CardTitle>
-											<p className="text-sm text-gray-600">{assessment.date}</p>
+											<p className="text-sm text-gray-600">
+												{assessment.date}
+											</p>
 										</div>
 										<div className="flex items-center space-x-2">
-											<Badge className={getStatusColor(assessment.status)}>
+											<Badge
+												className={getStatusColor(
+													assessment.status,
+												)}
+											>
 												{assessment.status}
 											</Badge>
 											<Button
 												variant="outline"
 												size="sm"
-												onClick={() => handleAssessmentSelect(assessment.id)}
+												onClick={() =>
+													handleAssessmentSelect(
+														assessment.id,
+													)
+												}
 											>
 												Grade
 											</Button>
@@ -313,26 +346,34 @@ export function ProfessorDashboard() {
 								<CardContent>
 									<div className="grid grid-cols-2 gap-4 text-sm">
 										<div>
-											<span className="text-gray-600">Submission Window:</span>
+											<span className="text-gray-600">
+												Submission Window:
+											</span>
 											<p className="font-medium">
 												{new Date(
-													assessment.submissionWindow.opensAt,
+													assessment.submissionWindow
+														.opensAt,
 												).toLocaleDateString()}{" "}
 												-
 												{new Date(
-													assessment.submissionWindow.closesAt,
+													assessment.submissionWindow
+														.closesAt,
 												).toLocaleDateString()}
 											</p>
 										</div>
 										<div>
-											<span className="text-gray-600">Grading Window:</span>
+											<span className="text-gray-600">
+												Grading Window:
+											</span>
 											<p className="font-medium">
 												{new Date(
-													assessment.gradingWindow.opensAt,
+													assessment.gradingWindow
+														.opensAt,
 												).toLocaleDateString()}{" "}
 												-
 												{new Date(
-													assessment.gradingWindow.closesAt,
+													assessment.gradingWindow
+														.closesAt,
 												).toLocaleDateString()}
 											</p>
 										</div>
@@ -347,7 +388,9 @@ export function ProfessorDashboard() {
 			{/* Grading Tab */}
 			{activeTab === "grading" && (
 				<div className="space-y-6">
-					<h2 className="text-2xl font-semibold text-gray-900">Grading</h2>
+					<h2 className="text-2xl font-semibold text-gray-900">
+						Grading
+					</h2>
 					<div className="space-y-4">
 						{studentScores.map((score) => (
 							<Card
@@ -366,13 +409,19 @@ export function ProfessorDashboard() {
 									<div className="space-y-4">
 										<div className="grid grid-cols-2 gap-4">
 											<div>
-												<Label htmlFor={`score-${score.id}`}>Score</Label>
+												<Label
+													htmlFor={`score-${score.id}`}
+												>
+													Score
+												</Label>
 												<Input
 													id={`score-${score.id}`}
 													type="number"
 													min="0"
 													max={score.maxValue}
-													defaultValue={score.value || ""}
+													defaultValue={
+														score.value || ""
+													}
 													onChange={(_e) => {
 														// Handle score change
 													}}
@@ -382,10 +431,16 @@ export function ProfessorDashboard() {
 												</p>
 											</div>
 											<div>
-												<Label htmlFor={`feedback-${score.id}`}>Feedback</Label>
+												<Label
+													htmlFor={`feedback-${score.id}`}
+												>
+													Feedback
+												</Label>
 												<Textarea
 													id={`feedback-${score.id}`}
-													defaultValue={score.feedback || ""}
+													defaultValue={
+														score.feedback || ""
+													}
 													rows={3}
 												/>
 											</div>
@@ -394,7 +449,9 @@ export function ProfessorDashboard() {
 											<Button variant="outline" size="sm">
 												Save Draft
 											</Button>
-											<Button size="sm">Submit Grade</Button>
+											<Button size="sm">
+												Submit Grade
+											</Button>
 										</div>
 									</div>
 								</CardContent>

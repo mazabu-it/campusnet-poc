@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { PayloadRequest } from "payload";
 import { getPayload } from "payload";
 import config from "@/payload.config";
 import type { Enrollment } from "@/payload-types";
@@ -35,9 +36,10 @@ export async function POST(request: Request) {
 			enrollments = result.docs;
 		}
 
-		const gradeCalculationEngine = new GradeCalculationEngine(
-			request as any,
-		);
+		const gradeCalculationEngine = new GradeCalculationEngine({
+			payload,
+			req: request,
+		} as unknown as PayloadRequest);
 		const results = [];
 
 		for (const enrollment of enrollments) {
@@ -54,7 +56,7 @@ export async function POST(request: Request) {
 				});
 
 				// Get all scores for this student in this course
-				const scoresResult = await payload.find({
+				const _scoresResult = await payload.find({
 					collection: "scores",
 					where: {
 						and: [
@@ -101,7 +103,10 @@ export async function POST(request: Request) {
 								assessmentTemplate:
 									typeof breakdown.assessmentTemplate ===
 									"string"
-										? parseInt(breakdown.assessmentTemplate)
+										? parseInt(
+												breakdown.assessmentTemplate,
+												10,
+											)
 										: breakdown.assessmentTemplate,
 							}),
 						),

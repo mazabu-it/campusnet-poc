@@ -189,8 +189,8 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 											cx="50%"
 											cy="50%"
 											labelLine={false}
-											label={(entry: any) =>
-												`${entry.name} ${(entry.percent * 100).toFixed(0)}%`
+											label={({ name, percent }) =>
+												`${name} ${((percent as number) * 100).toFixed(0)}%`
 											}
 											outerRadius={80}
 											fill="#8884d8"
@@ -236,7 +236,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-6">
-							{block.goals?.map((goal, index) => (
+							{block.goals?.map((goal, _index) => (
 								<div key={goal.name} className="space-y-2">
 									<div className="flex items-center justify-between">
 										<span className="text-sm font-medium text-gray-700">

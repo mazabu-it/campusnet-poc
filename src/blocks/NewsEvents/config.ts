@@ -69,7 +69,8 @@ export const NewsEventsBlock: Block = {
 					type: "text",
 					required: true,
 					admin: {
-						description: "Location (for events) or source (for news)",
+						description:
+							"Location (for events) or source (for news)",
 					},
 				},
 			],

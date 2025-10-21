@@ -112,7 +112,10 @@ export const University: CollectionConfig = {
 							options: [
 								{ label: "No Cap", value: "none" },
 								{ label: "Pass Grade Cap", value: "pass-cap" },
-								{ label: "Maximum Grade Cap", value: "max-cap" },
+								{
+									label: "Maximum Grade Cap",
+									value: "max-cap",
+								},
 							],
 							defaultValue: "pass-cap",
 						},
@@ -139,7 +142,10 @@ export const University: CollectionConfig = {
 							type: "select",
 							options: [
 								{ label: "Allow Late Entry", value: "allow" },
-								{ label: "Penalty for Late Entry", value: "penalty" },
+								{
+									label: "Penalty for Late Entry",
+									value: "penalty",
+								},
 								{ label: "No Late Entry", value: "deny" },
 							],
 							defaultValue: "allow",

@@ -9,7 +9,15 @@ import {
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
 // React PDF Components for generating PDFs
-export const StudentReportPDF = ({ student, grades, courses }: any) => (
+export const StudentReportPDF = ({
+	student,
+	grades,
+	_courses,
+}: {
+	student: unknown;
+	grades: unknown;
+	_courses: unknown;
+}) => (
 	<Document>
 		<Page size="A4" style={styles.page}>
 			<View style={styles.header}>
@@ -33,8 +41,11 @@ export const StudentReportPDF = ({ student, grades, courses }: any) => (
 
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Academic Performance</Text>
-				{grades?.map((grade: any, index: number) => (
-					<View key={index} style={styles.gradeItem}>
+				{grades?.map((grade: unknown, index: number) => (
+					<View
+						key={(grade as { id?: string }).id || index}
+						style={styles.gradeItem}
+					>
 						<Text style={styles.text}>
 							Course: {grade.courseInstance?.course?.name}
 						</Text>
@@ -106,7 +117,11 @@ const styles = StyleSheet.create({
 
 // PDF Service class for advanced PDF operations
 export class PDFService {
-	async generateStudentReport(student: any, grades: any[], courses: any[]) {
+	async generateStudentReport(
+		student: unknown,
+		grades: unknown[],
+		courses: unknown[],
+	) {
 		try {
 			const pdfDoc = await pdf(
 				StudentReportPDF({ student, grades, courses }),
@@ -118,12 +133,12 @@ export class PDFService {
 		}
 	}
 
-	async generateTranscript(student: any, academicHistory: any[]) {
+	async generateTranscript(student: unknown, academicHistory: unknown[]) {
 		try {
 			const pdfDoc = await PDFDocument.create();
 			const page = pdfDoc.addPage([600, 800]);
 
-			const { width, height } = page.getSize();
+			const { width: _width, height } = page.getSize();
 			const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
 			// Header
@@ -162,7 +177,7 @@ export class PDFService {
 
 			// Academic history
 			let yPosition = height - 180;
-			academicHistory.forEach((record: any) => {
+			academicHistory.forEach((record: unknown) => {
 				page.drawText(`${record.course} - ${record.grade}`, {
 					x: 50,
 					y: yPosition,
@@ -181,11 +196,11 @@ export class PDFService {
 		}
 	}
 
-	async signDocument(pdfBlob: Blob, signatureData: string) {
+	async signDocument(pdfBlob: Blob, _signatureData: string) {
 		try {
 			const pdfDoc = await PDFDocument.load(await pdfBlob.arrayBuffer());
 			const page = pdfDoc.getPages()[0];
-			const { width, height } = page.getSize();
+			const { width, height: _height } = page.getSize();
 
 			// Add signature placeholder
 			page.drawRectangle({

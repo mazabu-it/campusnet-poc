@@ -148,26 +148,42 @@ export class ReportGenerator {
 				(ga) => ga.enrollment === enrollment.id,
 			);
 
-			const courseInstance = enrollment.courseInstance as any;
-			const courseVariation = courseInstance?.courseVariation as any;
-			const course = courseVariation?.course as any;
+			const courseInstance = enrollment.courseInstance as {
+				courseVariation?: { course?: unknown };
+			};
+			const courseVariation = courseInstance?.courseVariation as {
+				course?: unknown;
+			};
+			const course = courseVariation?.course as {
+				title?: string;
+				credits?: number;
+			};
 
 			return {
 				courseCode: courseVariation?.codeVariant || "",
-				courseTitle: courseVariation?.titleVariant || course?.title || "",
+				courseTitle:
+					courseVariation?.titleVariant || course?.title || "",
 				credits:
 					enrollment.creditsEarned ||
 					courseVariation?.credits ||
 					course?.credits ||
 					0,
 				assessments:
-					gradeAggregate?.assessmentBreakdown?.map((ab: any) => ({
-						name: ab.assessmentTemplate?.name || "Assessment",
-						score: ab.score || 0,
-						maxScore: ab.maxScore,
-						weight: ab.weight,
-						contribution: ab.contribution,
-					})) || [],
+					gradeAggregate?.assessmentBreakdown?.map(
+						(ab: {
+							assessmentTemplate?: { name?: string };
+							score?: number;
+							maxScore?: number;
+							weight?: number;
+							contribution?: number;
+						}) => ({
+							name: ab.assessmentTemplate?.name || "Assessment",
+							score: ab.score || 0,
+							maxScore: ab.maxScore,
+							weight: ab.weight,
+							contribution: ab.contribution,
+						}),
+					) || [],
 				finalGrade: gradeAggregate?.finalNumeric || 0,
 				letterGrade: gradeAggregate?.finalLetter || "N/A",
 				passFail: gradeAggregate?.passFail || "incomplete",
@@ -184,7 +200,8 @@ export class ReportGenerator {
 						? student.program.name
 						: "N/A",
 				programYear:
-					student.programYear && typeof student.programYear === "object"
+					student.programYear &&
+					typeof student.programYear === "object"
 						? student.programYear.yearNumber
 						: 1,
 			},
@@ -197,7 +214,8 @@ export class ReportGenerator {
 					email: university.contactInfo?.email || "",
 				},
 			},
-			academicYear: (academicYear as any)?.yearLabel || "N/A",
+			academicYear:
+				(academicYear as { yearLabel?: string })?.yearLabel || "N/A",
 			courses,
 			gpa,
 			totalCredits,
@@ -355,31 +373,31 @@ export class ReportGenerator {
           </thead>
           <tbody>
             ${data.courses
-							.map(
-								(course) => `
+				.map(
+					(course) => `
               <tr>
                 <td>${course.courseCode}</td>
                 <td>${course.courseTitle}</td>
                 <td>${course.credits}</td>
                 <td>
                   ${course.assessments
-										.map(
-											(assessment) => `
+						.map(
+							(assessment) => `
                     <div class="assessment-row">
                       ${assessment.name}: ${assessment.score}/${assessment.maxScore} 
                       (${assessment.weight}% weight, ${assessment.contribution.toFixed(2)} pts)
                     </div>
                   `,
-										)
-										.join("")}
+						)
+						.join("")}
                 </td>
                 <td>${course.finalGrade.toFixed(2)}</td>
                 <td>${course.letterGrade}</td>
                 <td>${course.passFail}</td>
               </tr>
             `,
-							)
-							.join("")}
+				)
+				.join("")}
           </tbody>
         </table>
 
