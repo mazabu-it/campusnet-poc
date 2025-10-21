@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 const execAsync = promisify(exec);
 
-export async function POST(req: NextRequest) {
+export async function POST(_req: NextRequest) {
 	try {
 		// Run migrations via CLI
 		await execAsync("npx payload migrate");

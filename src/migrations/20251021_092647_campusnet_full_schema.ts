@@ -4,7 +4,7 @@ import {
 	sql,
 } from "@payloadcms/db-vercel-postgres";
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
 	// Create all enum types
 	await db.execute(sql`
    DO $$ BEGIN
@@ -1192,8 +1192,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
 export async function down({
 	db,
-	payload,
-	req,
+	payload: _payload,
+	req: _req,
 }: MigrateDownArgs): Promise<void> {
 	// Drop all Campusnet tables
 	await db.execute(sql`

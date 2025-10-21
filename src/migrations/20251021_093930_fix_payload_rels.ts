@@ -4,7 +4,7 @@ import {
 	sql,
 } from "@payloadcms/db-vercel-postgres";
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
 	// Add missing columns to payload_locked_documents_rels table
 	await db.execute(sql`
    DO $$ BEGIN
@@ -282,8 +282,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
 export async function down({
 	db,
-	payload,
-	req,
+	payload: _payload,
+	req: _req,
 }: MigrateDownArgs): Promise<void> {
 	// Remove foreign key constraints
 	await db.execute(sql`

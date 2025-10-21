@@ -219,7 +219,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						latePolicy: "allow",
 					},
 					reportConfig: {
-						headerBrandingId: null,
+						headerBranding: null,
 						footerText: "Demo University - Academic Records",
 						signatureRequired: true,
 						watermarking: false,
@@ -481,7 +481,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const softwareEngineeringInstance = await payload.create({
+		const _softwareEngineeringInstance = await payload.create({
 			collection: "course-instances",
 			data: {
 				courseVariation: softwareEngineeringVar.id,
@@ -775,7 +775,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const introFinalAssessment = await payload.create({
+		const _introFinalAssessment = await payload.create({
 			collection: "assessments",
 			data: {
 				assessmentTemplate: introProgrammingFinal.id,
@@ -955,7 +955,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// 18. Create Grade Aggregates
 		console.log("Creating grade aggregates...");
-		const alexGradeAggregate = await payload.create({
+		const _alexGradeAggregate = await payload.create({
 			collection: "grade-aggregates",
 			data: {
 				enrollment: alexIntroEnrollment.id,
@@ -1003,7 +1003,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const emmaGradeAggregate = await payload.create({
+		const _emmaGradeAggregate = await payload.create({
 			collection: "grade-aggregates",
 			data: {
 				enrollment: emmaDataStructuresEnrollment.id,
