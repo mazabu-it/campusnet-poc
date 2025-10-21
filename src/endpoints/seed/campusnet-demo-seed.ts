@@ -575,7 +575,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Morning section with hands-on programming labs",
-				professors: [professor.id],
+				professors: [],
 			},
 		});
 
@@ -595,7 +595,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Afternoon section with algorithm analysis focus",
-				professors: [professor.id],
+				professors: [],
 			},
 		});
 
@@ -615,6 +615,32 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "planning",
 				notes: "Project-based course with team assignments",
+				professors: [],
+			},
+		});
+
+		// Update course instances with professors
+		console.log("Updating course instances with professors...");
+		await payload.update({
+			collection: "course-instances",
+			id: introProgrammingInstance.id,
+			data: {
+				professors: [professor.id],
+			},
+		});
+
+		await payload.update({
+			collection: "course-instances",
+			id: dataStructuresInstance.id,
+			data: {
+				professors: [professor.id],
+			},
+		});
+
+		await payload.update({
+			collection: "course-instances",
+			id: _softwareEngineeringInstance.id,
+			data: {
 				professors: [professor.id],
 			},
 		});
