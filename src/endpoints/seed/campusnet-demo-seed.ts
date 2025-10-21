@@ -477,6 +477,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				isActive: true,
 			},
 		});
+		
+		console.log("Professor created with ID:", professor.id);
 
 		const student1 = await payload.create({
 			collection: "users",
@@ -558,7 +560,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// 13. Create Course Instances
 		console.log("Creating course instances...");
-		console.log("Professor ID:", professor.id);
 		const introProgrammingInstance = await payload.create({
 			collection: "course-instances",
 			data: {
@@ -575,7 +576,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Morning section with hands-on programming labs",
-				professors: [],
+				professors: [professor.id],
 			},
 		});
 
@@ -595,7 +596,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Afternoon section with algorithm analysis focus",
-				professors: [],
+				professors: [professor.id],
 			},
 		});
 
@@ -615,32 +616,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "planning",
 				notes: "Project-based course with team assignments",
-				professors: [],
-			},
-		});
-
-		// Update course instances with professors
-		console.log("Updating course instances with professors...");
-		await payload.update({
-			collection: "course-instances",
-			id: introProgrammingInstance.id,
-			data: {
-				professors: [professor.id],
-			},
-		});
-
-		await payload.update({
-			collection: "course-instances",
-			id: dataStructuresInstance.id,
-			data: {
-				professors: [professor.id],
-			},
-		});
-
-		await payload.update({
-			collection: "course-instances",
-			id: _softwareEngineeringInstance.id,
-			data: {
 				professors: [professor.id],
 			},
 		});
