@@ -1,11 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
+import { format } from "date-fns";
+import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+
 interface NewsEventsData {
 	title: string;
 	subtitle: string;
@@ -23,6 +24,31 @@ interface Props {
 }
 
 export const NewsEventsComponent: React.FC<Props> = ({ block }) => {
+	// Add error handling and default values
+	if (!block) {
+		return (
+			<section className="py-20 bg-gray-50">
+				<div className="container mx-auto px-4">
+					<div className="text-center mb-16">
+						<h2 className="text-4xl font-bold text-gray-900 mb-4">
+							Latest News & Events
+						</h2>
+						<p className="text-xl text-gray-600 max-w-3xl mx-auto">
+							Stay updated with university news and upcoming
+							events
+						</p>
+					</div>
+				</div>
+			</section>
+		);
+	}
+
+	const {
+		title = "Latest News & Events",
+		subtitle = "Stay updated with university news and upcoming events",
+		items = [],
+	} = block;
+
 	return (
 		<motion.section
 			initial={{ opacity: 0 }}
@@ -40,15 +66,15 @@ export const NewsEventsComponent: React.FC<Props> = ({ block }) => {
 					className="text-center mb-16"
 				>
 					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-						{block.title}
+						{title}
 					</h2>
 					<p className="text-xl text-gray-600 max-w-3xl mx-auto">
-						{block.subtitle}
+						{subtitle}
 					</p>
 				</motion.div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					{block.items?.map((item, index) => (
+					{items?.map((item, index) => (
 						<motion.div
 							key={index}
 							initial={{ opacity: 0, y: 20 }}
@@ -59,18 +85,35 @@ export const NewsEventsComponent: React.FC<Props> = ({ block }) => {
 							<Card className="h-full hover:shadow-xl transition-all duration-300 group cursor-pointer">
 								<CardHeader className="pb-4">
 									<div className="flex items-center justify-between mb-4">
-										<Badge 
-											variant={item.type === 'news' ? 'default' : 'secondary'}
-											className={item.type === 'news' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}
+										<Badge
+											variant={
+												item.type === "news"
+													? "default"
+													: "secondary"
+											}
+											className={
+												item.type === "news"
+													? "bg-blue-100 text-blue-800"
+													: "bg-green-100 text-green-800"
+											}
 										>
-											<Icon 
-												icon={item.type === 'news' ? 'lucide:newspaper' : 'lucide:calendar'} 
-												className="mr-1" 
+											<Icon
+												icon={
+													item.type === "news"
+														? "lucide:newspaper"
+														: "lucide:calendar"
+												}
+												className="mr-1"
 											/>
-											{item.type === 'news' ? 'News' : 'Event'}
+											{item.type === "news"
+												? "News"
+												: "Event"}
 										</Badge>
 										<span className="text-sm text-gray-500">
-											{format(new Date(item.date), 'MMM dd, yyyy')}
+											{format(
+												new Date(item.date),
+												"MMM dd, yyyy",
+											)}
 										</span>
 									</div>
 									<CardTitle className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
@@ -83,12 +126,22 @@ export const NewsEventsComponent: React.FC<Props> = ({ block }) => {
 									</p>
 									<div className="flex items-center justify-between">
 										<div className="flex items-center text-sm text-gray-500">
-											<Icon icon="lucide:map-pin" className="mr-1" />
+											<Icon
+												icon="lucide:map-pin"
+												className="mr-1"
+											/>
 											{item.location}
 										</div>
-										<Button variant="ghost" size="sm" className="group-hover:text-blue-600 transition-colors duration-300">
+										<Button
+											variant="ghost"
+											size="sm"
+											className="group-hover:text-blue-600 transition-colors duration-300"
+										>
 											Read More
-											<Icon icon="lucide:arrow-right" className="ml-1" />
+											<Icon
+												icon="lucide:arrow-right"
+												className="ml-1"
+											/>
 										</Button>
 									</div>
 								</CardContent>

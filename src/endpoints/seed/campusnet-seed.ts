@@ -103,7 +103,7 @@ export async function seedCampusnetData(req: PayloadRequest) {
 			collection: "diploma-levels",
 			data: {
 				name: "Bachelor",
-				code: "BACHELOR-" + Date.now(), // Make it unique
+				code: `BACHELOR-${Date.now()}`, // Make it unique
 				level: "bachelor",
 				description: "Bachelor degree level",
 				typicalDuration: 3,
@@ -115,7 +115,7 @@ export async function seedCampusnetData(req: PayloadRequest) {
 			collection: "diploma-levels",
 			data: {
 				name: "Master",
-				code: "MASTER-" + Date.now(), // Make it unique
+				code: `MASTER-${Date.now()}`, // Make it unique
 				level: "master",
 				description: "Master degree level",
 				typicalDuration: 2,
@@ -208,7 +208,7 @@ export async function seedCampusnetData(req: PayloadRequest) {
 			collection: "universities",
 			data: {
 				name: "Campusnet University",
-				code: "CNU-" + Date.now(), // Make it unique
+				code: `CNU-${Date.now()}`, // Make it unique
 				description:
 					"A modern university using Campusnet for academic management",
 				locale: "en",
@@ -251,7 +251,8 @@ export async function seedCampusnetData(req: PayloadRequest) {
 				university: university.id,
 				name: "Faculty of Computer Science",
 				code: "FCS",
-				description: "Faculty specializing in computer science and technology",
+				description:
+					"Faculty specializing in computer science and technology",
 				contactInfo: {
 					address: "456 Tech Avenue, Brussels, Belgium",
 					phone: "+32 2 234 5678",
@@ -286,7 +287,8 @@ export async function seedCampusnetData(req: PayloadRequest) {
 				department: department.id,
 				name: "Bachelor in Software Engineering",
 				code: "BSE",
-				description: "Comprehensive bachelor program in software engineering",
+				description:
+					"Comprehensive bachelor program in software engineering",
 				diplomaLevel: bachelorLevel.id,
 				duration: 3,
 				curriculumRules: {
@@ -364,12 +366,16 @@ export async function seedCampusnetData(req: PayloadRequest) {
 			{
 				code: "CS101",
 				title: "Introduction to Programming",
-				description: "Fundamental concepts of programming and problem solving",
+				description:
+					"Fundamental concepts of programming and problem solving",
 				credits: 6,
 				courseType: "required" as const,
 				learningOutcomes: [
 					{ outcome: "Understand basic programming concepts" },
-					{ outcome: "Write simple programs in a high-level language" },
+					{
+						outcome:
+							"Write simple programs in a high-level language",
+					},
 					{ outcome: "Debug and test programs effectively" },
 				],
 			},
@@ -388,7 +394,8 @@ export async function seedCampusnetData(req: PayloadRequest) {
 			{
 				code: "CS201",
 				title: "Software Engineering Principles",
-				description: "Introduction to software engineering methodologies",
+				description:
+					"Introduction to software engineering methodologies",
 				credits: 6,
 				courseType: "required" as const,
 				learningOutcomes: [

@@ -25,6 +25,31 @@ interface Props {
 }
 
 export const ProgramsShowcaseComponent: React.FC<Props> = ({ block }) => {
+	// Add error handling and default values
+	if (!block) {
+		return (
+			<section className="py-20 bg-gray-50">
+				<div className="container mx-auto px-4">
+					<div className="text-center mb-16">
+						<h2 className="text-4xl font-bold text-gray-900 mb-4">
+							Our Academic Programs
+						</h2>
+						<p className="text-xl text-gray-600 max-w-3xl mx-auto">
+							Discover world-class programs designed to prepare
+							you for success
+						</p>
+					</div>
+				</div>
+			</section>
+		);
+	}
+
+	const {
+		title = "Our Academic Programs",
+		subtitle = "Discover world-class programs designed to prepare you for success",
+		programs = [],
+	} = block;
+
 	return (
 		<motion.section
 			initial={{ opacity: 0 }}
@@ -42,15 +67,15 @@ export const ProgramsShowcaseComponent: React.FC<Props> = ({ block }) => {
 					className="text-center mb-16"
 				>
 					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-						{block.title}
+						{title}
 					</h2>
 					<p className="text-xl text-gray-600 max-w-3xl mx-auto">
-						{block.subtitle}
+						{subtitle}
 					</p>
 				</motion.div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					{block.programs?.map((program, index) => (
+					{programs?.map((program, index) => (
 						<motion.div
 							key={program.name}
 							initial={{ opacity: 0, y: 20 }}

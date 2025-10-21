@@ -220,10 +220,26 @@ export const resetAndSeedEndpoint: Endpoint = {
 				limit: 1000,
 			});
 			for (const user of campusnetUsers.docs) {
-				await req.payload.delete({
-					collection: "users",
-					id: user.id,
-				});
+				if (user && user.id) {
+					await req.payload.delete({
+						collection: "users",
+						id: user.id,
+					});
+				}
+			}
+
+			// Clear existing pages
+			const pages = await req.payload.find({
+				collection: "pages",
+				limit: 1000,
+			});
+			for (const page of pages.docs) {
+				if (page && page.id) {
+					await req.payload.delete({
+						collection: "pages",
+						id: page.id,
+					});
+				}
 			}
 
 			console.log("✅ Database cleared successfully!");
@@ -255,6 +271,7 @@ export const resetAndSeedEndpoint: Endpoint = {
 						gradingScales: gradingScales.docs.length,
 						diplomaLevels: diplomaLevels.docs.length,
 						campusnetUsers: campusnetUsers.docs.length,
+						pages: pages.docs.length,
 					},
 				},
 			});

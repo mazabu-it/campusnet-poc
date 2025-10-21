@@ -37,14 +37,18 @@ export const queryKeys = {
 const api = {
 	// User
 	getUser: async (): Promise<any> => {
-		const response = await fetch(`${API_BASE}/api/users/me`);
+		const response = await fetch(`${API_BASE}/api/users/me`, {
+			credentials: "include",
+		});
 		if (!response.ok) throw new Error("Failed to fetch user");
 		return response.json();
 	},
 
 	// Courses
 	getCourses: async (): Promise<any[]> => {
-		const response = await fetch(`${API_BASE}/api/courses`);
+		const response = await fetch(`${API_BASE}/api/courses`, {
+			credentials: "include",
+		});
 		if (!response.ok) throw new Error("Failed to fetch courses");
 		const data = await response.json();
 		return data.docs || [];
@@ -52,7 +56,9 @@ const api = {
 
 	// Course Instances
 	getCourseInstances: async (): Promise<any[]> => {
-		const response = await fetch(`${API_BASE}/api/course-instances`);
+		const response = await fetch(`${API_BASE}/api/course-instances`, {
+			credentials: "include",
+		});
 		if (!response.ok) throw new Error("Failed to fetch course instances");
 		const data = await response.json();
 		return data.docs || [];
@@ -60,7 +66,9 @@ const api = {
 
 	// Enrollments
 	getEnrollments: async (): Promise<any[]> => {
-		const response = await fetch(`${API_BASE}/api/enrollments`);
+		const response = await fetch(`${API_BASE}/api/enrollments`, {
+			credentials: "include",
+		});
 		if (!response.ok) throw new Error("Failed to fetch enrollments");
 		const data = await response.json();
 		return data.docs || [];
@@ -69,6 +77,9 @@ const api = {
 	getStudentEnrollments: async (studentId: string): Promise<any[]> => {
 		const response = await fetch(
 			`${API_BASE}/api/enrollments?where[student][equals]=${studentId}`,
+			{
+				credentials: "include",
+			},
 		);
 		if (!response.ok)
 			throw new Error("Failed to fetch student enrollments");
@@ -78,7 +89,9 @@ const api = {
 
 	// Assessments
 	getAssessments: async (): Promise<any[]> => {
-		const response = await fetch(`${API_BASE}/api/assessments`);
+		const response = await fetch(`${API_BASE}/api/assessments`, {
+			credentials: "include",
+		});
 		if (!response.ok) throw new Error("Failed to fetch assessments");
 		const data = await response.json();
 		return data.docs || [];
@@ -86,7 +99,9 @@ const api = {
 
 	// Scores
 	getScores: async (): Promise<any[]> => {
-		const response = await fetch(`${API_BASE}/api/scores`);
+		const response = await fetch(`${API_BASE}/api/scores`, {
+			credentials: "include",
+		});
 		if (!response.ok) throw new Error("Failed to fetch scores");
 		const data = await response.json();
 		return data.docs || [];
@@ -94,7 +109,9 @@ const api = {
 
 	// Grade Aggregates
 	getGradeAggregates: async (): Promise<any[]> => {
-		const response = await fetch(`${API_BASE}/api/grade-aggregates`);
+		const response = await fetch(`${API_BASE}/api/grade-aggregates`, {
+			credentials: "include",
+		});
 		if (!response.ok) throw new Error("Failed to fetch grade aggregates");
 		const data = await response.json();
 		return data.docs || [];
@@ -146,6 +163,7 @@ const api = {
 export const useUser = () => {
 	const { user } = useAppStore();
 	const setUser = user.login;
+	const logout = user.logout;
 	const setAuthenticated = user.setLoading;
 
 	const query = useQuery({
@@ -156,13 +174,13 @@ export const useUser = () => {
 
 	React.useEffect(() => {
 		if (query.data) {
-			setUser(query.data);
+			setUser(query.data.user);
 			setAuthenticated(true);
 		} else if (query.error) {
-			user.logout();
+			logout();
 			setAuthenticated(false);
 		}
-	}, [query.data, query.error, setUser, setAuthenticated, user]);
+	}, [query.data, query.error, setUser, setAuthenticated, logout]);
 
 	return query;
 };

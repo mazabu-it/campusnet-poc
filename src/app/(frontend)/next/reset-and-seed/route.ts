@@ -21,7 +21,9 @@ export async function POST(_req: NextRequest) {
 		};
 
 		const result = await resetAndSeedEndpoint.resetAndSeedEndpoint.handler(
-			mockReq as any,
+			mockReq as unknown as Parameters<
+				typeof resetAndSeedEndpoint.resetAndSeedEndpoint.handler
+			>[0],
 		);
 
 		// Parse the response

@@ -31,10 +31,10 @@ import { useAppStore } from "@/stores/app-store";
 const COLORS = ["#3B82F6", "#8B5CF6", "#10B981", "#F59E0B", "#EF4444"];
 
 export default function StudentDashboard() {
-	const { user } = useAppStore();
+	const { user: userStore } = useAppStore();
 	const { data: _userData, isLoading: userLoading } = useUser();
 	const { data: enrollments, isLoading: enrollmentsLoading } =
-		useStudentEnrollments(user?.user?.id || "");
+		useStudentEnrollments(userStore.user?.id || "");
 	const { data: gradeAggregates, isLoading: gradesLoading } =
 		useGradeAggregates();
 
@@ -48,7 +48,7 @@ export default function StudentDashboard() {
 		);
 	}
 
-	if (!user || user.user?.role !== "student") {
+	if (!userStore.user || userStore.user.role !== "student") {
 		return (
 			<div className="flex items-center justify-center min-h-screen">
 				<Card className="w-full max-w-md">
@@ -70,12 +70,14 @@ export default function StudentDashboard() {
 		);
 	}
 
-	const studentGrades = Array.isArray(gradeAggregates) 
-		? gradeAggregates.filter((grade) =>
-			Array.isArray(enrollments) && enrollments.some(
-				(enrollment) => enrollment.id === grade.enrollment,
-			),
-		) 
+	const studentGrades = Array.isArray(gradeAggregates)
+		? gradeAggregates.filter(
+				(grade) =>
+					Array.isArray(enrollments) &&
+					enrollments.some(
+						(enrollment) => enrollment.id === grade.enrollment,
+					),
+			)
 		: [];
 
 	const gpa =
@@ -132,11 +134,11 @@ export default function StudentDashboard() {
 					<div className="flex items-center justify-between">
 						<div>
 							<h1 className="text-3xl font-bold text-gray-900">
-								Welcome back, {user.user?.name}!
+								Welcome back, {userStore.user?.name}!
 							</h1>
 							<p className="text-gray-600 mt-1">
-								Student ID: {user.user?.id} • Program:{" "}
-								{user.user?.program}
+								Student ID: {userStore.user?.id} • Program:{" "}
+								{userStore.user?.program}
 							</p>
 						</div>
 						<div className="flex items-center space-x-4">
@@ -360,7 +362,9 @@ export default function StudentDashboard() {
 													{gradeDistribution.map(
 														(entry, index) => (
 															<Cell
-																key={`cell-${index}`}
+																key={
+																	entry.grade
+																}
 																fill={
 																	COLORS[
 																		index %

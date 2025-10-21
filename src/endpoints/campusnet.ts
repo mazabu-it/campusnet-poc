@@ -148,7 +148,8 @@ export const enrollStudentEndpoint: Endpoint = {
 				collection: "course-instances",
 				id: courseInstanceId,
 				data: {
-					currentEnrollment: (courseInstance.currentEnrollment || 0) + 1,
+					currentEnrollment:
+						(courseInstance.currentEnrollment || 0) + 1,
 				},
 			});
 
@@ -173,7 +174,9 @@ export const submitScoreEndpoint: Endpoint = {
 
 			if (!assessmentId || !studentId || value === undefined) {
 				return Response.json(
-					{ error: "Assessment ID, Student ID, and value are required" },
+					{
+						error: "Assessment ID, Student ID, and value are required",
+					},
 					{ status: 400 },
 				);
 			}

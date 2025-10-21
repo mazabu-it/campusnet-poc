@@ -449,6 +449,49 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		// 12. Create Users (Professors, Students, Staff)
 		console.log("Creating users...");
 
+		// Skip test user creation - user already exists from previous seeding
+		console.log(
+			"Skipping test user creation - using existing test@test.com user",
+		);
+
+		// Create a test student for debugging
+		try {
+			const testStudent = await payload.create({
+				collection: "users",
+				data: {
+					name: "Test Student",
+					email: "student@test.com",
+					password: "test123",
+					role: "student",
+					university: university.id,
+					faculty: faculty.id,
+					department: department.id,
+					program: program.id,
+					programYear: programYear1.id,
+					studentId: "TEST001",
+					profile: {
+						phone: "+32 2 123 4567",
+						address: "123 Test Street, Brussels, Belgium",
+					},
+					academicInfo: {
+						enrollmentDate: new Date().toISOString(),
+						expectedGraduation: new Date(
+							Date.now() + 2 * 365 * 24 * 60 * 60 * 1000,
+						).toISOString(),
+						status: "active",
+					},
+				},
+			});
+			console.log("✅ Test student created:", testStudent.email);
+		} catch (error) {
+			console.log("❌ Test student creation failed:", error);
+			console.log("University ID:", university?.id);
+			console.log("Faculty ID:", faculty?.id);
+			console.log("Department ID:", department?.id);
+			console.log("Program ID:", program?.id);
+			console.log("ProgramYear1 ID:", programYear1?.id);
+		}
+
 		// Create multiple professors
 		const professors = [];
 		for (let i = 0; i < 5; i++) {
@@ -1140,6 +1183,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				title: "Welcome to Demo University",
 				slug: "home",
+				_status: "published",
 				hero: {
 					type: "none",
 				},
@@ -1290,6 +1334,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				title: "About Demo University",
 				slug: "university",
+				_status: "published",
 				hero: {
 					type: "none",
 				},
@@ -1358,6 +1403,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				title: "University Dashboard",
 				slug: "dashboard",
+				_status: "published",
 				hero: {
 					type: "none",
 				},
@@ -1443,6 +1489,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				title: "Student Registration",
 				slug: "registration",
+				_status: "published",
 				hero: {
 					type: "none",
 				},
@@ -1493,6 +1540,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				title: "News & Events",
 				slug: "news",
+				_status: "published",
 				hero: {
 					type: "none",
 				},
@@ -1580,6 +1628,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				title: "Our Faculty",
 				slug: "faculty",
+				_status: "published",
 				hero: {
 					type: "none",
 				},
