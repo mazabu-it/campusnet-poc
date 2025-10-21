@@ -1,10 +1,10 @@
 {
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "crons": [
-    {
-      "path": "/api/payload-jobs/run",
-      "schedule": "0 0 * * *"
-    }
-  ]
+	"installCommand": "npm install",
+	"buildCommand": "npm run payload migrate && npm run build",
+	"crons": [
+		{
+			"path": "/api/payload-jobs/run",
+			"schedule": "0 0 * * *"
+		}
+	]
 }
