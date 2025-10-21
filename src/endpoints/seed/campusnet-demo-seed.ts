@@ -558,6 +558,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// 13. Create Course Instances
 		console.log("Creating course instances...");
+		console.log("Professor ID:", professor.id);
 		const introProgrammingInstance = await payload.create({
 			collection: "course-instances",
 			data: {
