@@ -223,7 +223,7 @@ export const useCourseInstances = () => {
 
 export const useEnrollments = () => {
 	const { academic } = useAppStore();
-	const setEnrollments = academic.setGrades; // Using setGrades as placeholder
+	const _setEnrollments = academic.setGrades; // Using setGrades as placeholder
 
 	return useQuery({
 		queryKey: queryKeys.enrollments,
@@ -241,7 +241,7 @@ export const useStudentEnrollments = (studentId: string) => {
 
 export const useAssessments = () => {
 	const { academic } = useAppStore();
-	const setAssessments = academic.setGrades; // Using setGrades as placeholder
+	const _setAssessments = academic.setGrades; // Using setGrades as placeholder
 
 	return useQuery({
 		queryKey: queryKeys.assessments,
@@ -251,7 +251,7 @@ export const useAssessments = () => {
 
 export const useScores = () => {
 	const { academic } = useAppStore();
-	const setScores = academic.setGrades; // Using setGrades as placeholder
+	const _setScores = academic.setGrades; // Using setGrades as placeholder
 
 	return useQuery({
 		queryKey: queryKeys.scores,
@@ -261,7 +261,7 @@ export const useScores = () => {
 
 export const useGradeAggregates = () => {
 	const { academic } = useAppStore();
-	const setGradeAggregates = academic.setGrades; // Using setGrades as placeholder
+	const _setGradeAggregates = academic.setGrades; // Using setGrades as placeholder
 
 	return useQuery({
 		queryKey: queryKeys.gradeAggregates,

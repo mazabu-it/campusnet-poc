@@ -1,34 +1,20 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { format, parseISO } from "date-fns";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import {
-	Area,
-	AreaChart,
-	Bar,
-	BarChart,
 	CartesianGrid,
 	Cell,
 	Line,
 	LineChart,
 	Pie,
 	PieChart,
-	PolarAngleAxis,
-	PolarGrid,
-	PolarRadiusAxis,
-	Radar,
-	RadarChart,
 	ResponsiveContainer,
-	Scatter,
-	ScatterChart,
 	Tooltip,
 	XAxis,
 	YAxis,
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
@@ -92,7 +78,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
 					{block.metrics?.map((metric, index) => (
 						<motion.div
-							key={index}
+							key={metric.label}
 							initial={{ opacity: 0, y: 20 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{ once: true }}
@@ -213,7 +199,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 											{block.programData?.map(
 												(entry, index) => (
 													<Cell
-														key={`cell-${index}`}
+														key={entry.name}
 														fill={
 															COLORS[
 																index %
@@ -251,7 +237,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 						</CardHeader>
 						<CardContent className="space-y-6">
 							{block.goals?.map((goal, index) => (
-								<div key={index} className="space-y-2">
+								<div key={goal.name} className="space-y-2">
 									<div className="flex items-center justify-between">
 										<span className="text-sm font-medium text-gray-700">
 											{goal.name}

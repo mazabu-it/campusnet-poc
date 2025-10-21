@@ -31,7 +31,7 @@ export const UniversityHeroComponent: React.FC<Props> = ({ block }) => {
 						Welcome to Demo University
 					</h1>
 					<p className="text-xl text-gray-600 mb-8">
-						Empowering Tomorrow's Leaders Through Excellence in
+						Empowering Tomorrow&apos;s Leaders Through Excellence in
 						Education
 					</p>
 				</div>
@@ -41,7 +41,7 @@ export const UniversityHeroComponent: React.FC<Props> = ({ block }) => {
 
 	const {
 		title = "Welcome to Demo University",
-		subtitle = "Empowering Tomorrow's Leaders Through Excellence in Education",
+		subtitle = "Empowering Tomorrow&apos;s Leaders Through Excellence in Education",
 		primaryButtonText = "Apply Now",
 		secondaryButtonText = "Learn More",
 		stats = [],

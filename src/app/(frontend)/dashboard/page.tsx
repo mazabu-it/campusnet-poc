@@ -122,21 +122,21 @@ export default function StudentDashboard() {
 	];
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="min-h-screen bg-gray-900 dark:bg-gray-900">
 			{/* Header */}
 			<motion.div
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
-				className="bg-white shadow-sm border-b"
+				className="bg-gray-800 dark:bg-gray-800 shadow-sm border-b border-gray-700"
 			>
 				<div className="container mx-auto px-4 py-6">
 					<div className="flex items-center justify-between">
 						<div>
-							<h1 className="text-3xl font-bold text-gray-900">
+							<h1 className="text-3xl font-bold text-white">
 								Welcome back, {userStore.user?.name}!
 							</h1>
-							<p className="text-gray-600 mt-1">
+							<p className="text-gray-300 mt-1">
 								Student ID: {userStore.user?.id} • Program:{" "}
 								{userStore.user?.program}
 							</p>
@@ -144,7 +144,7 @@ export default function StudentDashboard() {
 						<div className="flex items-center space-x-4">
 							<Badge
 								variant="secondary"
-								className="bg-green-100 text-green-800"
+								className="bg-green-500/20 text-green-400 border-green-500/30"
 							>
 								<Icon
 									icon="lucide:check-circle"
@@ -152,7 +152,11 @@ export default function StudentDashboard() {
 								/>
 								Active Student
 							</Badge>
-							<Button variant="outline" size="sm">
+							<Button
+								variant="outline"
+								size="sm"
+								className="border-gray-600 text-gray-300 hover:bg-gray-700"
+							>
 								<Icon icon="lucide:settings" className="mr-2" />
 								Settings
 							</Button>
@@ -168,11 +172,31 @@ export default function StudentDashboard() {
 					onValueChange={setActiveTab}
 					className="space-y-6"
 				>
-					<TabsList className="grid w-full grid-cols-4">
-						<TabsTrigger value="overview">Overview</TabsTrigger>
-						<TabsTrigger value="courses">Courses</TabsTrigger>
-						<TabsTrigger value="grades">Grades</TabsTrigger>
-						<TabsTrigger value="progress">Progress</TabsTrigger>
+					<TabsList className="grid w-full grid-cols-4 bg-gray-800 border-gray-700">
+						<TabsTrigger
+							value="overview"
+							className="data-[state=active]:bg-gray-700 data-[state=active]:text-white text-gray-400"
+						>
+							Overview
+						</TabsTrigger>
+						<TabsTrigger
+							value="courses"
+							className="data-[state=active]:bg-gray-700 data-[state=active]:text-white text-gray-400"
+						>
+							Courses
+						</TabsTrigger>
+						<TabsTrigger
+							value="grades"
+							className="data-[state=active]:bg-gray-700 data-[state=active]:text-white text-gray-400"
+						>
+							Grades
+						</TabsTrigger>
+						<TabsTrigger
+							value="progress"
+							className="data-[state=active]:bg-gray-700 data-[state=active]:text-white text-gray-400"
+						>
+							Progress
+						</TabsTrigger>
 					</TabsList>
 
 					{/* Overview Tab */}
@@ -184,18 +208,18 @@ export default function StudentDashboard() {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ delay: 0.1, duration: 0.6 }}
 							>
-								<Card>
+								<Card className="bg-gray-800 border-gray-700">
 									<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-										<CardTitle className="text-sm font-medium text-gray-600">
+										<CardTitle className="text-sm font-medium text-gray-400">
 											Current GPA
 										</CardTitle>
 										<Icon
 											icon="lucide:trending-up"
-											className="h-4 w-4 text-green-600"
+											className="h-4 w-4 text-green-400"
 										/>
 									</CardHeader>
 									<CardContent>
-										<div className="text-2xl font-bold text-gray-900">
+										<div className="text-2xl font-bold text-white">
 											{gpa.toFixed(2)}
 										</div>
 										<p className="text-xs text-gray-500">
@@ -210,18 +234,18 @@ export default function StudentDashboard() {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ delay: 0.2, duration: 0.6 }}
 							>
-								<Card>
+								<Card className="bg-gray-800 border-gray-700">
 									<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-										<CardTitle className="text-sm font-medium text-gray-600">
+										<CardTitle className="text-sm font-medium text-gray-400">
 											Credits Completed
 										</CardTitle>
 										<Icon
 											icon="lucide:book-open"
-											className="h-4 w-4 text-blue-600"
+											className="h-4 w-4 text-blue-400"
 										/>
 									</CardHeader>
 									<CardContent>
-										<div className="text-2xl font-bold text-gray-900">
+										<div className="text-2xl font-bold text-white">
 											{creditsCompleted}
 										</div>
 										<p className="text-xs text-gray-500">
@@ -236,18 +260,18 @@ export default function StudentDashboard() {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ delay: 0.3, duration: 0.6 }}
 							>
-								<Card>
+								<Card className="bg-gray-800 border-gray-700">
 									<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-										<CardTitle className="text-sm font-medium text-gray-600">
+										<CardTitle className="text-sm font-medium text-gray-400">
 											Active Courses
 										</CardTitle>
 										<Icon
 											icon="lucide:calendar"
-											className="h-4 w-4 text-purple-600"
+											className="h-4 w-4 text-purple-400"
 										/>
 									</CardHeader>
 									<CardContent>
-										<div className="text-2xl font-bold text-gray-900">
+										<div className="text-2xl font-bold text-white">
 											{enrollments?.filter(
 												(e) => e.status === "active",
 											).length || 0}
@@ -264,18 +288,18 @@ export default function StudentDashboard() {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ delay: 0.4, duration: 0.6 }}
 							>
-								<Card>
+								<Card className="bg-gray-800 border-gray-700">
 									<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-										<CardTitle className="text-sm font-medium text-gray-600">
+										<CardTitle className="text-sm font-medium text-gray-400">
 											Graduation Progress
 										</CardTitle>
 										<Icon
 											icon="lucide:graduation-cap"
-											className="h-4 w-4 text-orange-600"
+											className="h-4 w-4 text-orange-400"
 										/>
 									</CardHeader>
 									<CardContent>
-										<div className="text-2xl font-bold text-gray-900">
+										<div className="text-2xl font-bold text-white">
 											{progressPercentage.toFixed(0)}%
 										</div>
 										<Progress
@@ -294,12 +318,12 @@ export default function StudentDashboard() {
 								animate={{ opacity: 1, x: 0 }}
 								transition={{ delay: 0.5, duration: 0.6 }}
 							>
-								<Card>
+								<Card className="bg-gray-800 border-gray-700">
 									<CardHeader>
-										<CardTitle className="flex items-center">
+										<CardTitle className="flex items-center text-white">
 											<Icon
 												icon="lucide:trending-up"
-												className="mr-2 text-blue-600"
+												className="mr-2 text-blue-400"
 											/>
 											GPA Trend
 										</CardTitle>
@@ -331,12 +355,12 @@ export default function StudentDashboard() {
 								animate={{ opacity: 1, x: 0 }}
 								transition={{ delay: 0.6, duration: 0.6 }}
 							>
-								<Card>
+								<Card className="bg-gray-800 border-gray-700">
 									<CardHeader>
-										<CardTitle className="flex items-center">
+										<CardTitle className="flex items-center text-white">
 											<Icon
 												icon="lucide:pie-chart"
-												className="mr-2 text-purple-600"
+												className="mr-2 text-purple-400"
 											/>
 											Grade Distribution
 										</CardTitle>

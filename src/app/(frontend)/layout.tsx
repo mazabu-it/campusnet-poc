@@ -5,12 +5,12 @@ import { draftMode } from "next/headers";
 import type React from "react";
 
 import { AdminBar } from "@/components/AdminBar";
-import { Footer } from "@/Footer/Component";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { FooterComponent } from "@/Footer/Component";
 import { Header } from "@/Header/Component";
 import { Providers } from "@/providers";
-import { InitTheme } from "@/providers/Theme/InitTheme";
 import { QueryProvider } from "@/providers/QueryProvider";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { InitTheme } from "@/providers/Theme/InitTheme";
 import { mergeOpenGraph } from "@/utilities/mergeOpenGraph";
 import { cn } from "@/utilities/ui";
 
@@ -47,7 +47,7 @@ export default async function RootLayout({
 
 							<Header />
 							{children}
-							<Footer />
+							<FooterComponent />
 						</Providers>
 					</QueryProvider>
 				</ErrorBoundary>

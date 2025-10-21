@@ -1,24 +1,12 @@
-import { Icon } from "@iconify/react";
 import Link from "next/link";
-import React from "react";
-import { CMSLink } from "@/components/Link";
 import { Logo } from "@/components/Logo/Logo";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
-import type { Footer } from "@/payload-types";
-
 import { ThemeSelector } from "@/providers/Theme/ThemeSelector";
-import { getCachedGlobal } from "@/utilities/getGlobals";
-import { cn } from "@/utilities/ui";
 
-export async function Footer() {
-	const footerData: Footer = await getCachedGlobal("footer", 1)();
-
-	const navItems = footerData?.navItems || [];
-
+export async function FooterComponent() {
 	const footerSections = [
 		{
 			title: "Academics",
@@ -77,7 +65,7 @@ export async function Footer() {
 						</h3>
 						<p className="text-blue-100 mb-6 max-w-2xl mx-auto">
 							Subscribe to our newsletter for the latest news,
-							events, and updates from Demo University.
+							events, and updates from Campusnet University.
 						</p>
 						<div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
 							<Input
@@ -86,10 +74,6 @@ export async function Footer() {
 								type="email"
 							/>
 							<Button className="bg-white text-blue-600 hover:bg-gray-100">
-								<Icon
-									icon="lucide:mail"
-									className="w-4 h-4 mr-2"
-								/>
 								Subscribe
 							</Button>
 						</div>
@@ -106,7 +90,7 @@ export async function Footer() {
 							<Logo className="w-8 h-8 mr-3" />
 							<div>
 								<h2 className="text-xl font-bold">
-									Demo University
+									Campusnet University
 								</h2>
 								<p className="text-gray-400 text-sm">
 									Excellence in Education
@@ -125,10 +109,9 @@ export async function Footer() {
 									href={social.href}
 									className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors"
 								>
-									<Icon
-										icon={social.icon}
-										className="w-5 h-5"
-									/>
+									<span className="sr-only">
+										{social.label}
+									</span>
 								</a>
 							))}
 						</div>
@@ -145,12 +128,8 @@ export async function Footer() {
 									<li key={link.href}>
 										<Link
 											href={link.href}
-											className="text-gray-300 hover:text-white transition-colors flex items-center group"
+											className="text-gray-300 hover:text-white transition-colors"
 										>
-											<Icon
-												icon="lucide:chevron-right"
-												className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity"
-											/>
 											{link.label}
 										</Link>
 									</li>
@@ -166,7 +145,7 @@ export async function Footer() {
 				<div className="flex flex-col md:flex-row justify-between items-center">
 					<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
 						<p className="text-gray-400 text-sm">
-							© 2025 Demo University. All rights reserved.
+							© 2025 Campusnet University. All rights reserved.
 						</p>
 						<div className="flex space-x-6">
 							<Link

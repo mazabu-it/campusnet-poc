@@ -147,7 +147,7 @@ export const DocumentSigningComponent: React.FC<DocumentSigningProps> = ({
 	const [currentStep, setCurrentStep] = useState<
 		"review" | "sign" | "complete"
 	>("review");
-	const [signatureData, setSignatureData] = useState<string>("");
+	const [_signatureData, setSignatureData] = useState<string>("");
 
 	const handleSignatureSave = useCallback(
 		(data: string) => {

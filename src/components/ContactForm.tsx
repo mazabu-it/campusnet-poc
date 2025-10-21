@@ -1,11 +1,10 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { format } from "date-fns";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import type React from "react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,6 +49,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 	showAcademicYear = true,
 	className,
 }) => {
+	const nameId = useId();
+	const emailId = useId();
+	const phoneId = useId();
+	const subjectId = useId();
+	const messageId = useId();
+	const programId = useId();
+	const academicYearId = useId();
+	const agreeTermsId = useId();
+	const agreeNewsletterId = useId();
+
 	const [formData, setFormData] = useState<ContactFormData>({
 		name: "",
 		email: "",
@@ -195,9 +204,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								<div>
-									<Label htmlFor="name">Full Name *</Label>
+									<Label htmlFor={nameId}>Full Name *</Label>
 									<Input
-										id="name"
+										id={nameId}
 										value={formData.name}
 										onChange={(e) =>
 											handleChange("name", e.target.value)
@@ -215,11 +224,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 								</div>
 
 								<div>
-									<Label htmlFor="email">
+									<Label htmlFor={emailId}>
 										Email Address *
 									</Label>
 									<Input
-										id="email"
+										id={emailId}
 										type="email"
 										value={formData.email}
 										onChange={(e) =>
@@ -242,9 +251,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 							</div>
 
 							<div>
-								<Label htmlFor="phone">Phone Number</Label>
+								<Label htmlFor={phoneId}>Phone Number</Label>
 								<Input
-									id="phone"
+									id={phoneId}
 									type="tel"
 									value={formData.phone}
 									onChange={(e) =>
@@ -268,7 +277,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
 								{showProgramSelection && (
 									<div>
-										<Label htmlFor="program">
+										<Label htmlFor={programId}>
 											Program of Interest
 										</Label>
 										<Select
@@ -296,7 +305,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
 								{showAcademicYear && (
 									<div>
-										<Label htmlFor="academicYear">
+										<Label htmlFor={academicYearId}>
 											Academic Year
 										</Label>
 										<Select
@@ -338,9 +347,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 							</h3>
 
 							<div>
-								<Label htmlFor="subject">Subject *</Label>
+								<Label htmlFor={subjectId}>Subject *</Label>
 								<Input
-									id="subject"
+									id={subjectId}
 									value={formData.subject}
 									onChange={(e) =>
 										handleChange("subject", e.target.value)
@@ -358,9 +367,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 							</div>
 
 							<div>
-								<Label htmlFor="message">Message *</Label>
+								<Label htmlFor={messageId}>Message *</Label>
 								<Textarea
-									id="message"
+									id={messageId}
 									value={formData.message}
 									onChange={(e) =>
 										handleChange("message", e.target.value)
@@ -390,13 +399,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 						<div className="space-y-4">
 							<div className="flex items-start space-x-2">
 								<Checkbox
-									id="agreeTerms"
+									id={agreeTermsId}
 									checked={formData.agreeTerms}
 									onCheckedChange={(checked) =>
 										handleChange("agreeTerms", !!checked)
 									}
 								/>
-								<Label htmlFor="agreeTerms" className="text-sm">
+								<Label
+									htmlFor={agreeTermsId}
+									className="text-sm"
+								>
 									I agree to the{" "}
 									<Link
 										href="/terms"
@@ -422,7 +434,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
 							<div className="flex items-start space-x-2">
 								<Checkbox
-									id="agreeNewsletter"
+									id={agreeNewsletterId}
 									checked={formData.agreeNewsletter}
 									onCheckedChange={(checked) =>
 										handleChange(
@@ -432,7 +444,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 									}
 								/>
 								<Label
-									htmlFor="agreeNewsletter"
+									htmlFor={agreeNewsletterId}
 									className="text-sm"
 								>
 									I would like to receive updates and

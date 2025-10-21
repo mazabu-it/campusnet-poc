@@ -1,4 +1,4 @@
-import type { Access } from "payload";
+import type { Access, AccessResult } from "payload";
 
 // Super Admin - Full access to everything
 export const superAdminAccess: Access = ({ req: { user } }) => {
@@ -23,8 +23,7 @@ export const adminAccess: Access = ({ req: { user } }) => {
 // Rector/Dean - Read access to their scope
 export const rectorDeanAccess: Access = ({ req: { user } }) => {
 	if (user?.role === "rector-dean") {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const where: any = {};
+		const where: Record<string, unknown> = {};
 
 		if (user.university) {
 			where.university = { equals: user.university };
@@ -33,7 +32,7 @@ export const rectorDeanAccess: Access = ({ req: { user } }) => {
 			where.faculty = { equals: user.faculty };
 		}
 
-		return where;
+		return where as AccessResult;
 	}
 	return false;
 };

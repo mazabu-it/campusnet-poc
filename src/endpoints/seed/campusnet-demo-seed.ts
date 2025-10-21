@@ -194,17 +194,17 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		// 4. Create University
-		console.log("Creating university...");
+		// 4. Create University (University of Kinshasa)
+		console.log("Creating University of Kinshasa...");
 		const university = await payload.create({
 			collection: "universities",
 			data: {
-				name: "Demo University",
-				code: `DEMO-${Date.now()}`,
+				name: "University of Kinshasa",
+				code: `UNIKIN-${Date.now()}`,
 				description:
-					"A comprehensive demo university for testing Campusnet",
-				locale: "en",
-				timezone: "Europe/Brussels",
+					"L'Université de Kinshasa (UNIKIN) est la plus ancienne université de la République démocratique du Congo, fondée en 1954. Elle forme des professionnels dans divers domaines académiques.",
+				locale: "fr",
+				timezone: "Africa/Kinshasa",
 				gradingScale: gradingScale.id,
 				academicCalendar: academicCalendar.id,
 				configuration: {
@@ -222,7 +222,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					},
 					reportConfig: {
 						headerBranding: null,
-						footerText: "Demo University - Academic Records",
+						footerText: "Université de Kinshasa - Relevé de Notes",
 						signatureRequired: true,
 						watermarking: false,
 						exportFormat: "pdf",
@@ -244,14 +244,15 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			collection: "faculties",
 			data: {
 				university: university.id,
-				name: "Faculty of Computer Science",
-				code: "CS",
+				name: "Faculté des Sciences et Technologies",
+				code: "FST",
 				description:
-					"Faculty specializing in computer science and technology",
+					"Faculté des Sciences et Technologies de l'Université de Kinshasa - Formation en informatique et technologies",
 				contactInfo: {
-					address: "Building A, Demo University",
-					phone: "+1-555-0124",
-					email: "cs@demouniversity.edu",
+					address:
+						"Campus de l'Université de Kinshasa, Avenue de l'Université",
+					phone: "+243-81-700-0001",
+					email: "fst@unikin.ac.cd",
 				},
 				isActive: true,
 			},
@@ -263,14 +264,14 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			collection: "departments",
 			data: {
 				faculty: faculty.id,
-				name: "Department of Software Engineering",
-				code: "SE",
+				name: "Département d'Informatique",
+				code: "INFO",
 				description:
-					"Department focused on software engineering and development",
+					"Département d'Informatique de la Faculté des Sciences et Technologies - Formation en génie logiciel et développement",
 				contactInfo: {
-					address: "Room 201, Building A",
-					phone: "+1-555-0125",
-					email: "se@demouniversity.edu",
+					address: "Bureau 201, Faculté des Sciences et Technologies",
+					phone: "+243-81-700-0002",
+					email: "info@unikin.ac.cd",
 				},
 				isActive: true,
 			},
@@ -296,11 +297,12 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			collection: "programs",
 			data: {
 				department: department.id,
-				name: "Bachelor of Science in Software Engineering",
-				code: "BSE",
-				description: "Comprehensive software engineering program",
+				name: "Licence en Informatique",
+				code: "LIC-INFO",
+				description:
+					"Programme de licence en informatique avec spécialisation en génie logiciel",
 				diplomaLevel: diplomaLevel.id,
-				duration: 4,
+				duration: 3,
 				curriculumRules: {
 					totalCreditsRequired: 120,
 					electiveCreditsAllowed: 30,
@@ -346,18 +348,21 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		const introProgramming = await payload.create({
 			collection: "courses",
 			data: {
-				code: "CS101",
-				title: "Introduction to Programming",
+				code: "INFO101",
+				title: "Introduction à la Programmation",
 				description:
-					"Fundamentals of programming concepts and practices",
+					"Fondamentaux de la programmation et concepts de base",
 				credits: 3,
 				owningDepartment: department.id,
 				courseType: "required",
 				isActive: true,
 				learningOutcomes: [
-					{ outcome: "Understand basic programming concepts" },
-					{ outcome: "Write simple programs in Python" },
-					{ outcome: "Debug and test code effectively" },
+					{
+						outcome:
+							"Comprendre les concepts de base de la programmation",
+					},
+					{ outcome: "Écrire des programmes simples en Python" },
+					{ outcome: "Déboguer et tester le code efficacement" },
 				],
 			},
 		});
@@ -365,18 +370,24 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		const dataStructures = await payload.create({
 			collection: "courses",
 			data: {
-				code: "CS201",
-				title: "Data Structures and Algorithms",
+				code: "INFO201",
+				title: "Structures de Données et Algorithmes",
 				description:
-					"Advanced data structures and algorithmic thinking",
+					"Structures de données avancées et pensée algorithmique",
 				credits: 4,
 				owningDepartment: department.id,
 				courseType: "required",
 				isActive: true,
 				learningOutcomes: [
-					{ outcome: "Implement common data structures" },
-					{ outcome: "Analyze algorithm complexity" },
-					{ outcome: "Solve problems using appropriate algorithms" },
+					{
+						outcome:
+							"Implémenter des structures de données communes",
+					},
+					{ outcome: "Analyser la complexité des algorithmes" },
+					{
+						outcome:
+							"Résoudre des problèmes en utilisant des algorithmes appropriés",
+					},
 				],
 			},
 		});
@@ -384,17 +395,27 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		const softwareEngineering = await payload.create({
 			collection: "courses",
 			data: {
-				code: "SE301",
-				title: "Software Engineering Principles",
-				description: "Software development lifecycle and methodologies",
+				code: "INFO301",
+				title: "Principes du Génie Logiciel",
+				description:
+					"Cycle de vie du développement logiciel et méthodologies",
 				credits: 3,
 				owningDepartment: department.id,
 				courseType: "required",
 				isActive: true,
 				learningOutcomes: [
-					{ outcome: "Understand software development lifecycle" },
-					{ outcome: "Apply software engineering methodologies" },
-					{ outcome: "Work effectively in development teams" },
+					{
+						outcome:
+							"Comprendre le cycle de vie du développement logiciel",
+					},
+					{
+						outcome:
+							"Appliquer les méthodologies du génie logiciel",
+					},
+					{
+						outcome:
+							"Travailler efficacement en équipe de développement",
+					},
 				],
 			},
 		});
@@ -884,7 +905,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// 15. Create Assessments
 		console.log("Creating assessments...");
-		const introMidtermAssessment = await payload.create({
+		const _introMidtermAssessment = await payload.create({
 			collection: "assessments",
 			data: {
 				assessmentTemplate: introProgrammingMidterm.id,
@@ -942,7 +963,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const introProjectAssessment = await payload.create({
+		const _introProjectAssessment = await payload.create({
 			collection: "assessments",
 			data: {
 				assessmentTemplate: introProgrammingProject.id,
@@ -1081,62 +1102,321 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		console.log(`Created ${enrollments.length} enrollments`);
 
-		// 17. Create Scores (Sample)
-		console.log("Creating sample scores...");
+		// 17. Create Comprehensive Scores for All Students
+		console.log("Creating comprehensive scores for all students...");
 
-		// Create a few sample scores for demonstration
 		let scoreCount = 0;
 
-		// Create scores for first few students in Introduction to Programming
-		for (let i = 0; i < Math.min(3, students.length); i++) {
-			const student = students[i];
+		// Get all assessment templates for each course instance
+		const introProgrammingTemplates = await payload.find({
+			collection: "assessment-templates",
+			where: { courseInstance: { equals: introProgrammingInstance.id } },
+		});
 
-			// Sample midterm score
-			await payload.create({
-				collection: "scores",
+		const dataStructuresTemplates = await payload.find({
+			collection: "assessment-templates",
+			where: { courseInstance: { equals: dataStructuresInstance.id } },
+		});
+
+		const softwareEngineeringTemplates = await payload.find({
+			collection: "assessment-templates",
+			where: {
+				courseInstance: { equals: softwareEngineeringInstance.id },
+			},
+		});
+
+		// Create assessments for each template
+		const allAssessments = [];
+
+		// Introduction to Programming Assessments
+		for (const template of introProgrammingTemplates.docs) {
+			const assessment = await payload.create({
+				collection: "assessments",
 				data: {
-					assessment: introMidtermAssessment.id,
-					student: student.id,
-					scoreTitle: `${student.name} - CS101 Midterm`,
-					value: faker.number.int({ min: 70, max: 100 }),
-					maxValue: 100,
-					percentage: faker.number.int({ min: 70, max: 100 }),
-					isLate: faker.datatype.boolean({ probability: 0.1 }),
-					latePenaltyApplied: 0,
-					finalValue: faker.number.int({ min: 70, max: 100 }),
-					gradedBy: professors[0].id,
-					gradedAt: faker.date.past({ years: 1 }).toISOString(),
-					feedback: faker.lorem.sentence(),
-					notes: faker.lorem.sentence(),
-					isExcused: false,
+					assessmentTemplate: template.id,
+					title: `Fall 2024 ${template.name} - INFO101`,
+					description: `${template.description} for Introduction à la Programmation`,
+					date: faker.date
+						.future({ years: 1 })
+						.toISOString()
+						.split("T")[0],
+					startTime: "09:00",
+					endTime: "12:00",
+					location: "Salle de cours INFO101",
+					status: "published",
+					submissionWindow: {
+						opensAt: faker.date
+							.past({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						closesAt: faker.date
+							.future({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						lateSubmissionAllowed: true,
+						latePenaltyPercent: 10,
+					},
+					gradingWindow: {
+						opensAt: faker.date
+							.past({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						closesAt: faker.date
+							.future({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						allowLateGrading: true,
+					},
+					instructions: template.instructions,
+					notes: "Évaluation automatisée pour la démonstration",
 				},
 			});
-			scoreCount++;
-
-			// Sample project score
-			await payload.create({
-				collection: "scores",
-				data: {
-					assessment: introProjectAssessment.id,
-					student: student.id,
-					scoreTitle: `${student.name} - CS101 Project`,
-					value: faker.number.int({ min: 75, max: 100 }),
-					maxValue: 100,
-					percentage: faker.number.int({ min: 75, max: 100 }),
-					isLate: faker.datatype.boolean({ probability: 0.05 }),
-					latePenaltyApplied: 0,
-					finalValue: faker.number.int({ min: 75, max: 100 }),
-					gradedBy: professors[0].id,
-					gradedAt: faker.date.past({ years: 1 }).toISOString(),
-					feedback: faker.lorem.sentence(),
-					notes: faker.lorem.sentence(),
-					isExcused: false,
-				},
-			});
-			scoreCount++;
+			allAssessments.push({ ...assessment, template });
 		}
 
-		console.log(`Created ${scoreCount} sample scores`);
+		// Data Structures Assessments
+		for (const template of dataStructuresTemplates.docs) {
+			const assessment = await payload.create({
+				collection: "assessments",
+				data: {
+					assessmentTemplate: template.id,
+					title: `Fall 2024 ${template.name} - INFO201`,
+					description: `${template.description} for Structures de Données et Algorithmes`,
+					date: faker.date
+						.future({ years: 1 })
+						.toISOString()
+						.split("T")[0],
+					startTime: "14:00",
+					endTime: "17:00",
+					location: "Salle de cours INFO201",
+					status: "published",
+					submissionWindow: {
+						opensAt: faker.date
+							.past({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						closesAt: faker.date
+							.future({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						lateSubmissionAllowed: true,
+						latePenaltyPercent: 10,
+					},
+					gradingWindow: {
+						opensAt: faker.date
+							.past({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						closesAt: faker.date
+							.future({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						allowLateGrading: true,
+					},
+					instructions: template.instructions,
+					notes: "Évaluation automatisée pour la démonstration",
+				},
+			});
+			allAssessments.push({ ...assessment, template });
+		}
+
+		// Software Engineering Assessments
+		for (const template of softwareEngineeringTemplates.docs) {
+			const assessment = await payload.create({
+				collection: "assessments",
+				data: {
+					assessmentTemplate: template.id,
+					title: `Fall 2024 ${template.name} - INFO301`,
+					description: `${template.description} for Principes du Génie Logiciel`,
+					date: faker.date
+						.future({ years: 1 })
+						.toISOString()
+						.split("T")[0],
+					startTime: "10:00",
+					endTime: "13:00",
+					location: "Salle de cours INFO301",
+					status: "published",
+					submissionWindow: {
+						opensAt: faker.date
+							.past({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						closesAt: faker.date
+							.future({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						lateSubmissionAllowed: true,
+						latePenaltyPercent: 10,
+					},
+					gradingWindow: {
+						opensAt: faker.date
+							.past({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						closesAt: faker.date
+							.future({ years: 1 })
+							.toISOString()
+							.split("T")[0],
+						allowLateGrading: true,
+					},
+					instructions: template.instructions,
+					notes: "Évaluation automatisée pour la démonstration",
+				},
+			});
+			allAssessments.push({ ...assessment, template });
+		}
+
+		console.log(`Created ${allAssessments.length} assessments`);
+
+		// Create scores for all students in all assessments
+		for (const student of students) {
+			// Get student's enrollments
+			const studentEnrollments = enrollments.filter(
+				(enrollment) => enrollment.student === student.id,
+			);
+
+			for (const enrollment of studentEnrollments) {
+				// Find assessments for this course instance
+				const courseAssessments = allAssessments.filter(
+					(assessment) =>
+						assessment.template.courseInstance ===
+						enrollment.courseInstance,
+				);
+
+				for (const assessment of courseAssessments) {
+					// Generate realistic scores based on assessment type
+					let scoreValue: number;
+					let feedback: string;
+
+					switch (assessment.template.assessmentType) {
+						case "exam":
+							// Exams tend to have more varied scores
+							scoreValue = faker.number.int({
+								min: 45,
+								max: 100,
+							});
+							feedback = faker.helpers.arrayElement([
+								"Good understanding of concepts",
+								"Shows improvement in problem-solving",
+								"Excellent work, keep it up",
+								"Needs more practice with algorithms",
+								"Strong analytical skills demonstrated",
+								"Good effort, review key concepts",
+							]);
+							break;
+						case "project":
+							// Projects tend to have higher scores
+							scoreValue = faker.number.int({
+								min: 70,
+								max: 100,
+							});
+							feedback = faker.helpers.arrayElement([
+								"Excellent implementation and documentation",
+								"Good project structure and code quality",
+								"Creative solution to the problem",
+								"Good work, minor improvements needed",
+								"Outstanding project presentation",
+								"Solid implementation with room for enhancement",
+							]);
+							break;
+						case "assignment":
+							// Assignments have moderate scores
+							scoreValue = faker.number.int({
+								min: 60,
+								max: 100,
+							});
+							feedback = faker.helpers.arrayElement([
+								"Good understanding of the material",
+								"Correct approach, minor errors",
+								"Excellent work, well done",
+								"Good effort, check calculations",
+								"Clear explanations provided",
+								"Good progress, continue practicing",
+							]);
+							break;
+						default:
+							scoreValue = faker.number.int({
+								min: 50,
+								max: 100,
+							});
+							feedback = "Good work overall";
+					}
+
+					// Add some variation based on student performance
+					const studentPerformance = faker.helpers.arrayElement([
+						"excellent",
+						"good",
+						"average",
+						"below-average",
+					]);
+
+					switch (studentPerformance) {
+						case "excellent":
+							scoreValue = Math.min(
+								100,
+								scoreValue +
+									faker.number.int({ min: 5, max: 15 }),
+							);
+							break;
+						case "good":
+							scoreValue = Math.min(
+								100,
+								scoreValue +
+									faker.number.int({ min: 0, max: 10 }),
+							);
+							break;
+						case "average":
+							scoreValue = Math.max(
+								0,
+								scoreValue -
+									faker.number.int({ min: 0, max: 5 }),
+							);
+							break;
+						case "below-average":
+							scoreValue = Math.max(
+								0,
+								scoreValue -
+									faker.number.int({ min: 5, max: 15 }),
+							);
+							break;
+					}
+
+					await payload.create({
+						collection: "scores",
+						data: {
+							assessment: assessment.id,
+							student: student.id,
+							scoreTitle: `${student.name} - ${assessment.title}`,
+							value: scoreValue,
+							maxValue: assessment.template.maxScore,
+							percentage: Math.round(
+								(scoreValue / assessment.template.maxScore) *
+									100,
+							),
+							isLate: faker.datatype.boolean({
+								probability: 0.1,
+							}),
+							latePenaltyApplied: 0,
+							finalValue: scoreValue,
+							gradedBy: professors[0].id,
+							gradedAt: faker.date
+								.past({ years: 1 })
+								.toISOString(),
+							feedback,
+							notes: faker.lorem.sentence(),
+							isExcused: faker.datatype.boolean({
+								probability: 0.02,
+							}),
+						},
+					});
+					scoreCount++;
+				}
+			}
+		}
+
+		console.log(
+			`Created ${scoreCount} comprehensive scores for all students`,
+		);
 
 		// 18. Create Grade Aggregates (Sample)
 		console.log("Creating sample grade aggregates...");
@@ -1689,22 +1969,22 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		console.log("✅ Campusnet demo data seeding completed successfully!");
 		console.log("📊 Created:");
-		console.log("  - 1 University (Demo University)");
-		console.log("  - 1 Faculty (Computer Science)");
-		console.log("  - 1 Department (Software Engineering)");
-		console.log("  - 1 Program (BSE)");
+		console.log("  - 1 University (University of Kinshasa)");
+		console.log("  - 1 Faculty (Faculté des Sciences et Technologies)");
+		console.log("  - 1 Department (Département d'Informatique)");
+		console.log("  - 1 Program (Licence en Informatique)");
 		console.log("  - 2 Program Years");
-		console.log("  - 3 Courses (CS101, CS201, SE301)");
+		console.log("  - 3 Courses (INFO101, INFO201, INFO301)");
 		console.log("  - 3 Course Instances");
 		console.log(`  - ${professors.length} Professors`);
 		console.log(`  - ${students.length} Students`);
 		console.log(`  - ${facultyStaff.length} Faculty Staff`);
 		console.log(`  - ${departmentStaff.length} Department Staff`);
 		console.log("  - 9 Assessment Templates");
-		console.log("  - 6 Assessments");
+		console.log(`  - ${allAssessments.length} Assessments`);
 		console.log(`  - ${enrollments.length} Enrollments`);
-		console.log(`  - ${scoreCount} Scores`);
-		console.log("  - 3 Grade Aggregates");
+		console.log(`  - ${scoreCount} Comprehensive Scores`);
+		console.log("  - Multiple Grade Aggregates");
 		console.log(
 			"  - 6 Client-Facing Pages (Home, University, Dashboard, Registration, News, Faculty)",
 		);

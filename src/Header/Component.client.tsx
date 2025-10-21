@@ -1,6 +1,6 @@
 "use client";
 import { Icon } from "@iconify/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
@@ -12,13 +12,12 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import type { Header } from "@/payload-types";
 import { useHeaderTheme } from "@/providers/HeaderTheme";
 import { cn } from "@/utilities/ui";
-import { HeaderNav } from "./Nav";
 
 interface HeaderClientProps {
 	data: Header;
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 	/* Storing the value in a useState to avoid hydration errors */
 	const [theme, setTheme] = useState<string | null>(null);
 	const [isScrolled, setIsScrolled] = useState(false);
@@ -28,13 +27,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
 	useEffect(() => {
 		setHeaderTheme(null);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [pathname]);
+	}, [setHeaderTheme]);
 
 	useEffect(() => {
 		if (headerTheme && headerTheme !== theme) setTheme(headerTheme);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [headerTheme]);
+	}, [headerTheme, theme]);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -58,8 +55,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 			className={cn(
 				"fixed top-0 left-0 right-0 z-50 transition-all duration-300",
 				isScrolled
-					? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b"
-					: "bg-transparent",
+					? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-gray-700"
+					: "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm",
 			)}
 			{...(theme ? { "data-theme": theme } : {})}
 			initial={{ y: -100 }}
@@ -74,24 +71,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 						whileTap={{ scale: 0.95 }}
 					>
 						<Link href="/" className="flex items-center space-x-2">
-							<Logo
-								loading="eager"
-								priority="high"
-								className="invert dark:invert-0"
-							/>
-							<div className="hidden sm:block">
-								<h1 className="text-xl font-bold text-gray-900 dark:text-white">
-									Demo University
-								</h1>
-								<p className="text-xs text-gray-600 dark:text-gray-400">
-									Excellence in Education
-								</p>
-							</div>
+							<Logo loading="eager" priority="high" />
 						</Link>
 					</motion.div>
 
 					{/* Desktop Navigation */}
-					<nav className="hidden lg:flex items-center space-x-8">
+					<nav className="hidden lg:flex items-center space-x-1">
 						{navigationItems.map((item, index) => (
 							<motion.div
 								key={item.href}
@@ -102,57 +87,34 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 								<Link
 									href={item.href}
 									className={cn(
-										"flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800",
+										"px-4 py-2 text-sm font-medium transition-all duration-200 rounded-md",
 										pathname === item.href
-											? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-											: "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white",
+											? "text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800"
+											: "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50",
 									)}
 								>
-									<Icon
-										icon={item.icon}
-										className="w-4 h-4"
-									/>
-									<span className="font-medium">
-										{item.label}
-									</span>
-									{item.label === "News" && (
-										<Badge
-											variant="secondary"
-											className="ml-1 text-xs"
-										>
-											New
-										</Badge>
-									)}
+									{item.label}
 								</Link>
 							</motion.div>
 						))}
 					</nav>
 
 					{/* Action Buttons */}
-					<div className="hidden lg:flex items-center space-x-4">
+					<div className="hidden lg:flex items-center space-x-3">
 						<Button variant="ghost" size="sm" asChild>
 							<Link
 								href="/login"
-								className="flex items-center space-x-2"
+								className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
 							>
-								<Icon
-									icon="lucide:log-in"
-									className="w-4 h-4"
-								/>
-								<span>Login</span>
+								Sign in
 							</Link>
 						</Button>
-						<Button size="sm" asChild>
-							<Link
-								href="/registration"
-								className="flex items-center space-x-2"
-							>
-								<Icon
-									icon="lucide:user-plus"
-									className="w-4 h-4"
-								/>
-								<span>Apply Now</span>
-							</Link>
+						<Button
+							size="sm"
+							asChild
+							className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100"
+						>
+							<Link href="/registration">Get started</Link>
 						</Button>
 					</div>
 

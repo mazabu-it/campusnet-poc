@@ -8,9 +8,6 @@ import { NewsEventsComponent } from "@/blocks/NewsEvents/Component";
 import { ProgramsShowcaseComponent } from "@/blocks/ProgramsShowcase/Component";
 import { RegistrationFormComponent } from "@/blocks/RegistrationForm/Component";
 import { UniversityHeroComponent } from "@/blocks/UniversityHero/Component";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Sample data for demonstration
 const heroData = {
