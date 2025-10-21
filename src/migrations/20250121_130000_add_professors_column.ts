@@ -9,19 +9,11 @@ export async function up({
 	payload: _payload,
 	req: _req,
 }: MigrateUpArgs): Promise<void> {
-	// Add professors column to course_instances table if it exists
-	await db.execute(sql`
-		DO $$ BEGIN
-			ALTER TABLE "course_instances" ADD COLUMN "professors" integer[];
-		EXCEPTION
-			WHEN undefined_table THEN
-				-- Table doesn't exist yet, will be created by schema sync
-				NULL;
-			WHEN duplicate_column THEN
-				-- Column already exists, skip
-				NULL;
-		END $$;
-	`);
+	// Payload CMS handles hasMany relationships through the course_instances_rels table
+	// No need to add a direct professors column - it's handled by the relationship table
+	console.log(
+		"Professors field is handled by course_instances_rels table - no direct column needed",
+	);
 }
 
 export async function down({
@@ -29,8 +21,8 @@ export async function down({
 	payload: _payload,
 	req: _req,
 }: MigrateDownArgs): Promise<void> {
-	// Remove professors column from course_instances table
-	await db.execute(sql`
-		ALTER TABLE "course_instances" DROP COLUMN IF EXISTS "professors";
-	`);
+	// No direct column to remove - relationships are handled by course_instances_rels table
+	console.log(
+		"Professors field is handled by course_instances_rels table - no direct column to remove",
+	);
 }
