@@ -493,7 +493,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Morning section with hands-on programming labs",
-				professors: [],
 			},
 		});
 
@@ -513,7 +512,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Afternoon section with algorithm analysis focus",
-				professors: [],
 			},
 		});
 
@@ -533,7 +531,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "planning",
 				notes: "Project-based course with team assignments",
-				professors: [],
 			},
 		});
 

@@ -11,7 +11,9 @@ export async function up({
 }: MigrateUpArgs): Promise<void> {
 	// Skip this migration if the column doesn't exist
 	// The column will be created as nullable by Payload's schema sync
-	console.log("Skipping professors column alteration - will be handled by schema sync");
+	console.log(
+		"Skipping professors column alteration - will be handled by schema sync",
+	);
 }
 
 export async function down({
