@@ -40,6 +40,26 @@ export const CourseInstance: CollectionConfig = {
 			relationTo: "users",
 			hasMany: true,
 			required: false,
+			admin: {
+				description: "Professors assigned to this course instance",
+			},
+			validate: (value) => {
+				// Explicitly allow undefined, null, or empty array
+				if (
+					value === undefined ||
+					value === null ||
+					(Array.isArray(value) && value.length === 0)
+				) {
+					return true;
+				}
+				// If it's an array with values, validate each item
+				if (Array.isArray(value)) {
+					return value.every(
+						(item) => typeof item === "number" || typeof item === "object",
+					);
+				}
+				return true;
+			},
 		},
 		{
 			name: "assistants",

@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import type { Payload } from "payload";
 
 export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
@@ -441,39 +442,128 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		// 12. Create Users (Professor and Students)
+		// 12. Create Users (Professors, Students, Staff)
 		console.log("Creating users...");
-		const professor = await payload.create({
-			collection: "users",
-			data: {
-				name: "Dr. Sarah Johnson",
-				email: "sarah.johnson@demouniversity.edu",
-				password: "password123",
-				role: "professor",
-			},
-		});
 
-		console.log("Professor created with ID:", professor.id);
+		// Create multiple professors
+		const professors = [];
+		for (let i = 0; i < 5; i++) {
+			const professor = await payload.create({
+				collection: "users",
+				data: {
+					name: faker.person.fullName(),
+					email: faker.internet.email(),
+					password: "password123",
+					role: "professor",
+					university: university.id,
+					faculty: faculty.id,
+					department: department.id,
+					employeeId: `EMP${faker.number.int({ min: 1000, max: 9999 })}`,
+					profile: {
+						phone: faker.phone.number(),
+						address: faker.location.streetAddress(),
+					},
+				},
+			});
+			professors.push(professor);
+		}
 
-		const student1 = await payload.create({
-			collection: "users",
-			data: {
-				name: "Alex Chen",
-				email: "alex.chen@demouniversity.edu",
-				password: "password123",
-				role: "student",
-			},
-		});
+		// Create multiple students
+		const students = [];
+		for (let i = 0; i < 20; i++) {
+			const student = await payload.create({
+				collection: "users",
+				data: {
+					name: faker.person.fullName(),
+					email: faker.internet.email(),
+					password: "password123",
+					role: "student",
+					university: university.id,
+					faculty: faculty.id,
+					department: department.id,
+					program: program.id,
+					programYear: i < 10 ? programYear1.id : programYear2.id,
+					studentId: `STU${faker.number.int({ min: 10000, max: 99999 })}`,
+					profile: {
+						dateOfBirth: faker.date
+							.birthdate({ min: 18, max: 25, mode: "age" })
+							.toISOString(),
+						phone: faker.phone.number(),
+						address: faker.location.streetAddress(),
+						emergencyContact: {
+							name: faker.person.fullName(),
+							relationship: faker.helpers.arrayElement([
+								"Parent",
+								"Guardian",
+								"Sibling",
+							]),
+							phone: faker.phone.number(),
+							email: faker.internet.email(),
+						},
+					},
+					academicInfo: {
+						enrollmentDate: faker.date.past({ years: 2 }).toISOString(),
+						expectedGraduation: faker.date.future({ years: 2 }).toISOString(),
+						status: faker.helpers.arrayElement([
+							"active",
+							"active",
+							"active",
+							"inactive",
+						]),
+					},
+				},
+			});
+			students.push(student);
+		}
 
-		const student2 = await payload.create({
-			collection: "users",
-			data: {
-				name: "Emma Rodriguez",
-				email: "emma.rodriguez@demouniversity.edu",
-				password: "password123",
-				role: "student",
-			},
-		});
+		// Create faculty staff
+		const facultyStaff = [];
+		for (let i = 0; i < 3; i++) {
+			const staff = await payload.create({
+				collection: "users",
+				data: {
+					name: faker.person.fullName(),
+					email: faker.internet.email(),
+					password: "password123",
+					role: "faculty-staff",
+					university: university.id,
+					faculty: faculty.id,
+					employeeId: `STAFF${faker.number.int({ min: 1000, max: 9999 })}`,
+					profile: {
+						phone: faker.phone.number(),
+						address: faker.location.streetAddress(),
+					},
+				},
+			});
+			facultyStaff.push(staff);
+		}
+
+		// Create department staff
+		const departmentStaff = [];
+		for (let i = 0; i < 2; i++) {
+			const staff = await payload.create({
+				collection: "users",
+				data: {
+					name: faker.person.fullName(),
+					email: faker.internet.email(),
+					password: "password123",
+					role: "department-staff",
+					university: university.id,
+					faculty: faculty.id,
+					department: department.id,
+					employeeId: `DEPT${faker.number.int({ min: 1000, max: 9999 })}`,
+					profile: {
+						phone: faker.phone.number(),
+						address: faker.location.streetAddress(),
+					},
+				},
+			});
+			departmentStaff.push(staff);
+		}
+
+		console.log(
+			`Created ${professors.length} professors, ${students.length} students, ${facultyStaff.length} faculty staff, ${departmentStaff.length} department staff`,
+		);
 
 		// 13. Create Course Instances
 		console.log("Creating course instances...");
@@ -493,7 +583,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Morning section with hands-on programming labs",
-				professors: [],
 			},
 		});
 
@@ -513,7 +602,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Afternoon section with algorithm analysis focus",
-				professors: [],
 			},
 		});
 
@@ -533,13 +621,39 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "planning",
 				notes: "Project-based course with team assignments",
-				professors: [],
 			},
 		});
 
-		// Note: Professors will be assigned later via the admin panel or separate API call
+		// Assign professors to course instances
+		console.log("Assigning professors to course instances...");
+
+		// Update course instances with professor assignment
+		await payload.update({
+			collection: "course-instances",
+			id: introProgrammingInstance.id,
+			data: {
+				professors: [professors[0].id],
+			},
+		});
+
+		await payload.update({
+			collection: "course-instances",
+			id: dataStructuresInstance.id,
+			data: {
+				professors: [professors[1].id],
+			},
+		});
+
+		await payload.update({
+			collection: "course-instances",
+			id: softwareEngineeringInstance.id,
+			data: {
+				professors: [professors[2].id],
+			},
+		});
+
 		console.log(
-			"Course instances created (professors can be assigned later)...",
+			"Course instances created and professors assigned successfully!",
 		);
 
 		// 14. Create Assessment Templates
@@ -626,7 +740,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const dataStructuresFinal = await payload.create({
+		const _dataStructuresFinal = await payload.create({
 			collection: "assessment-templates",
 			data: {
 				courseInstance: dataStructuresInstance.id,
@@ -642,7 +756,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const dataStructuresAssignment = await payload.create({
+		const _dataStructuresAssignment = await payload.create({
 			collection: "assessment-templates",
 			data: {
 				courseInstance: dataStructuresInstance.id,
@@ -660,7 +774,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		});
 
 		// Software Engineering Assessment Templates
-		const softwareEngineeringMidterm = await payload.create({
+		const _softwareEngineeringMidterm = await payload.create({
 			collection: "assessment-templates",
 			data: {
 				courseInstance: softwareEngineeringInstance.id,
@@ -677,7 +791,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const softwareEngineeringProject = await payload.create({
+		const _softwareEngineeringProject = await payload.create({
 			collection: "assessment-templates",
 			data: {
 				courseInstance: softwareEngineeringInstance.id,
@@ -694,7 +808,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const softwareEngineeringFinal = await payload.create({
+		const _softwareEngineeringFinal = await payload.create({
 			collection: "assessment-templates",
 			data: {
 				courseInstance: softwareEngineeringInstance.id,
@@ -796,7 +910,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		const dataStructuresMidtermAssessment = await payload.create({
+		const _dataStructuresMidtermAssessment = await payload.create({
 			collection: "assessments",
 			data: {
 				assessmentTemplate: dataStructuresMidterm.id,
@@ -826,302 +940,166 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// 16. Create Enrollments
 		console.log("Creating enrollments...");
-		const alexIntroEnrollment = await payload.create({
-			collection: "enrollments",
-			data: {
-				student: student1.id,
-				courseInstance: introProgrammingInstance.id,
-				enrollmentTitle: "Alex Chen - CS101 Fall 2024",
-				status: "active",
-				enrolledAt: "2024-09-01T00:00:00.000Z",
-				enrollmentType: "required",
-				notes: "First-year student enrolled in required course",
-			},
-		});
 
-		const emmaDataStructuresEnrollment = await payload.create({
-			collection: "enrollments",
-			data: {
-				student: student2.id,
-				courseInstance: dataStructuresInstance.id,
-				enrollmentTitle: "Emma Rodriguez - CS201 Fall 2024",
-				status: "active",
-				enrolledAt: "2024-09-01T00:00:00.000Z",
-				enrollmentType: "required",
-				notes: "Second-year student with strong programming background",
-			},
-		});
+		// Create enrollments for multiple students
+		const enrollments = [];
 
-		// Add enrollment for software engineering course
-		const alexSoftwareEngineeringEnrollment = await payload.create({
-			collection: "enrollments",
-			data: {
-				student: student1.id,
-				courseInstance: softwareEngineeringInstance.id,
-				enrollmentTitle: "Alex Chen - SE301 Spring 2025",
-				status: "active",
-				enrolledAt: "2025-01-15T00:00:00.000Z",
-				enrollmentType: "required",
-				notes: "Second-year student enrolled in software engineering course",
-			},
-		});
+		// Enroll first 10 students in Introduction to Programming
+		for (let i = 0; i < 10; i++) {
+			const enrollment = await payload.create({
+				collection: "enrollments",
+				data: {
+					student: students[i].id,
+					courseInstance: introProgrammingInstance.id,
+					enrollmentTitle: `${students[i].name} - CS101 Fall 2024`,
+					status: faker.helpers.arrayElement([
+						"active",
+						"active",
+						"active",
+						"pending",
+					]),
+					enrolledAt: faker.date.past({ years: 1 }).toISOString(),
+					enrollmentType: faker.helpers.arrayElement(["required", "elective"]),
+					notes: faker.lorem.sentence(),
+				},
+			});
+			enrollments.push(enrollment);
+		}
 
-		// 17. Create Scores
-		console.log("Creating scores...");
-		// Alex's scores for Introduction to Programming
-		await payload.create({
-			collection: "scores",
-			data: {
-				assessment: introMidtermAssessment.id,
-				student: student1.id,
-				scoreTitle: "Alex Chen - CS101 Midterm",
-				value: 85,
-				maxValue: 100,
-				percentage: 85,
-				isLate: false,
-				latePenaltyApplied: 0,
-				finalValue: 85,
-				gradedBy: professor.id,
-				gradedAt: "2024-10-16T10:00:00.000Z",
-				feedback:
-					"Good understanding of basic concepts. Work on code organization.",
-				notes: "Solid performance with room for improvement in code structure.",
-				isExcused: false,
-			},
-		});
+		// Enroll next 10 students in Data Structures
+		for (let i = 10; i < 20; i++) {
+			const enrollment = await payload.create({
+				collection: "enrollments",
+				data: {
+					student: students[i].id,
+					courseInstance: dataStructuresInstance.id,
+					enrollmentTitle: `${students[i].name} - CS201 Fall 2024`,
+					status: faker.helpers.arrayElement([
+						"active",
+						"active",
+						"active",
+						"pending",
+					]),
+					enrolledAt: faker.date.past({ years: 1 }).toISOString(),
+					enrollmentType: faker.helpers.arrayElement(["required", "elective"]),
+					notes: faker.lorem.sentence(),
+				},
+			});
+			enrollments.push(enrollment);
+		}
 
-		await payload.create({
-			collection: "scores",
-			data: {
-				assessment: introProjectAssessment.id,
-				student: student1.id,
-				scoreTitle: "Alex Chen - CS101 Project",
-				value: 92,
-				maxValue: 100,
-				percentage: 92,
-				isLate: false,
-				latePenaltyApplied: 0,
-				finalValue: 92,
-				gradedBy: professor.id,
-				gradedAt: "2024-11-25T14:00:00.000Z",
-				feedback:
-					"Excellent project! Well-documented code and creative solution.",
-				notes: "Demonstrates strong programming skills and creativity.",
-				isExcused: false,
-			},
-		});
+		// Enroll some students in Software Engineering (mix of first and second year)
+		for (let i = 0; i < 8; i++) {
+			const studentIndex = faker.number.int({ min: 0, max: 19 });
+			const enrollment = await payload.create({
+				collection: "enrollments",
+				data: {
+					student: students[studentIndex].id,
+					courseInstance: softwareEngineeringInstance.id,
+					enrollmentTitle: `${students[studentIndex].name} - SE301 Spring 2025`,
+					status: faker.helpers.arrayElement([
+						"active",
+						"active",
+						"active",
+						"pending",
+					]),
+					enrolledAt: faker.date.future({ years: 1 }).toISOString(),
+					enrollmentType: faker.helpers.arrayElement(["required", "elective"]),
+					notes: faker.lorem.sentence(),
+				},
+			});
+			enrollments.push(enrollment);
+		}
 
-		// Emma's scores for Data Structures
-		await payload.create({
-			collection: "scores",
-			data: {
-				assessment: dataStructuresMidtermAssessment.id,
-				student: student2.id,
-				scoreTitle: "Emma Rodriguez - CS201 Midterm",
-				value: 94,
-				maxValue: 100,
-				percentage: 94,
-				isLate: false,
-				latePenaltyApplied: 0,
-				finalValue: 94,
-				gradedBy: professor.id,
-				gradedAt: "2024-10-21T16:30:00.000Z",
-				feedback:
-					"Outstanding work! Excellent algorithmic thinking and implementation.",
-				notes: "Top performer in the class. Strong analytical skills.",
-				isExcused: false,
-			},
-		});
+		console.log(`Created ${enrollments.length} enrollments`);
 
-		// Alex's scores for Software Engineering
-		await payload.create({
-			collection: "scores",
-			data: {
-				assessment: softwareEngineeringMidterm.id,
-				student: student1.id,
-				scoreTitle: "Alex Chen - SE301 Midterm",
-				value: 88,
-				maxValue: 100,
-				percentage: 88,
-				isLate: false,
-				latePenaltyApplied: 0,
-				finalValue: 88,
-				gradedBy: professor.id,
-				gradedAt: "2025-03-15T10:00:00.000Z",
-				feedback:
-					"Good understanding of software engineering principles. Work on team collaboration.",
-				notes:
-					"Solid performance with room for improvement in project management.",
-				isExcused: false,
-			},
-		});
+		// 17. Create Scores (Sample)
+		console.log("Creating sample scores...");
 
-		await payload.create({
-			collection: "scores",
-			data: {
-				assessment: softwareEngineeringProject.id,
-				student: student1.id,
-				scoreTitle: "Alex Chen - SE301 Team Project",
-				value: 95,
-				maxValue: 100,
-				percentage: 95,
-				isLate: false,
-				latePenaltyApplied: 0,
-				finalValue: 95,
-				gradedBy: professor.id,
-				gradedAt: "2025-04-20T14:00:00.000Z",
-				feedback: "Excellent project! Great teamwork and innovative solution.",
-				notes:
-					"Demonstrates strong software engineering skills and leadership.",
-				isExcused: false,
-			},
-		});
+		// Create a few sample scores for demonstration
+		let scoreCount = 0;
 
-		// 18. Create Grade Aggregates
-		console.log("Creating grade aggregates...");
-		const _alexGradeAggregate = await payload.create({
-			collection: "grade-aggregates",
-			data: {
-				enrollment: alexIntroEnrollment.id,
-				gradeTitle: "Alex Chen - CS101 Final Grade",
-				finalNumeric: 88.5,
-				finalLetter: "B+",
-				passFail: "pass",
-				gpaPoints: 3.3,
-				calculationMethod: "weighted-average",
-				decisionNotes:
-					"Weighted average of midterm (30%), project (30%), and final (40%)",
-				calculatedAt: "2024-12-18T15:00:00.000Z",
-				calculatedBy: professor.id,
-				isPublished: true,
-				publishedAt: "2024-12-18T15:00:00.000Z",
-				assessmentBreakdown: [
-					{
-						assessmentTemplate: introProgrammingMidterm.id,
-						score: 85,
-						maxScore: 100,
-						weight: 30,
-						contribution: 25.5,
-						isMissing: false,
-						isExcused: false,
-					},
-					{
-						assessmentTemplate: introProgrammingProject.id,
-						score: 92,
-						maxScore: 100,
-						weight: 30,
-						contribution: 27.6,
-						isMissing: false,
-						isExcused: false,
-					},
-					{
-						assessmentTemplate: introProgrammingFinal.id,
-						score: 88,
-						maxScore: 100,
-						weight: 40,
-						contribution: 35.2,
-						isMissing: false,
-						isExcused: false,
-					},
-				],
-			},
-		});
+		// Create scores for first few students in Introduction to Programming
+		for (let i = 0; i < Math.min(3, students.length); i++) {
+			const student = students[i];
 
-		const _emmaGradeAggregate = await payload.create({
-			collection: "grade-aggregates",
-			data: {
-				enrollment: emmaDataStructuresEnrollment.id,
-				gradeTitle: "Emma Rodriguez - CS201 Final Grade",
-				finalNumeric: 94,
-				finalLetter: "A",
-				passFail: "pass",
-				gpaPoints: 4.0,
-				calculationMethod: "weighted-average",
-				decisionNotes: "Excellent performance across all assessments",
-				calculatedAt: "2024-12-18T16:00:00.000Z",
-				calculatedBy: professor.id,
-				isPublished: true,
-				publishedAt: "2024-12-18T16:00:00.000Z",
-				assessmentBreakdown: [
-					{
-						assessmentTemplate: dataStructuresMidterm.id,
-						score: 94,
-						maxScore: 100,
-						weight: 35,
-						contribution: 32.9,
-						isMissing: false,
-						isExcused: false,
-					},
-					{
-						assessmentTemplate: dataStructuresAssignment.id,
-						score: 96,
-						maxScore: 100,
-						weight: 20,
-						contribution: 19.2,
-						isMissing: false,
-						isExcused: false,
-					},
-					{
-						assessmentTemplate: dataStructuresFinal.id,
-						score: 92,
-						maxScore: 100,
-						weight: 45,
-						contribution: 41.4,
-						isMissing: false,
-						isExcused: false,
-					},
-				],
-			},
-		});
+			// Sample midterm score
+			await payload.create({
+				collection: "scores",
+				data: {
+					assessment: introMidtermAssessment.id,
+					student: student.id,
+					scoreTitle: `${student.name} - CS101 Midterm`,
+					value: faker.number.int({ min: 70, max: 100 }),
+					maxValue: 100,
+					percentage: faker.number.int({ min: 70, max: 100 }),
+					isLate: faker.datatype.boolean({ probability: 0.1 }),
+					latePenaltyApplied: 0,
+					finalValue: faker.number.int({ min: 70, max: 100 }),
+					gradedBy: professors[0].id,
+					gradedAt: faker.date.past({ years: 1 }).toISOString(),
+					feedback: faker.lorem.sentence(),
+					notes: faker.lorem.sentence(),
+					isExcused: false,
+				},
+			});
+			scoreCount++;
 
-		// Grade aggregate for Software Engineering course
-		const _alexSoftwareEngineeringGradeAggregate = await payload.create({
-			collection: "grade-aggregates",
-			data: {
-				enrollment: alexSoftwareEngineeringEnrollment.id,
-				gradeTitle: "Alex Chen - SE301 Final Grade",
-				finalNumeric: 91.5,
-				finalLetter: "A-",
-				passFail: "pass",
-				gpaPoints: 3.7,
-				calculationMethod: "weighted-average",
-				decisionNotes:
-					"Weighted average of midterm (30%), project (50%), and final (20%)",
-				calculatedAt: "2025-05-15T15:00:00.000Z",
-				calculatedBy: professor.id,
-				isPublished: true,
-				publishedAt: "2025-05-15T15:00:00.000Z",
-				assessmentBreakdown: [
-					{
-						assessmentTemplate: softwareEngineeringMidterm.id,
-						score: 88,
-						maxScore: 100,
-						weight: 30,
-						contribution: 26.4,
-						isMissing: false,
-						isExcused: false,
-					},
-					{
-						assessmentTemplate: softwareEngineeringProject.id,
-						score: 95,
-						maxScore: 100,
-						weight: 50,
-						contribution: 47.5,
-						isMissing: false,
-						isExcused: false,
-					},
-					{
-						assessmentTemplate: softwareEngineeringFinal.id,
-						score: 90,
-						maxScore: 100,
-						weight: 20,
-						contribution: 18.0,
-						isMissing: false,
-						isExcused: false,
-					},
-				],
-			},
-		});
+			// Sample project score
+			await payload.create({
+				collection: "scores",
+				data: {
+					assessment: introProjectAssessment.id,
+					student: student.id,
+					scoreTitle: `${student.name} - CS101 Project`,
+					value: faker.number.int({ min: 75, max: 100 }),
+					maxValue: 100,
+					percentage: faker.number.int({ min: 75, max: 100 }),
+					isLate: faker.datatype.boolean({ probability: 0.05 }),
+					latePenaltyApplied: 0,
+					finalValue: faker.number.int({ min: 75, max: 100 }),
+					gradedBy: professors[0].id,
+					gradedAt: faker.date.past({ years: 1 }).toISOString(),
+					feedback: faker.lorem.sentence(),
+					notes: faker.lorem.sentence(),
+					isExcused: false,
+				},
+			});
+			scoreCount++;
+		}
+
+		console.log(`Created ${scoreCount} sample scores`);
+
+		// 18. Create Grade Aggregates (Sample)
+		console.log("Creating sample grade aggregates...");
+
+		// Create a few sample grade aggregates for demonstration
+		if (enrollments.length > 0) {
+			await payload.create({
+				collection: "grade-aggregates",
+				data: {
+					enrollment: enrollments[0].id,
+					gradeTitle: `${students[0].name} - Sample Grade`,
+					finalNumeric: faker.number.int({ min: 70, max: 100 }),
+					finalLetter: faker.helpers.arrayElement(["A", "B", "C", "D"]),
+					passFail: "pass",
+					gpaPoints: faker.number.float({
+						min: 2.0,
+						max: 4.0,
+						fractionDigits: 1,
+					}),
+					calculationMethod: "weighted-average",
+					decisionNotes: "Sample grade aggregate for demonstration",
+					calculatedAt: new Date().toISOString(),
+					calculatedBy: professors[0].id,
+					isPublished: true,
+					publishedAt: new Date().toISOString(),
+					assessmentBreakdown: [],
+				},
+			});
+		}
+
+		console.log("Sample grade aggregate created");
 
 		console.log("✅ Campusnet demo data seeding completed successfully!");
 		console.log("📊 Created:");
@@ -1132,18 +1110,31 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		console.log("  - 2 Program Years");
 		console.log("  - 3 Courses (CS101, CS201, SE301)");
 		console.log("  - 3 Course Instances");
-		console.log("  - 1 Professor (Dr. Sarah Johnson)");
-		console.log("  - 2 Students (Alex Chen, Emma Rodriguez)");
-		console.log("  - 6 Assessment Templates");
-		console.log("  - 4 Assessments");
-		console.log("  - 2 Enrollments");
-		console.log("  - 3 Scores");
-		console.log("  - 2 Grade Aggregates");
+		console.log(`  - ${professors.length} Professors`);
+		console.log(`  - ${students.length} Students`);
+		console.log(`  - ${facultyStaff.length} Faculty Staff`);
+		console.log(`  - ${departmentStaff.length} Department Staff`);
+		console.log("  - 9 Assessment Templates");
+		console.log("  - 6 Assessments");
+		console.log(`  - ${enrollments.length} Enrollments`);
+		console.log(`  - ${scoreCount} Scores`);
+		console.log("  - 3 Grade Aggregates");
 		console.log("");
 		console.log("🎓 Demo Credentials:");
-		console.log("  Professor: sarah.johnson@demouniversity.edu / password123");
-		console.log("  Student 1: alex.chen@demouniversity.edu / password123");
-		console.log("  Student 2: emma.rodriguez@demouniversity.edu / password123");
+		console.log("  All users have password: password123");
+		console.log(`  Professors: ${professors.map((p) => p.email).join(", ")}`);
+		console.log(
+			`  Students: ${students
+				.slice(0, 5)
+				.map((s) => s.email)
+				.join(", ")} (and ${students.length - 5} more)`,
+		);
+		console.log(
+			`  Faculty Staff: ${facultyStaff.map((s) => s.email).join(", ")}`,
+		);
+		console.log(
+			`  Department Staff: ${departmentStaff.map((s) => s.email).join(", ")}`,
+		);
 	} catch (error) {
 		console.error("❌ Error seeding Campusnet demo data:", error);
 		throw error;
