@@ -447,75 +447,21 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			collection: "users",
 			data: {
 				name: "Dr. Sarah Johnson",
-				firstName: "Sarah",
-				lastName: "Johnson",
 				email: "sarah.johnson@demouniversity.edu",
 				password: "password123",
 				role: "professor",
-				university: university.id,
-				faculty: faculty.id,
-				department: department.id,
-				employeeId: "EMP001",
-				profile: {
-					phone: "+1-555-0101",
-					address: "456 Faculty Lane, Demo City, DC 12345",
-				},
-				academicInfo: {
-					enrollmentDate: "2020-09-01",
-					status: "active",
-					gpa: 3.8,
-					totalCreditsEarned: 120,
-				},
-				permissions: {
-					canImpersonate: false,
-					canManageUsers: false,
-					canManageCourses: true,
-					canGrade: true,
-					canViewReports: true,
-					scope: "department",
-				},
-				isActive: true,
 			},
 		});
-		
+
 		console.log("Professor created with ID:", professor.id);
 
 		const student1 = await payload.create({
 			collection: "users",
 			data: {
 				name: "Alex Chen",
-				firstName: "Alex",
-				lastName: "Chen",
 				email: "alex.chen@demouniversity.edu",
 				password: "password123",
 				role: "student",
-				university: university.id,
-				faculty: faculty.id,
-				department: department.id,
-				program: program.id,
-				programYear: programYear1.id,
-				studentId: "STU001",
-				profile: {
-					dateOfBirth: "2003-05-15",
-					phone: "+1-555-0102",
-					address: "789 Student Street, Demo City, DC 12345",
-				},
-				academicInfo: {
-					enrollmentDate: "2022-09-01",
-					expectedGraduation: "2026-05-15",
-					status: "active",
-					gpa: 3.2,
-					totalCreditsEarned: 15,
-				},
-				permissions: {
-					canImpersonate: false,
-					canManageUsers: false,
-					canManageCourses: false,
-					canGrade: false,
-					canViewReports: false,
-					scope: "self",
-				},
-				isActive: true,
 			},
 		});
 
@@ -523,38 +469,9 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			collection: "users",
 			data: {
 				name: "Emma Rodriguez",
-				firstName: "Emma",
-				lastName: "Rodriguez",
 				email: "emma.rodriguez@demouniversity.edu",
 				password: "password123",
 				role: "student",
-				university: university.id,
-				faculty: faculty.id,
-				department: department.id,
-				program: program.id,
-				programYear: programYear1.id,
-				studentId: "STU002",
-				profile: {
-					dateOfBirth: "2003-08-22",
-					phone: "+1-555-0103",
-					address: "321 College Ave, Demo City, DC 12345",
-				},
-				academicInfo: {
-					enrollmentDate: "2022-09-01",
-					expectedGraduation: "2026-05-15",
-					status: "active",
-					gpa: 3.5,
-					totalCreditsEarned: 15,
-				},
-				permissions: {
-					canImpersonate: false,
-					canManageUsers: false,
-					canManageCourses: false,
-					canGrade: false,
-					canViewReports: false,
-					scope: "self",
-				},
-				isActive: true,
 			},
 		});
 
