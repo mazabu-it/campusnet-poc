@@ -39,7 +39,7 @@ export const CourseInstance: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       hasMany: true,
-      required: true,
+      required: false,
     },
     {
       name: 'assistants',
