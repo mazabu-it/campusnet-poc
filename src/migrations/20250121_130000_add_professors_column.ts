@@ -9,9 +9,18 @@ export async function up({
 	payload: _payload,
 	req: _req,
 }: MigrateUpArgs): Promise<void> {
-	// Add professors column to course_instances table
+	// Add professors column to course_instances table if it exists
 	await db.execute(sql`
-		ALTER TABLE "course_instances" ADD COLUMN "professors" integer[];
+		DO $$ BEGIN
+			ALTER TABLE "course_instances" ADD COLUMN "professors" integer[];
+		EXCEPTION
+			WHEN undefined_table THEN
+				-- Table doesn't exist yet, will be created by schema sync
+				NULL;
+			WHEN duplicate_column THEN
+				-- Column already exists, skip
+				NULL;
+		END $$;
 	`);
 }
 
