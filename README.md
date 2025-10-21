@@ -272,3 +272,4 @@ The seed script will also create a demo user for demonstration purposes only:
 ## Questions
 
 If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+# Database reset and migration applied - Tue Oct 21 14:09:52 CEST 2025
