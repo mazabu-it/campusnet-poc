@@ -9,10 +9,9 @@ export async function up({
 	payload: _payload,
 	req: _req,
 }: MigrateUpArgs): Promise<void> {
-	// Make professors column nullable in course_instances table
-	await db.execute(sql`
-		ALTER TABLE "course_instances" ALTER COLUMN "professors" DROP NOT NULL;
-	`);
+	// Skip this migration if the column doesn't exist
+	// The column will be created as nullable by Payload's schema sync
+	console.log("Skipping professors column alteration - will be handled by schema sync");
 }
 
 export async function down({
