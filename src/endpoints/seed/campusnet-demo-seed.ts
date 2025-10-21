@@ -534,31 +534,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		// Update course instances with professors
-		console.log("Updating course instances with professors...");
-		await payload.update({
-			collection: "course-instances",
-			id: introProgrammingInstance.id,
-			data: {
-				professors: [professor.id],
-			},
-		});
-
-		await payload.update({
-			collection: "course-instances",
-			id: dataStructuresInstance.id,
-			data: {
-				professors: [professor.id],
-			},
-		});
-
-		await payload.update({
-			collection: "course-instances",
-			id: _softwareEngineeringInstance.id,
-			data: {
-				professors: [professor.id],
-			},
-		});
+		// Note: Professors will be assigned later via the admin panel or separate API call
+		console.log("Course instances created (professors can be assigned later)...");
 
 		// 14. Create Assessment Templates
 		console.log("Creating assessment templates...");
