@@ -54,9 +54,12 @@ export const CourseInstance: CollectionConfig = {
 				}
 				// If it's an array with values, validate each item
 				if (Array.isArray(value)) {
-					return value.every(
+					const isValid = value.every(
 						(item) => typeof item === "number" || typeof item === "object",
 					);
+					return isValid
+						? true
+						: "All professor items must be valid user IDs or objects";
 				}
 				return true;
 			},

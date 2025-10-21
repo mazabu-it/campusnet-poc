@@ -1171,6 +1171,9 @@ export interface CourseInstance {
    * Auto-generated title for this instance
    */
   instanceTitle?: string | null;
+  /**
+   * Professors assigned to this course instance
+   */
   professors?: (number | User)[] | null;
   assistants?: (number | User)[] | null;
   maxEnrollment?: number | null;
