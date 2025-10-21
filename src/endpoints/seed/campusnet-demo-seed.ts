@@ -493,6 +493,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Morning section with hands-on programming labs",
+				professors: [],
 			},
 		});
 
@@ -512,10 +513,11 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Afternoon section with algorithm analysis focus",
+				professors: [],
 			},
 		});
 
-		const _softwareEngineeringInstance = await payload.create({
+		const softwareEngineeringInstance = await payload.create({
 			collection: "course-instances",
 			data: {
 				courseVariation: softwareEngineeringVar.id,
@@ -531,11 +533,14 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "planning",
 				notes: "Project-based course with team assignments",
+				professors: [],
 			},
 		});
 
 		// Note: Professors will be assigned later via the admin panel or separate API call
-		console.log("Course instances created (professors can be assigned later)...");
+		console.log(
+			"Course instances created (professors can be assigned later)...",
+		);
 
 		// 14. Create Assessment Templates
 		console.log("Creating assessment templates...");
@@ -650,6 +655,58 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				assessmentType: "assignment",
 				instructions:
 					"Analyze the time and space complexity of given algorithms.",
+				isActive: true,
+			},
+		});
+
+		// Software Engineering Assessment Templates
+		const softwareEngineeringMidterm = await payload.create({
+			collection: "assessment-templates",
+			data: {
+				courseInstance: softwareEngineeringInstance.id,
+				name: "Midterm Exam",
+				description: "Software engineering principles and methodologies",
+				weightPercent: 30,
+				minScore: 0,
+				maxScore: 100,
+				isOptional: false,
+				assessmentType: "exam",
+				instructions:
+					"Answer questions about software development lifecycle and methodologies.",
+				isActive: true,
+			},
+		});
+
+		const softwareEngineeringProject = await payload.create({
+			collection: "assessment-templates",
+			data: {
+				courseInstance: softwareEngineeringInstance.id,
+				name: "Team Project",
+				description: "Group software development project",
+				weightPercent: 50,
+				minScore: 0,
+				maxScore: 100,
+				isOptional: false,
+				assessmentType: "project",
+				instructions:
+					"Work in teams to develop a complete software application.",
+				isActive: true,
+			},
+		});
+
+		const softwareEngineeringFinal = await payload.create({
+			collection: "assessment-templates",
+			data: {
+				courseInstance: softwareEngineeringInstance.id,
+				name: "Final Exam",
+				description: "Comprehensive final examination",
+				weightPercent: 20,
+				minScore: 0,
+				maxScore: 100,
+				isOptional: false,
+				assessmentType: "exam",
+				instructions:
+					"Complete all sections covering software engineering concepts.",
 				isActive: true,
 			},
 		});
@@ -795,6 +852,20 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
+		// Add enrollment for software engineering course
+		const alexSoftwareEngineeringEnrollment = await payload.create({
+			collection: "enrollments",
+			data: {
+				student: student1.id,
+				courseInstance: softwareEngineeringInstance.id,
+				enrollmentTitle: "Alex Chen - SE301 Spring 2025",
+				status: "active",
+				enrolledAt: "2025-01-15T00:00:00.000Z",
+				enrollmentType: "required",
+				notes: "Second-year student enrolled in software engineering course",
+			},
+		});
+
 		// 17. Create Scores
 		console.log("Creating scores...");
 		// Alex's scores for Introduction to Programming
@@ -858,6 +929,50 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				feedback:
 					"Outstanding work! Excellent algorithmic thinking and implementation.",
 				notes: "Top performer in the class. Strong analytical skills.",
+				isExcused: false,
+			},
+		});
+
+		// Alex's scores for Software Engineering
+		await payload.create({
+			collection: "scores",
+			data: {
+				assessment: softwareEngineeringMidterm.id,
+				student: student1.id,
+				scoreTitle: "Alex Chen - SE301 Midterm",
+				value: 88,
+				maxValue: 100,
+				percentage: 88,
+				isLate: false,
+				latePenaltyApplied: 0,
+				finalValue: 88,
+				gradedBy: professor.id,
+				gradedAt: "2025-03-15T10:00:00.000Z",
+				feedback:
+					"Good understanding of software engineering principles. Work on team collaboration.",
+				notes:
+					"Solid performance with room for improvement in project management.",
+				isExcused: false,
+			},
+		});
+
+		await payload.create({
+			collection: "scores",
+			data: {
+				assessment: softwareEngineeringProject.id,
+				student: student1.id,
+				scoreTitle: "Alex Chen - SE301 Team Project",
+				value: 95,
+				maxValue: 100,
+				percentage: 95,
+				isLate: false,
+				latePenaltyApplied: 0,
+				finalValue: 95,
+				gradedBy: professor.id,
+				gradedAt: "2025-04-20T14:00:00.000Z",
+				feedback: "Excellent project! Great teamwork and innovative solution.",
+				notes:
+					"Demonstrates strong software engineering skills and leadership.",
 				isExcused: false,
 			},
 		});
@@ -952,6 +1067,55 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						maxScore: 100,
 						weight: 45,
 						contribution: 41.4,
+						isMissing: false,
+						isExcused: false,
+					},
+				],
+			},
+		});
+
+		// Grade aggregate for Software Engineering course
+		const _alexSoftwareEngineeringGradeAggregate = await payload.create({
+			collection: "grade-aggregates",
+			data: {
+				enrollment: alexSoftwareEngineeringEnrollment.id,
+				gradeTitle: "Alex Chen - SE301 Final Grade",
+				finalNumeric: 91.5,
+				finalLetter: "A-",
+				passFail: "pass",
+				gpaPoints: 3.7,
+				calculationMethod: "weighted-average",
+				decisionNotes:
+					"Weighted average of midterm (30%), project (50%), and final (20%)",
+				calculatedAt: "2025-05-15T15:00:00.000Z",
+				calculatedBy: professor.id,
+				isPublished: true,
+				publishedAt: "2025-05-15T15:00:00.000Z",
+				assessmentBreakdown: [
+					{
+						assessmentTemplate: softwareEngineeringMidterm.id,
+						score: 88,
+						maxScore: 100,
+						weight: 30,
+						contribution: 26.4,
+						isMissing: false,
+						isExcused: false,
+					},
+					{
+						assessmentTemplate: softwareEngineeringProject.id,
+						score: 95,
+						maxScore: 100,
+						weight: 50,
+						contribution: 47.5,
+						isMissing: false,
+						isExcused: false,
+					},
+					{
+						assessmentTemplate: softwareEngineeringFinal.id,
+						score: 90,
+						maxScore: 100,
+						weight: 20,
+						contribution: 18.0,
 						isMissing: false,
 						isExcused: false,
 					},

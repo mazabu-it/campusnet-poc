@@ -23,6 +23,7 @@ export const adminAccess: Access = ({ req: { user } }) => {
 // Rector/Dean - Read access to their scope
 export const rectorDeanAccess: Access = ({ req: { user } }) => {
 	if (user?.role === "rector-dean") {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const where: any = {};
 
 		if (user.university) {

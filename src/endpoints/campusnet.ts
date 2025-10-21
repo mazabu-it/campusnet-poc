@@ -219,6 +219,7 @@ export const submitScoreEndpoint: Endpoint = {
 				notes,
 			};
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			let score: any;
 			if (existingScore.docs.length > 0) {
 				// Update existing score
