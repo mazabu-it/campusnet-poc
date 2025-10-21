@@ -40,13 +40,6 @@ export const CourseInstance: CollectionConfig = {
 			relationTo: "users",
 			hasMany: true,
 			required: false,
-			validate: (value) => {
-				// Allow empty array or undefined
-				if (!value || (Array.isArray(value) && value.length === 0)) {
-					return true;
-				}
-				return true;
-			},
 		},
 		{
 			name: "assistants",
