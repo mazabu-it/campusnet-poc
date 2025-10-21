@@ -366,7 +366,7 @@ export async function seedCampusnetData(req: PayloadRequest) {
 				title: "Introduction to Programming",
 				description: "Fundamental concepts of programming and problem solving",
 				credits: 6,
-				courseType: "required",
+				courseType: "required" as const,
 				learningOutcomes: [
 					{ outcome: "Understand basic programming concepts" },
 					{ outcome: "Write simple programs in a high-level language" },
@@ -378,7 +378,7 @@ export async function seedCampusnetData(req: PayloadRequest) {
 				title: "Data Structures and Algorithms",
 				description: "Fundamental data structures and algorithm design",
 				credits: 6,
-				courseType: "required",
+				courseType: "required" as const,
 				learningOutcomes: [
 					{ outcome: "Implement common data structures" },
 					{ outcome: "Analyze algorithm complexity" },
@@ -390,7 +390,7 @@ export async function seedCampusnetData(req: PayloadRequest) {
 				title: "Software Engineering Principles",
 				description: "Introduction to software engineering methodologies",
 				credits: 6,
-				courseType: "required",
+				courseType: "required" as const,
 				learningOutcomes: [
 					{ outcome: "Apply software engineering principles" },
 					{ outcome: "Work effectively in development teams" },
@@ -403,7 +403,7 @@ export async function seedCampusnetData(req: PayloadRequest) {
 				description:
 					"Advanced topics in software architecture and design patterns",
 				credits: 6,
-				courseType: "required",
+				courseType: "required" as const,
 				learningOutcomes: [
 					{ outcome: "Design scalable software architectures" },
 					{ outcome: "Apply design patterns effectively" },
