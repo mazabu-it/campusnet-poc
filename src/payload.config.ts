@@ -3,7 +3,7 @@ import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
+import { buildConfig, type PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
@@ -11,11 +11,37 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+import { University } from './collections/University'
+import { Faculty } from './collections/Faculty'
+import { Department } from './collections/Department'
+import { DiplomaLevel } from './collections/DiplomaLevel'
+import { Program } from './collections/Program'
+import { AcademicYear } from './collections/AcademicYear'
+import { ProgramYear } from './collections/ProgramYear'
+import { Course } from './collections/Course'
+import { CourseVariation } from './collections/CourseVariation'
+import { CourseInstance } from './collections/CourseInstance'
+import { GradingScale } from './collections/GradingScale'
+import { AcademicCalendar } from './collections/AcademicCalendar'
+import { AssessmentTemplate } from './collections/AssessmentTemplate'
+import { Assessment } from './collections/Assessment'
+import { Enrollment } from './collections/Enrollment'
+import { Score } from './collections/Score'
+import { GradeAggregate } from './collections/GradeAggregate'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import {
+  calculateGradeEndpoint,
+  updateGradeAggregateEndpoint,
+  calculateStudentGPAEndpoint,
+  enrollStudentEndpoint,
+  submitScoreEndpoint,
+} from './endpoints/campusnet'
+import { seedCampusnetEndpoint } from './endpoints/seed'
+import { generateStudentReportEndpoint, generateFacultySummaryEndpoint } from './endpoints/reports'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -64,7 +90,30 @@ export default buildConfig({
       connectionString: process.env.POSTGRES_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    University,
+    Faculty,
+    Department,
+    DiplomaLevel,
+    Program,
+    AcademicYear,
+    ProgramYear,
+    Course,
+    CourseVariation,
+    CourseInstance,
+    GradingScale,
+    AcademicCalendar,
+    AssessmentTemplate,
+    Assessment,
+    Enrollment,
+    Score,
+    GradeAggregate,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
@@ -81,6 +130,16 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  endpoints: [
+    calculateGradeEndpoint,
+    updateGradeAggregateEndpoint,
+    calculateStudentGPAEndpoint,
+    enrollStudentEndpoint,
+    submitScoreEndpoint,
+    seedCampusnetEndpoint,
+    generateStudentReportEndpoint,
+    generateFacultySummaryEndpoint,
+  ],
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {

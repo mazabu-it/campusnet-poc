@@ -23,6 +23,7 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
     "@payloadcms/admin-bar": "3.59.1",
     "@payloadcms/db-vercel-postgres": "3.59.1",
     "@payloadcms/live-preview-react": "3.59.1",
@@ -56,9 +57,11 @@
     "react-hook-form": "7.45.4",
     "sharp": "0.34.2",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.6",
     "@eslint/eslintrc": "^3.2.0",
     "@playwright/test": "1.54.1",
     "@tailwindcss/typography": "^0.5.13",

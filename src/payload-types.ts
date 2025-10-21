@@ -72,6 +72,23 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    universities: University;
+    faculties: Faculty;
+    departments: Department;
+    'diploma-levels': DiplomaLevel;
+    programs: Program;
+    'academic-years': AcademicYear;
+    'program-years': ProgramYear;
+    courses: Course;
+    'course-variations': CourseVariation;
+    'course-instances': CourseInstance;
+    'grading-scales': GradingScale;
+    'academic-calendars': AcademicCalendar;
+    'assessment-templates': AssessmentTemplate;
+    assessments: Assessment;
+    enrollments: Enrollment;
+    scores: Score;
+    'grade-aggregates': GradeAggregate;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -88,6 +105,23 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    faculties: FacultiesSelect<false> | FacultiesSelect<true>;
+    departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
+    'diploma-levels': DiplomaLevelsSelect<false> | DiplomaLevelsSelect<true>;
+    programs: ProgramsSelect<false> | ProgramsSelect<true>;
+    'academic-years': AcademicYearsSelect<false> | AcademicYearsSelect<true>;
+    'program-years': ProgramYearsSelect<false> | ProgramYearsSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
+    'course-variations': CourseVariationsSelect<false> | CourseVariationsSelect<true>;
+    'course-instances': CourseInstancesSelect<false> | CourseInstancesSelect<true>;
+    'grading-scales': GradingScalesSelect<false> | GradingScalesSelect<true>;
+    'academic-calendars': AcademicCalendarsSelect<false> | AcademicCalendarsSelect<true>;
+    'assessment-templates': AssessmentTemplatesSelect<false> | AssessmentTemplatesSelect<true>;
+    assessments: AssessmentsSelect<false> | AssessmentsSelect<true>;
+    enrollments: EnrollmentsSelect<false> | EnrollmentsSelect<true>;
+    scores: ScoresSelect<false> | ScoresSelect<true>;
+    'grade-aggregates': GradeAggregatesSelect<false> | GradeAggregatesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -382,7 +416,101 @@ export interface Category {
  */
 export interface User {
   id: number;
-  name?: string | null;
+  name: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  /**
+   * Student ID number (if applicable)
+   */
+  studentId?: string | null;
+  /**
+   * Employee ID number (if applicable)
+   */
+  employeeId?: string | null;
+  role:
+    | 'super-admin'
+    | 'admin'
+    | 'rector-dean'
+    | 'faculty-staff'
+    | 'department-staff'
+    | 'professor'
+    | 'assistant'
+    | 'student';
+  /**
+   * Primary university affiliation
+   */
+  university?: (number | null) | University;
+  /**
+   * Faculty affiliation (if applicable)
+   */
+  faculty?: (number | null) | Faculty;
+  /**
+   * Department affiliation (if applicable)
+   */
+  department?: (number | null) | Department;
+  /**
+   * Program enrollment (for students)
+   */
+  program?: (number | null) | Program;
+  /**
+   * Current program year (for students)
+   */
+  programYear?: (number | null) | ProgramYear;
+  profile?: {
+    dateOfBirth?: string | null;
+    phone?: string | null;
+    address?: string | null;
+    emergencyContact?: {
+      name?: string | null;
+      relationship?: string | null;
+      phone?: string | null;
+      email?: string | null;
+    };
+  };
+  academicInfo?: {
+    /**
+     * Date of enrollment (for students)
+     */
+    enrollmentDate?: string | null;
+    /**
+     * Expected graduation date (for students)
+     */
+    expectedGraduation?: string | null;
+    status?: ('active' | 'inactive' | 'graduated' | 'withdrawn' | 'suspended') | null;
+    /**
+     * Current GPA (for students)
+     */
+    gpa?: number | null;
+    /**
+     * Total credits earned (for students)
+     */
+    totalCreditsEarned?: number | null;
+  };
+  permissions?: {
+    /**
+     * Can impersonate other users (Super Admin only)
+     */
+    canImpersonate?: boolean | null;
+    /**
+     * Can manage user accounts
+     */
+    canManageUsers?: boolean | null;
+    /**
+     * Can manage courses and assessments
+     */
+    canManageCourses?: boolean | null;
+    /**
+     * Can enter and modify grades
+     */
+    canGrade?: boolean | null;
+    /**
+     * Can view reports and analytics
+     */
+    canViewReports?: boolean | null;
+    scope?: ('university' | 'faculty' | 'department' | 'program' | 'course' | 'self') | null;
+  };
+  isActive?: boolean | null;
+  lastLoginAt?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -400,6 +528,241 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities".
+ */
+export interface University {
+  id: number;
+  name: string;
+  code: string;
+  description?: string | null;
+  locale: 'en' | 'nl' | 'fr' | 'de';
+  timezone: string;
+  gradingScale: number | GradingScale;
+  academicCalendar: number | AcademicCalendar;
+  configuration?: {
+    roundingRule?: ('bankers' | 'round-half-up' | 'round-half-down') | null;
+    decimalPrecision?: number | null;
+    retakePolicy?: {
+      maxRetakes?: number | null;
+      weightReplacement?: ('replace' | 'average' | 'best') | null;
+      capRule?: ('none' | 'pass-cap' | 'max-cap') | null;
+    };
+    assessmentWindows?: {
+      defaultOpenDays?: number | null;
+      defaultCloseDays?: number | null;
+      lateEntryPolicy?: ('allow' | 'penalty' | 'deny') | null;
+    };
+    reportSettings?: {
+      headerBranding?: (number | null) | Media;
+      footerText?: string | null;
+      signatureRequired?: boolean | null;
+      watermarking?: boolean | null;
+      exportFormat?: ('pdf' | 'pdf-excel') | null;
+    };
+  };
+  isActive?: boolean | null;
+  contactInfo?: {
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    website?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "grading-scales".
+ */
+export interface GradingScale {
+  id: number;
+  name: string;
+  description?: string | null;
+  scaleType: 'numeric-100' | 'numeric-20' | 'letter' | 'pass-fail' | 'custom';
+  gradeMappings?:
+    | {
+        minScore: number;
+        maxScore: number;
+        /**
+         * Letter grade (e.g., A+, A, B+, etc.)
+         */
+        letterGrade?: string | null;
+        /**
+         * Numeric equivalent (e.g., 4.0, 3.7, etc.)
+         */
+        numericGrade?: number | null;
+        isPassing?: boolean | null;
+        /**
+         * Grade description (e.g., Excellent, Good, etc.)
+         */
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Minimum score/grade required to pass
+   */
+  passThreshold: number;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "academic-calendars".
+ */
+export interface AcademicCalendar {
+  id: number;
+  name: string;
+  academicYear: number | AcademicYear;
+  importantDates?:
+    | {
+        name: string;
+        date: string;
+        type:
+          | 'enrollment-start'
+          | 'enrollment-end'
+          | 'classes-start'
+          | 'classes-end'
+          | 'exam-start'
+          | 'exam-end'
+          | 'grade-deadline'
+          | 'holiday'
+          | 'other';
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "academic-years".
+ */
+export interface AcademicYear {
+  id: number;
+  /**
+   * e.g., 2025-2026
+   */
+  yearLabel: string;
+  startDate: string;
+  endDate: string;
+  semesters?:
+    | {
+        name: string;
+        startDate: string;
+        endDate: string;
+        isActive?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  isActive?: boolean | null;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculties".
+ */
+export interface Faculty {
+  id: number;
+  university: number | University;
+  name: string;
+  code: string;
+  description?: string | null;
+  dean?: (number | null) | User;
+  contactInfo?: {
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments".
+ */
+export interface Department {
+  id: number;
+  faculty: number | Faculty;
+  name: string;
+  code: string;
+  description?: string | null;
+  head?: (number | null) | User;
+  contactInfo?: {
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "programs".
+ */
+export interface Program {
+  id: number;
+  department: number | Department;
+  name: string;
+  code: string;
+  description?: string | null;
+  diplomaLevel: number | DiplomaLevel;
+  duration: number;
+  curriculumRules: {
+    totalCreditsRequired: number;
+    electiveCreditsAllowed?: number | null;
+    maxCreditsPerSemester?: number | null;
+    minCreditsPerSemester?: number | null;
+    prerequisiteRules?: string | null;
+  };
+  programDirector?: (number | null) | User;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "diploma-levels".
+ */
+export interface DiplomaLevel {
+  id: number;
+  name: string;
+  code: string;
+  level: 'bachelor' | 'master' | 'phd' | 'certificate' | 'diploma' | 'other';
+  description?: string | null;
+  typicalDuration?: number | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "program-years".
+ */
+export interface ProgramYear {
+  id: number;
+  program: number | Program;
+  yearNumber: number;
+  /**
+   * Auto-generated from program and year number
+   */
+  title?: string | null;
+  requiredCredits: number;
+  electiveCreditsAllowed?: number | null;
+  description?: string | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -745,6 +1108,323 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  code: string;
+  title: string;
+  description?: string | null;
+  credits: number;
+  owningDepartment: number | Department;
+  prerequisites?: (number | Course)[] | null;
+  courseType?: ('required' | 'elective' | 'optional') | null;
+  learningOutcomes?:
+    | {
+        outcome: string;
+        id?: string | null;
+      }[]
+    | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-variations".
+ */
+export interface CourseVariation {
+  id: number;
+  course: number | Course;
+  department: number | Department;
+  programYear?: (number | null) | ProgramYear;
+  /**
+   * Department-specific course code variant
+   */
+  codeVariant: string;
+  /**
+   * Department-specific course title variant
+   */
+  titleVariant?: string | null;
+  /**
+   * Department-specific course description
+   */
+  descriptionVariant?: string | null;
+  locale?: ('en' | 'nl' | 'fr' | 'de') | null;
+  /**
+   * Override credits for this variation (optional)
+   */
+  credits?: number | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-instances".
+ */
+export interface CourseInstance {
+  id: number;
+  courseVariation: number | CourseVariation;
+  academicYear: number | AcademicYear;
+  /**
+   * Auto-generated title for this instance
+   */
+  instanceTitle?: string | null;
+  professors: (number | User)[];
+  assistants?: (number | User)[] | null;
+  maxEnrollment?: number | null;
+  currentEnrollment?: number | null;
+  schedule?: {
+    days?: ('monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday')[] | null;
+    /**
+     * Format: HH:MM (e.g., 09:00)
+     */
+    startTime?: string | null;
+    /**
+     * Format: HH:MM (e.g., 11:00)
+     */
+    endTime?: string | null;
+    room?: string | null;
+  };
+  status?: ('planning' | 'open' | 'closed' | 'in-progress' | 'completed' | 'cancelled') | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "assessment-templates".
+ */
+export interface AssessmentTemplate {
+  id: number;
+  courseInstance: number | CourseInstance;
+  name: string;
+  description?: string | null;
+  /**
+   * Percentage weight of this assessment in final grade
+   */
+  weightPercent: number;
+  /**
+   * Minimum possible score
+   */
+  minScore?: number | null;
+  /**
+   * Maximum possible score
+   */
+  maxScore: number;
+  /**
+   * If true, missing scores are not counted as zero
+   */
+  isOptional?: boolean | null;
+  assessmentType: 'exam' | 'quiz' | 'assignment' | 'project' | 'presentation' | 'lab' | 'participation' | 'other';
+  /**
+   * Instructions for students
+   */
+  instructions?: string | null;
+  rubric?:
+    | {
+        criteria: string;
+        description?: string | null;
+        maxPoints: number;
+        id?: string | null;
+      }[]
+    | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "assessments".
+ */
+export interface Assessment {
+  id: number;
+  assessmentTemplate: number | AssessmentTemplate;
+  title: string;
+  description?: string | null;
+  date: string;
+  /**
+   * Start time (HH:MM format)
+   */
+  startTime?: string | null;
+  /**
+   * End time (HH:MM format)
+   */
+  endTime?: string | null;
+  location?: string | null;
+  status: 'draft' | 'open' | 'locked' | 'published';
+  submissionWindow?: {
+    /**
+     * When students can start submitting
+     */
+    opensAt?: string | null;
+    /**
+     * When submissions close
+     */
+    closesAt?: string | null;
+    lateSubmissionAllowed?: boolean | null;
+    /**
+     * Penalty percentage for late submissions
+     */
+    latePenaltyPercent?: number | null;
+  };
+  gradingWindow?: {
+    /**
+     * When grading can begin
+     */
+    opensAt?: string | null;
+    /**
+     * When grading must be completed
+     */
+    closesAt?: string | null;
+    allowLateGrading?: boolean | null;
+  };
+  /**
+   * Specific instructions for this assessment instance
+   */
+  instructions?: string | null;
+  /**
+   * Internal notes for staff
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enrollments".
+ */
+export interface Enrollment {
+  id: number;
+  student: number | User;
+  courseInstance: number | CourseInstance;
+  /**
+   * Auto-generated title
+   */
+  enrollmentTitle?: string | null;
+  status: 'pending' | 'active' | 'dropped' | 'completed' | 'failed' | 'withdrawn';
+  enrolledAt?: string | null;
+  droppedAt?: string | null;
+  completedAt?: string | null;
+  enrollmentType?: ('required' | 'elective' | 'optional') | null;
+  /**
+   * Credits earned (may differ from course credits)
+   */
+  creditsEarned?: number | null;
+  /**
+   * Internal notes about this enrollment
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scores".
+ */
+export interface Score {
+  id: number;
+  assessment: number | Assessment;
+  student: number | User;
+  /**
+   * Auto-generated title
+   */
+  scoreTitle?: string | null;
+  /**
+   * Raw score value
+   */
+  value: number;
+  /**
+   * Maximum possible score (from assessment template)
+   */
+  maxValue?: number | null;
+  /**
+   * Calculated percentage
+   */
+  percentage?: number | null;
+  isLate?: boolean | null;
+  /**
+   * Penalty percentage applied for late submission
+   */
+  latePenaltyApplied?: number | null;
+  /**
+   * Final score after penalties
+   */
+  finalValue?: number | null;
+  gradedBy: number | User;
+  gradedAt?: string | null;
+  /**
+   * Feedback for the student
+   */
+  feedback?: string | null;
+  /**
+   * Internal notes for staff
+   */
+  notes?: string | null;
+  /**
+   * If true, this score is excused and not counted
+   */
+  isExcused?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "grade-aggregates".
+ */
+export interface GradeAggregate {
+  id: number;
+  enrollment: number | Enrollment;
+  /**
+   * Auto-generated title
+   */
+  gradeTitle?: string | null;
+  /**
+   * Final numeric grade
+   */
+  finalNumeric?: number | null;
+  /**
+   * Final letter grade
+   */
+  finalLetter?: string | null;
+  passFail: 'pass' | 'fail' | 'incomplete';
+  /**
+   * GPA points (e.g., 4.0, 3.7, etc.)
+   */
+  gpaPoints?: number | null;
+  calculationMethod?: ('weighted-average' | 'simple-average' | 'best-score' | 'manual-override') | null;
+  assessmentBreakdown?:
+    | {
+        assessmentTemplate: number | AssessmentTemplate;
+        score?: number | null;
+        maxScore?: number | null;
+        weight?: number | null;
+        /**
+         * Contribution to final grade
+         */
+        contribution?: number | null;
+        isMissing?: boolean | null;
+        isExcused?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Notes about grade calculation or special circumstances
+   */
+  decisionNotes?: string | null;
+  calculatedAt?: string | null;
+  calculatedBy?: (number | null) | User;
+  /**
+   * Whether this grade has been published to the student
+   */
+  isPublished?: boolean | null;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -935,6 +1615,74 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'universities';
+        value: number | University;
+      } | null)
+    | ({
+        relationTo: 'faculties';
+        value: number | Faculty;
+      } | null)
+    | ({
+        relationTo: 'departments';
+        value: number | Department;
+      } | null)
+    | ({
+        relationTo: 'diploma-levels';
+        value: number | DiplomaLevel;
+      } | null)
+    | ({
+        relationTo: 'programs';
+        value: number | Program;
+      } | null)
+    | ({
+        relationTo: 'academic-years';
+        value: number | AcademicYear;
+      } | null)
+    | ({
+        relationTo: 'program-years';
+        value: number | ProgramYear;
+      } | null)
+    | ({
+        relationTo: 'courses';
+        value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'course-variations';
+        value: number | CourseVariation;
+      } | null)
+    | ({
+        relationTo: 'course-instances';
+        value: number | CourseInstance;
+      } | null)
+    | ({
+        relationTo: 'grading-scales';
+        value: number | GradingScale;
+      } | null)
+    | ({
+        relationTo: 'academic-calendars';
+        value: number | AcademicCalendar;
+      } | null)
+    | ({
+        relationTo: 'assessment-templates';
+        value: number | AssessmentTemplate;
+      } | null)
+    | ({
+        relationTo: 'assessments';
+        value: number | Assessment;
+      } | null)
+    | ({
+        relationTo: 'enrollments';
+        value: number | Enrollment;
+      } | null)
+    | ({
+        relationTo: 'scores';
+        value: number | Score;
+      } | null)
+    | ({
+        relationTo: 'grade-aggregates';
+        value: number | GradeAggregate;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1283,6 +2031,52 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  firstName?: T;
+  lastName?: T;
+  studentId?: T;
+  employeeId?: T;
+  role?: T;
+  university?: T;
+  faculty?: T;
+  department?: T;
+  program?: T;
+  programYear?: T;
+  profile?:
+    | T
+    | {
+        dateOfBirth?: T;
+        phone?: T;
+        address?: T;
+        emergencyContact?:
+          | T
+          | {
+              name?: T;
+              relationship?: T;
+              phone?: T;
+              email?: T;
+            };
+      };
+  academicInfo?:
+    | T
+    | {
+        enrollmentDate?: T;
+        expectedGraduation?: T;
+        status?: T;
+        gpa?: T;
+        totalCreditsEarned?: T;
+      };
+  permissions?:
+    | T
+    | {
+        canImpersonate?: T;
+        canManageUsers?: T;
+        canManageCourses?: T;
+        canGrade?: T;
+        canViewReports?: T;
+        scope?: T;
+      };
+  isActive?: T;
+  lastLoginAt?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1299,6 +2093,416 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities_select".
+ */
+export interface UniversitiesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  description?: T;
+  locale?: T;
+  timezone?: T;
+  gradingScale?: T;
+  academicCalendar?: T;
+  configuration?:
+    | T
+    | {
+        roundingRule?: T;
+        decimalPrecision?: T;
+        retakePolicy?:
+          | T
+          | {
+              maxRetakes?: T;
+              weightReplacement?: T;
+              capRule?: T;
+            };
+        assessmentWindows?:
+          | T
+          | {
+              defaultOpenDays?: T;
+              defaultCloseDays?: T;
+              lateEntryPolicy?: T;
+            };
+        reportSettings?:
+          | T
+          | {
+              headerBranding?: T;
+              footerText?: T;
+              signatureRequired?: T;
+              watermarking?: T;
+              exportFormat?: T;
+            };
+      };
+  isActive?: T;
+  contactInfo?:
+    | T
+    | {
+        address?: T;
+        phone?: T;
+        email?: T;
+        website?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculties_select".
+ */
+export interface FacultiesSelect<T extends boolean = true> {
+  university?: T;
+  name?: T;
+  code?: T;
+  description?: T;
+  dean?: T;
+  contactInfo?:
+    | T
+    | {
+        address?: T;
+        phone?: T;
+        email?: T;
+      };
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments_select".
+ */
+export interface DepartmentsSelect<T extends boolean = true> {
+  faculty?: T;
+  name?: T;
+  code?: T;
+  description?: T;
+  head?: T;
+  contactInfo?:
+    | T
+    | {
+        address?: T;
+        phone?: T;
+        email?: T;
+      };
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "diploma-levels_select".
+ */
+export interface DiplomaLevelsSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  level?: T;
+  description?: T;
+  typicalDuration?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "programs_select".
+ */
+export interface ProgramsSelect<T extends boolean = true> {
+  department?: T;
+  name?: T;
+  code?: T;
+  description?: T;
+  diplomaLevel?: T;
+  duration?: T;
+  curriculumRules?:
+    | T
+    | {
+        totalCreditsRequired?: T;
+        electiveCreditsAllowed?: T;
+        maxCreditsPerSemester?: T;
+        minCreditsPerSemester?: T;
+        prerequisiteRules?: T;
+      };
+  programDirector?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "academic-years_select".
+ */
+export interface AcademicYearsSelect<T extends boolean = true> {
+  yearLabel?: T;
+  startDate?: T;
+  endDate?: T;
+  semesters?:
+    | T
+    | {
+        name?: T;
+        startDate?: T;
+        endDate?: T;
+        isActive?: T;
+        id?: T;
+      };
+  isActive?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "program-years_select".
+ */
+export interface ProgramYearsSelect<T extends boolean = true> {
+  program?: T;
+  yearNumber?: T;
+  title?: T;
+  requiredCredits?: T;
+  electiveCreditsAllowed?: T;
+  description?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  code?: T;
+  title?: T;
+  description?: T;
+  credits?: T;
+  owningDepartment?: T;
+  prerequisites?: T;
+  courseType?: T;
+  learningOutcomes?:
+    | T
+    | {
+        outcome?: T;
+        id?: T;
+      };
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-variations_select".
+ */
+export interface CourseVariationsSelect<T extends boolean = true> {
+  course?: T;
+  department?: T;
+  programYear?: T;
+  codeVariant?: T;
+  titleVariant?: T;
+  descriptionVariant?: T;
+  locale?: T;
+  credits?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-instances_select".
+ */
+export interface CourseInstancesSelect<T extends boolean = true> {
+  courseVariation?: T;
+  academicYear?: T;
+  instanceTitle?: T;
+  professors?: T;
+  assistants?: T;
+  maxEnrollment?: T;
+  currentEnrollment?: T;
+  schedule?:
+    | T
+    | {
+        days?: T;
+        startTime?: T;
+        endTime?: T;
+        room?: T;
+      };
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "grading-scales_select".
+ */
+export interface GradingScalesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  scaleType?: T;
+  gradeMappings?:
+    | T
+    | {
+        minScore?: T;
+        maxScore?: T;
+        letterGrade?: T;
+        numericGrade?: T;
+        isPassing?: T;
+        description?: T;
+        id?: T;
+      };
+  passThreshold?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "academic-calendars_select".
+ */
+export interface AcademicCalendarsSelect<T extends boolean = true> {
+  name?: T;
+  academicYear?: T;
+  importantDates?:
+    | T
+    | {
+        name?: T;
+        date?: T;
+        type?: T;
+        description?: T;
+        id?: T;
+      };
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "assessment-templates_select".
+ */
+export interface AssessmentTemplatesSelect<T extends boolean = true> {
+  courseInstance?: T;
+  name?: T;
+  description?: T;
+  weightPercent?: T;
+  minScore?: T;
+  maxScore?: T;
+  isOptional?: T;
+  assessmentType?: T;
+  instructions?: T;
+  rubric?:
+    | T
+    | {
+        criteria?: T;
+        description?: T;
+        maxPoints?: T;
+        id?: T;
+      };
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "assessments_select".
+ */
+export interface AssessmentsSelect<T extends boolean = true> {
+  assessmentTemplate?: T;
+  title?: T;
+  description?: T;
+  date?: T;
+  startTime?: T;
+  endTime?: T;
+  location?: T;
+  status?: T;
+  submissionWindow?:
+    | T
+    | {
+        opensAt?: T;
+        closesAt?: T;
+        lateSubmissionAllowed?: T;
+        latePenaltyPercent?: T;
+      };
+  gradingWindow?:
+    | T
+    | {
+        opensAt?: T;
+        closesAt?: T;
+        allowLateGrading?: T;
+      };
+  instructions?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enrollments_select".
+ */
+export interface EnrollmentsSelect<T extends boolean = true> {
+  student?: T;
+  courseInstance?: T;
+  enrollmentTitle?: T;
+  status?: T;
+  enrolledAt?: T;
+  droppedAt?: T;
+  completedAt?: T;
+  enrollmentType?: T;
+  creditsEarned?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scores_select".
+ */
+export interface ScoresSelect<T extends boolean = true> {
+  assessment?: T;
+  student?: T;
+  scoreTitle?: T;
+  value?: T;
+  maxValue?: T;
+  percentage?: T;
+  isLate?: T;
+  latePenaltyApplied?: T;
+  finalValue?: T;
+  gradedBy?: T;
+  gradedAt?: T;
+  feedback?: T;
+  notes?: T;
+  isExcused?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "grade-aggregates_select".
+ */
+export interface GradeAggregatesSelect<T extends boolean = true> {
+  enrollment?: T;
+  gradeTitle?: T;
+  finalNumeric?: T;
+  finalLetter?: T;
+  passFail?: T;
+  gpaPoints?: T;
+  calculationMethod?: T;
+  assessmentBreakdown?:
+    | T
+    | {
+        assessmentTemplate?: T;
+        score?: T;
+        maxScore?: T;
+        weight?: T;
+        contribution?: T;
+        isMissing?: T;
+        isExcused?: T;
+        id?: T;
+      };
+  decisionNotes?: T;
+  calculatedAt?: T;
+  calculatedBy?: T;
+  isPublished?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
