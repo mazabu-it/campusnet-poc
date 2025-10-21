@@ -43,26 +43,6 @@ export const CourseInstance: CollectionConfig = {
 			admin: {
 				description: "Professors assigned to this course instance",
 			},
-			validate: (value) => {
-				// Explicitly allow undefined, null, or empty array
-				if (
-					value === undefined ||
-					value === null ||
-					(Array.isArray(value) && value.length === 0)
-				) {
-					return true;
-				}
-				// If it's an array with values, validate each item
-				if (Array.isArray(value)) {
-					const isValid = value.every(
-						(item) => typeof item === "number" || typeof item === "object",
-					);
-					return isValid
-						? true
-						: "All professor items must be valid user IDs or objects";
-				}
-				return true;
-			},
 		},
 		{
 			name: "assistants",
