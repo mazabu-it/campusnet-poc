@@ -1,213 +1,241 @@
-import type { PayloadRequest } from 'payload'
+import type { PayloadRequest } from "payload";
 
 export interface StudentReportData {
-  student: {
-    name: string
-    studentId: string
-    email: string
-    program: string
-    programYear: number
-  }
-  university: {
-    name: string
-    code: string
-    contactInfo: {
-      address: string
-      phone: string
-      email: string
-    }
-  }
-  academicYear: string
-  courses: Array<{
-    courseCode: string
-    courseTitle: string
-    credits: number
-    assessments: Array<{
-      name: string
-      score: number
-      maxScore: number
-      weight: number
-      contribution: number
-    }>
-    finalGrade: number
-    letterGrade: string
-    passFail: string
-  }>
-  gpa: number
-  totalCredits: number
+	student: {
+		name: string;
+		studentId: string;
+		email: string;
+		program: string;
+		programYear: number;
+	};
+	university: {
+		name: string;
+		code: string;
+		contactInfo: {
+			address: string;
+			phone: string;
+			email: string;
+		};
+	};
+	academicYear: string;
+	courses: Array<{
+		courseCode: string;
+		courseTitle: string;
+		credits: number;
+		assessments: Array<{
+			name: string;
+			score: number;
+			maxScore: number;
+			weight: number;
+			contribution: number;
+		}>;
+		finalGrade: number;
+		letterGrade: string;
+		passFail: string;
+	}>;
+	gpa: number;
+	totalCredits: number;
 }
 
 export class ReportGenerator {
-  private req: PayloadRequest
+	private req: PayloadRequest;
 
-  constructor(req: PayloadRequest) {
-    this.req = req
-  }
+	constructor(req: PayloadRequest) {
+		this.req = req;
+	}
 
-  /**
-   * Generate student grade report data
-   */
-  async generateStudentReport(
-    studentId: string,
-    academicYearId?: string,
-  ): Promise<StudentReportData> {
-    // Get student information
-    const student = await this.req.payload.findByID({
-      collection: 'users',
-      id: studentId,
-      depth: 3,
-    })
+	/**
+	 * Generate student grade report data
+	 */
+	async generateStudentReport(
+		studentId: string,
+		academicYearId?: string,
+	): Promise<StudentReportData> {
+		// Get student information
+		const student = await this.req.payload.findByID({
+			collection: "users",
+			id: studentId,
+			depth: 3,
+		});
 
-    if (!student || student.role !== 'student') {
-      throw new Error('Student not found')
-    }
+		if (!student || student.role !== "student") {
+			throw new Error("Student not found");
+		}
 
-    // Get university information
-    const university = await this.req.payload.findByID({
-      collection: 'universities',
-      id: student.university,
-    })
+		// Get university information
+		if (!student.university) {
+			throw new Error("Student university not found");
+		}
 
-    // Get academic year
-    let academicYear: Record<string, unknown>
-    if (academicYearId) {
-      academicYear = await this.req.payload.findByID({
-        collection: 'academic-years',
-        id: academicYearId,
-      })
-    } else {
-      const academicYears = await this.req.payload.find({
-        collection: 'academic-years',
-        where: {
-          isActive: {
-            equals: true,
-          },
-        },
-        limit: 1,
-        sort: '-createdAt',
-      })
-      academicYear = academicYears.docs[0]
-    }
+		const university = await this.req.payload.findByID({
+			collection: "universities",
+			id:
+				typeof student.university === "object"
+					? student.university.id
+					: student.university,
+		});
 
-    // Get enrollments for the academic year
-    const enrollments = await this.req.payload.find({
-      collection: 'enrollments',
-      where: {
-        student: {
-          equals: studentId,
-        },
-        status: {
-          in: ['active', 'completed'],
-        },
-      },
-      depth: 3,
-    })
+		// Get academic year
+		let academicYear: Record<string, unknown>;
+		if (academicYearId) {
+			academicYear = (await this.req.payload.findByID({
+				collection: "academic-years",
+				id: academicYearId,
+			})) as unknown as Record<string, unknown>;
+		} else {
+			const academicYears = await this.req.payload.find({
+				collection: "academic-years",
+				where: {
+					isActive: {
+						equals: true,
+					},
+				},
+				limit: 1,
+				sort: "-createdAt",
+			});
+			academicYear = academicYears.docs[0] as unknown as Record<
+				string,
+				unknown
+			>;
+		}
 
-    // Get grade aggregates for these enrollments
-    const gradeAggregates = await this.req.payload.find({
-      collection: 'grade-aggregates',
-      where: {
-        enrollment: {
-          in: enrollments.docs.map((e) => e.id),
-        },
-        isPublished: {
-          equals: true,
-        },
-      },
-      depth: 2,
-    })
+		// Get enrollments for the academic year
+		const enrollments = await this.req.payload.find({
+			collection: "enrollments",
+			where: {
+				student: {
+					equals: studentId,
+				},
+				status: {
+					in: ["active", "completed"],
+				},
+			},
+			depth: 3,
+		});
 
-    // Calculate GPA
-    const gpa = await this.calculateStudentGPA(studentId)
+		// Get grade aggregates for these enrollments
+		const gradeAggregates = await this.req.payload.find({
+			collection: "grade-aggregates",
+			where: {
+				enrollment: {
+					in: enrollments.docs.map((e) => e.id),
+				},
+				isPublished: {
+					equals: true,
+				},
+			},
+			depth: 2,
+		});
 
-    // Calculate total credits
-    const totalCredits = enrollments.docs.reduce((sum, enrollment) => {
-      return (
-        sum + (enrollment.creditsEarned || enrollment.courseInstance.courseVariation.credits || 0)
-      )
-    }, 0)
+		// Calculate GPA
+		const gpa = await this.calculateStudentGPA(studentId);
 
-    // Build course data
-    const courses = enrollments.docs.map((enrollment) => {
-      const gradeAggregate = gradeAggregates.docs.find((ga) => ga.enrollment === enrollment.id)
+		// Calculate total credits
+		const totalCredits = enrollments.docs.reduce((sum, enrollment) => {
+			const credits =
+				enrollment.creditsEarned ||
+				(typeof enrollment.courseInstance === "object" &&
+				typeof enrollment.courseInstance.courseVariation === "object"
+					? enrollment.courseInstance.courseVariation.credits
+					: 0) ||
+				0;
+			return sum + credits;
+		}, 0);
 
-      return {
-        courseCode: enrollment.courseInstance.courseVariation.codeVariant,
-        courseTitle:
-          enrollment.courseInstance.courseVariation.titleVariant ||
-          enrollment.courseInstance.courseVariation.course.title,
-        credits:
-          enrollment.creditsEarned ||
-          enrollment.courseInstance.courseVariation.credits ||
-          enrollment.courseInstance.courseVariation.course.credits,
-        assessments:
-          gradeAggregate?.assessmentBreakdown?.map((ab) => ({
-            name: ab.assessmentTemplate.name || 'Assessment',
-            score: ab.score || 0,
-            maxScore: ab.maxScore,
-            weight: ab.weight,
-            contribution: ab.contribution,
-          })) || [],
-        finalGrade: gradeAggregate?.finalNumeric || 0,
-        letterGrade: gradeAggregate?.finalLetter || 'N/A',
-        passFail: gradeAggregate?.passFail || 'incomplete',
-      }
-    })
+		// Build course data
+		const courses = enrollments.docs.map((enrollment) => {
+			const gradeAggregate = gradeAggregates.docs.find(
+				(ga) => ga.enrollment === enrollment.id,
+			);
 
-    return {
-      student: {
-        name: student.name,
-        studentId: student.studentId || 'N/A',
-        email: student.email,
-        program: student.program?.name || 'N/A',
-        programYear: student.programYear?.yearNumber || 1,
-      },
-      university: {
-        name: university.name,
-        code: university.code,
-        contactInfo: university.contactInfo,
-      },
-      academicYear: academicYear?.yearLabel || 'N/A',
-      courses,
-      gpa,
-      totalCredits,
-    }
-  }
+			const courseInstance = enrollment.courseInstance as any;
+			const courseVariation = courseInstance?.courseVariation as any;
+			const course = courseVariation?.course as any;
 
-  /**
-   * Calculate student GPA
-   */
-  private async calculateStudentGPA(studentId: string): Promise<number> {
-    const gradeAggregates = await this.req.payload.find({
-      collection: 'grade-aggregates',
-      where: {
-        enrollment: {
-          student: {
-            equals: studentId,
-          },
-        },
-        isPublished: {
-          equals: true,
-        },
-      },
-    })
+			return {
+				courseCode: courseVariation?.codeVariant || "",
+				courseTitle: courseVariation?.titleVariant || course?.title || "",
+				credits:
+					enrollment.creditsEarned ||
+					courseVariation?.credits ||
+					course?.credits ||
+					0,
+				assessments:
+					gradeAggregate?.assessmentBreakdown?.map((ab: any) => ({
+						name: ab.assessmentTemplate?.name || "Assessment",
+						score: ab.score || 0,
+						maxScore: ab.maxScore,
+						weight: ab.weight,
+						contribution: ab.contribution,
+					})) || [],
+				finalGrade: gradeAggregate?.finalNumeric || 0,
+				letterGrade: gradeAggregate?.finalLetter || "N/A",
+				passFail: gradeAggregate?.passFail || "incomplete",
+			};
+		});
 
-    if (gradeAggregates.docs.length === 0) {
-      return 0
-    }
+		return {
+			student: {
+				name: student.name,
+				studentId: student.studentId || "N/A",
+				email: student.email,
+				program:
+					student.program && typeof student.program === "object"
+						? student.program.name
+						: "N/A",
+				programYear:
+					student.programYear && typeof student.programYear === "object"
+						? student.programYear.yearNumber
+						: 1,
+			},
+			university: {
+				name: university.name,
+				code: university.code,
+				contactInfo: {
+					address: university.contactInfo?.address || "",
+					phone: university.contactInfo?.phone || "",
+					email: university.contactInfo?.email || "",
+				},
+			},
+			academicYear: (academicYear as any)?.yearLabel || "N/A",
+			courses,
+			gpa,
+			totalCredits,
+		};
+	}
 
-    const totalPoints = gradeAggregates.docs.reduce((sum, grade) => {
-      return sum + (grade.gpaPoints || 0)
-    }, 0)
+	/**
+	 * Calculate student GPA
+	 */
+	private async calculateStudentGPA(studentId: string): Promise<number> {
+		const gradeAggregates = await this.req.payload.find({
+			collection: "grade-aggregates",
+			where: {
+				"enrollment.student": {
+					equals: studentId,
+				},
+				isPublished: {
+					equals: true,
+				},
+			},
+		});
 
-    return totalPoints / gradeAggregates.docs.length
-  }
+		if (gradeAggregates.docs.length === 0) {
+			return 0;
+		}
 
-  /**
-   * Generate HTML for student report (for PDF conversion)
-   */
-  generateStudentReportHTML(data: StudentReportData): string {
-    return `
+		const totalPoints = gradeAggregates.docs.reduce((sum, grade) => {
+			return sum + (grade.gpaPoints || 0);
+		}, 0);
+
+		return totalPoints / gradeAggregates.docs.length;
+	}
+
+	/**
+	 * Generate HTML for student report (for PDF conversion)
+	 */
+	generateStudentReportHTML(data: StudentReportData): string {
+		return `
       <!DOCTYPE html>
       <html>
       <head>
@@ -327,31 +355,31 @@ export class ReportGenerator {
           </thead>
           <tbody>
             ${data.courses
-              .map(
-                (course) => `
+							.map(
+								(course) => `
               <tr>
                 <td>${course.courseCode}</td>
                 <td>${course.courseTitle}</td>
                 <td>${course.credits}</td>
                 <td>
                   ${course.assessments
-                    .map(
-                      (assessment) => `
+										.map(
+											(assessment) => `
                     <div class="assessment-row">
                       ${assessment.name}: ${assessment.score}/${assessment.maxScore} 
                       (${assessment.weight}% weight, ${assessment.contribution.toFixed(2)} pts)
                     </div>
                   `,
-                    )
-                    .join('')}
+										)
+										.join("")}
                 </td>
                 <td>${course.finalGrade.toFixed(2)}</td>
                 <td>${course.letterGrade}</td>
                 <td>${course.passFail}</td>
               </tr>
             `,
-              )
-              .join('')}
+							)
+							.join("")}
           </tbody>
         </table>
 
@@ -373,24 +401,27 @@ export class ReportGenerator {
         </div>
       </body>
       </html>
-    `
-  }
+    `;
+	}
 
-  /**
-   * Generate faculty summary report data
-   */
-  async generateFacultySummaryReport(_facultyId: string, _academicYearId?: string) {
-    // Implementation for faculty summary report
-    // This would include course-level distributions, pass rates, averages per program and year
-    return {
-      faculty: 'Faculty of Computer Science',
-      academicYear: '2025-2026',
-      courses: [],
-      summary: {
-        totalStudents: 0,
-        averageGPA: 0,
-        passRate: 0,
-      },
-    }
-  }
+	/**
+	 * Generate faculty summary report data
+	 */
+	async generateFacultySummaryReport(
+		_facultyId: string,
+		_academicYearId?: string,
+	) {
+		// Implementation for faculty summary report
+		// This would include course-level distributions, pass rates, averages per program and year
+		return {
+			faculty: "Faculty of Computer Science",
+			academicYear: "2025-2026",
+			courses: [],
+			summary: {
+				totalStudents: 0,
+				averageGPA: 0,
+				passRate: 0,
+			},
+		};
+	}
 }

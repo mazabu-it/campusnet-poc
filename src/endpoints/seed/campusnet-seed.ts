@@ -220,15 +220,15 @@ export async function seedCampusnetData(req: PayloadRequest) {
 					decimalPrecision: 2,
 					retakePolicy: {
 						maxRetakes: 2,
-						weightReplacement: "replace",
+						weightRepl: "replace",
 						capRule: "pass-cap",
 					},
-					assessmentWindows: {
+					assessWindows: {
 						defaultOpenDays: 7,
 						defaultCloseDays: 14,
-						lateEntryPolicy: "allow",
+						latePolicy: "allow",
 					},
-					reportSettings: {
+					reportConfig: {
 						signatureRequired: true,
 						watermarking: false,
 						exportFormat: "pdf",

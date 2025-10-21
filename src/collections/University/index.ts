@@ -97,7 +97,7 @@ export const University: CollectionConfig = {
 							min: 0,
 						},
 						{
-							name: "weightReplacement",
+							name: "weightRepl",
 							type: "select",
 							options: [
 								{ label: "Replace Original", value: "replace" },
@@ -119,7 +119,7 @@ export const University: CollectionConfig = {
 					],
 				},
 				{
-					name: "assessmentWindows",
+					name: "assessWindows",
 					type: "group",
 					fields: [
 						{
@@ -135,7 +135,7 @@ export const University: CollectionConfig = {
 							min: 1,
 						},
 						{
-							name: "lateEntryPolicy",
+							name: "latePolicy",
 							type: "select",
 							options: [
 								{ label: "Allow Late Entry", value: "allow" },
@@ -147,7 +147,7 @@ export const University: CollectionConfig = {
 					],
 				},
 				{
-					name: "reportSettings",
+					name: "reportConfig",
 					type: "group",
 					fields: [
 						{

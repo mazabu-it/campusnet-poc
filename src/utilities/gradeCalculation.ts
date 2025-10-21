@@ -1,284 +1,337 @@
-import type { PayloadRequest } from 'payload'
+import type { PayloadRequest } from "payload";
 
 export interface AssessmentBreakdown {
-  assessmentTemplate: string
-  score?: number
-  maxScore: number
-  weight: number
-  contribution: number
-  isMissing: boolean
-  isExcused: boolean
+	assessmentTemplate: string;
+	score?: number;
+	maxScore: number;
+	weight: number;
+	contribution: number;
+	isMissing: boolean;
+	isExcused: boolean;
 }
 
 export interface GradeCalculationResult {
-  finalNumeric: number
-  finalLetter: string
-  passFail: 'pass' | 'fail' | 'incomplete'
-  gpaPoints: number
-  assessmentBreakdown: AssessmentBreakdown[]
-  calculationMethod: string
+	finalNumeric: number;
+	finalLetter: string;
+	passFail: "pass" | "fail" | "incomplete";
+	gpaPoints: number;
+	assessmentBreakdown: AssessmentBreakdown[];
+	calculationMethod: string;
 }
 
 export class GradeCalculationEngine {
-  private req: PayloadRequest
+	private req: PayloadRequest;
 
-  constructor(req: PayloadRequest) {
-    this.req = req
-  }
+	constructor(req: PayloadRequest) {
+		this.req = req;
+	}
 
-  /**
-   * Calculate final grade for an enrollment
-   */
-  async calculateGrade(enrollmentId: string): Promise<GradeCalculationResult> {
-    const enrollment = await this.req.payload.findByID({
-      collection: 'enrollments',
-      id: enrollmentId,
-    })
+	/**
+	 * Calculate final grade for an enrollment
+	 */
+	async calculateGrade(enrollmentId: string): Promise<GradeCalculationResult> {
+		const enrollment = await this.req.payload.findByID({
+			collection: "enrollments",
+			id: enrollmentId,
+		});
 
-    if (!enrollment) {
-      throw new Error('Enrollment not found')
-    }
+		if (!enrollment) {
+			throw new Error("Enrollment not found");
+		}
 
-    // Get all assessments for this course instance
-    const assessments = await this.req.payload.find({
-      collection: 'assessments',
-      where: {
-        'assessmentTemplate.courseInstance': {
-          equals: enrollment.courseInstance,
-        },
-        status: {
-          in: ['locked', 'published'],
-        },
-      },
-      depth: 2,
-    })
+		// Get all assessments for this course instance
+		const assessments = await this.req.payload.find({
+			collection: "assessments",
+			where: {
+				"assessmentTemplate.courseInstance": {
+					equals: enrollment.courseInstance,
+				},
+				status: {
+					in: ["locked", "published"],
+				},
+			},
+			depth: 2,
+		});
 
-    // Get assessment templates
-    const assessmentTemplates = await this.req.payload.find({
-      collection: 'assessment-templates',
-      where: {
-        courseInstance: {
-          equals: enrollment.courseInstance,
-        },
-      },
-    })
+		// Get assessment templates
+		const assessmentTemplates = await this.req.payload.find({
+			collection: "assessment-templates",
+			where: {
+				courseInstance: {
+					equals: enrollment.courseInstance,
+				},
+			},
+		});
 
-    // Get all scores for this student
-    const scores = await this.req.payload.find({
-      collection: 'scores',
-      where: {
-        student: {
-          equals: enrollment.student,
-        },
-        assessment: {
-          in: assessments.docs.map((a) => a.id),
-        },
-      },
-    })
+		// Get all scores for this student
+		const scores = await this.req.payload.find({
+			collection: "scores",
+			where: {
+				student: {
+					equals: enrollment.student,
+				},
+				assessment: {
+					in: assessments.docs.map((a) => a.id),
+				},
+			},
+		});
 
-    // Get grading scale
-    const courseInstance = await this.req.payload.findByID({
-      collection: 'course-instances',
-      id: enrollment.courseInstance,
-      depth: 3,
-    })
+		// Get grading scale
+		const courseInstance = await this.req.payload.findByID({
+			collection: "course-instances",
+			id:
+				typeof enrollment.courseInstance === "object"
+					? enrollment.courseInstance.id
+					: enrollment.courseInstance,
+			depth: 3,
+		});
 
-    const university = await this.req.payload.findByID({
-      collection: 'universities',
-      id: courseInstance.courseVariation.department.faculty.university,
-      depth: 1,
-    })
+		// Get university ID from the course instance
+		let universityId: string | number;
+		if (
+			typeof courseInstance.courseVariation === "object" &&
+			typeof courseInstance.courseVariation.department === "object" &&
+			typeof courseInstance.courseVariation.department.faculty === "object"
+		) {
+			const faculty = courseInstance.courseVariation.department.faculty;
+			universityId =
+				typeof faculty.university === "object"
+					? faculty.university.id
+					: faculty.university;
+		} else {
+			// Fallback: get university through a separate query
+			const courseVariation = await this.req.payload.findByID({
+				collection: "course-variations",
+				id:
+					typeof courseInstance.courseVariation === "object"
+						? courseInstance.courseVariation.id
+						: courseInstance.courseVariation,
+				depth: 3,
+			});
+			const department = courseVariation.department;
+			const faculty =
+				typeof department === "object" ? department.faculty : department;
+			if (typeof faculty === "object") {
+				universityId =
+					typeof faculty.university === "object"
+						? faculty.university.id
+						: faculty.university;
+			} else {
+				universityId = faculty;
+			}
+		}
 
-    const gradingScale = await this.req.payload.findByID({
-      collection: 'grading-scales',
-      id: university.gradingScale,
-    })
+		const university = await this.req.payload.findByID({
+			collection: "universities",
+			id: universityId,
+			depth: 1,
+		});
 
-    return this.calculateWeightedGrade(
-      assessmentTemplates.docs,
-      scores.docs,
-      gradingScale,
-      university.configuration,
-    )
-  }
+		const gradingScale = await this.req.payload.findByID({
+			collection: "grading-scales",
+			id:
+				typeof university.gradingScale === "object"
+					? university.gradingScale.id
+					: university.gradingScale,
+		});
 
-  /**
-   * Calculate weighted grade based on assessment templates and scores
-   */
-  private calculateWeightedGrade(
-    templates: Record<string, unknown>[],
-    scores: Record<string, unknown>[],
-    gradingScale: Record<string, unknown>,
-    config: Record<string, unknown>,
-  ): GradeCalculationResult {
-    const breakdown: AssessmentBreakdown[] = []
-    let totalWeightedScore = 0
-    let totalWeight = 0
-    let hasMissingRequired = false
+		return this.calculateWeightedGrade(
+			assessmentTemplates.docs as unknown as Record<string, unknown>[],
+			scores.docs as unknown as Record<string, unknown>[],
+			gradingScale as unknown as Record<string, unknown>,
+			university.configuration as unknown as Record<string, unknown>,
+		);
+	}
 
-    for (const template of templates) {
-      const score = scores.find((s) => s.assessment.assessmentTemplate === template.id)
+	/**
+	 * Calculate weighted grade based on assessment templates and scores
+	 */
+	private calculateWeightedGrade(
+		templates: Record<string, unknown>[],
+		scores: Record<string, unknown>[],
+		gradingScale: Record<string, unknown>,
+		config: Record<string, unknown>,
+	): GradeCalculationResult {
+		const breakdown: AssessmentBreakdown[] = [];
+		let totalWeightedScore = 0;
+		let totalWeight = 0;
+		let hasMissingRequired = false;
 
-      const isMissing = !score && !template.isOptional
-      const isExcused = score?.isExcused || false
+		for (const template of templates) {
+			const score = scores.find(
+				(s) => (s as any).assessment.assessmentTemplate === template.id,
+			);
 
-      if (isMissing && !template.isOptional) {
-        hasMissingRequired = true
-      }
+			const isMissing = !score && !(template as any).isOptional;
+			const isExcused = (score as any)?.isExcused || false;
 
-      const scoreValue = score?.finalValue || 0
-      const maxScore = template.maxScore
-      const weight = template.weightPercent / 100
+			if (isMissing && !template.isOptional) {
+				hasMissingRequired = true;
+			}
 
-      const contribution = isExcused ? 0 : scoreValue * weight
+			const scoreValue = (score as any)?.finalValue || 0;
+			const maxScore = (template as any).maxScore;
+			const weight = (template as any).weightPercent / 100;
 
-      breakdown.push({
-        assessmentTemplate: template.id,
-        score: scoreValue,
-        maxScore,
-        weight: template.weightPercent,
-        contribution,
-        isMissing,
-        isExcused,
-      })
+			const contribution = isExcused ? 0 : scoreValue * weight;
 
-      if (!isMissing && !isExcused) {
-        totalWeightedScore += contribution
-        totalWeight += weight
-      }
-    }
+			breakdown.push({
+				assessmentTemplate: (template as any).id,
+				score: scoreValue,
+				maxScore,
+				weight: (template as any).weightPercent,
+				contribution,
+				isMissing,
+				isExcused,
+			});
 
-    // Calculate final numeric score
-    const finalNumeric = totalWeight > 0 ? totalWeightedScore / totalWeight : 0
+			if (!isMissing && !isExcused) {
+				totalWeightedScore += contribution;
+				totalWeight += weight;
+			}
+		}
 
-    // Apply rounding
-    const roundedNumeric = this.applyRounding(
-      finalNumeric,
-      config.roundingRule,
-      config.decimalPrecision,
-    )
+		// Calculate final numeric score
+		const finalNumeric = totalWeight > 0 ? totalWeightedScore / totalWeight : 0;
 
-    // Determine letter grade and pass/fail
-    const gradeMapping = this.findGradeMapping(roundedNumeric, gradingScale)
+		// Apply rounding
+		const roundedNumeric = this.applyRounding(
+			finalNumeric,
+			(config as any).roundingRule,
+			(config as any).decimalPrecision,
+		);
 
-    return {
-      finalNumeric: roundedNumeric,
-      finalLetter: gradeMapping.letterGrade || '',
-      passFail: hasMissingRequired ? 'incomplete' : gradeMapping.isPassing ? 'pass' : 'fail',
-      gpaPoints: gradeMapping.numericGrade || 0,
-      assessmentBreakdown: breakdown,
-      calculationMethod: 'weighted-average',
-    }
-  }
+		// Determine letter grade and pass/fail
+		const gradeMapping = this.findGradeMapping(roundedNumeric, gradingScale);
 
-  /**
-   * Apply rounding based on university configuration
-   */
-  private applyRounding(value: number, rule: string, precision: number): number {
-    const factor = Math.pow(10, precision)
+		return {
+			finalNumeric: roundedNumeric,
+			finalLetter: (gradeMapping as any).letterGrade || "",
+			passFail: hasMissingRequired
+				? "incomplete"
+				: (gradeMapping as any).isPassing
+					? "pass"
+					: "fail",
+			gpaPoints: (gradeMapping as any).numericGrade || 0,
+			assessmentBreakdown: breakdown,
+			calculationMethod: "weighted-average" as const,
+		};
+	}
 
-    switch (rule) {
-      case 'bankers':
-        // Banker's rounding (round half to even)
-        return Math.round(value * factor) / factor
-      case 'round-half-up':
-        return Math.round(value * factor + 0.5) / factor
-      case 'round-half-down':
-        return Math.floor(value * factor + 0.5) / factor
-      default:
-        return Math.round(value * factor) / factor
-    }
-  }
+	/**
+	 * Apply rounding based on university configuration
+	 */
+	private applyRounding(
+		value: number,
+		rule: string,
+		precision: number,
+	): number {
+		const factor = 10 ** precision;
 
-  /**
-   * Find the appropriate grade mapping for a numeric score
-   */
-  private findGradeMapping(
-    score: number,
-    gradingScale: Record<string, unknown>,
-  ): Record<string, unknown> {
-    for (const mapping of gradingScale.gradeMappings) {
-      if (score >= mapping.minScore && score <= mapping.maxScore) {
-        return mapping
-      }
-    }
+		switch (rule) {
+			case "bankers":
+				// Banker's rounding (round half to even)
+				return Math.round(value * factor) / factor;
+			case "round-half-up":
+				return Math.round(value * factor + 0.5) / factor;
+			case "round-half-down":
+				return Math.floor(value * factor + 0.5) / factor;
+			default:
+				return Math.round(value * factor) / factor;
+		}
+	}
 
-    // Return the lowest grade if no mapping found
-    return (
-      gradingScale.gradeMappings[gradingScale.gradeMappings.length - 1] || {
-        letterGrade: 'F',
-        numericGrade: 0,
-        isPassing: false,
-      }
-    )
-  }
+	/**
+	 * Find the appropriate grade mapping for a numeric score
+	 */
+	private findGradeMapping(
+		score: number,
+		gradingScale: Record<string, unknown>,
+	): Record<string, unknown> {
+		const mappings = (gradingScale as any).gradeMappings;
+		for (const mapping of mappings) {
+			if (
+				score >= (mapping as any).minScore &&
+				score <= (mapping as any).maxScore
+			) {
+				return mapping;
+			}
+		}
 
-  /**
-   * Calculate GPA for a student
-   */
-  async calculateStudentGPA(studentId: string): Promise<number> {
-    const gradeAggregates = await this.req.payload.find({
-      collection: 'grade-aggregates',
-      where: {
-        enrollment: {
-          student: {
-            equals: studentId,
-          },
-        },
-        isPublished: {
-          equals: true,
-        },
-      },
-      depth: 2,
-    })
+		// Return the lowest grade if no mapping found
+		return (
+			mappings[mappings.length - 1] || {
+				letterGrade: "F",
+				numericGrade: 0,
+				isPassing: false,
+			}
+		);
+	}
 
-    if (gradeAggregates.docs.length === 0) {
-      return 0
-    }
+	/**
+	 * Calculate GPA for a student
+	 */
+	async calculateStudentGPA(studentId: string): Promise<number> {
+		const gradeAggregates = await this.req.payload.find({
+			collection: "grade-aggregates",
+			where: {
+				"enrollment.student": {
+					equals: studentId,
+				},
+				isPublished: {
+					equals: true,
+				},
+			},
+			depth: 2,
+		});
 
-    const totalPoints = gradeAggregates.docs.reduce((sum, grade) => {
-      return sum + (grade.gpaPoints || 0)
-    }, 0)
+		if (gradeAggregates.docs.length === 0) {
+			return 0;
+		}
 
-    return totalPoints / gradeAggregates.docs.length
-  }
+		const totalPoints = gradeAggregates.docs.reduce((sum, grade) => {
+			return sum + (grade.gpaPoints || 0);
+		}, 0);
 
-  /**
-   * Update grade aggregate for an enrollment
-   */
-  async updateGradeAggregate(enrollmentId: string): Promise<void> {
-    const calculation = await this.calculateGrade(enrollmentId)
+		return totalPoints / gradeAggregates.docs.length;
+	}
 
-    // Check if grade aggregate already exists
-    const existing = await this.req.payload.find({
-      collection: 'grade-aggregates',
-      where: {
-        enrollment: {
-          equals: enrollmentId,
-        },
-      },
-    })
+	/**
+	 * Update grade aggregate for an enrollment
+	 */
+	async updateGradeAggregate(enrollmentId: string): Promise<void> {
+		const calculation = await this.calculateGrade(enrollmentId);
 
-    if (existing.docs.length > 0) {
-      // Update existing
-      await this.req.payload.update({
-        collection: 'grade-aggregates',
-        id: existing.docs[0].id,
-        data: {
-          ...calculation,
-          calculatedAt: new Date(),
-        },
-      })
-    } else {
-      // Create new
-      await this.req.payload.create({
-        collection: 'grade-aggregates',
-        data: {
-          enrollment: enrollmentId,
-          ...calculation,
-          calculatedAt: new Date(),
-        },
-      })
-    }
-  }
+		// Check if grade aggregate already exists
+		const existing = await this.req.payload.find({
+			collection: "grade-aggregates",
+			where: {
+				enrollment: {
+					equals: enrollmentId,
+				},
+			},
+		});
+
+		if (existing.docs.length > 0) {
+			// Update existing
+			await this.req.payload.update({
+				collection: "grade-aggregates",
+				id: existing.docs[0].id,
+				data: {
+					...(calculation as any),
+					calculatedAt: new Date().toISOString(),
+				},
+			});
+		} else {
+			// Create new
+			await this.req.payload.create({
+				collection: "grade-aggregates",
+				data: {
+					enrollment: enrollmentId,
+					...(calculation as any),
+					calculatedAt: new Date().toISOString(),
+				},
+			});
+		}
+	}
 }

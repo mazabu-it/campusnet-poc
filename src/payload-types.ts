@@ -547,15 +547,15 @@ export interface University {
     decimalPrecision?: number | null;
     retakePolicy?: {
       maxRetakes?: number | null;
-      weightReplacement?: ('replace' | 'average' | 'best') | null;
+      weightRepl?: ('replace' | 'average' | 'best') | null;
       capRule?: ('none' | 'pass-cap' | 'max-cap') | null;
     };
-    assessmentWindows?: {
+    assessWindows?: {
       defaultOpenDays?: number | null;
       defaultCloseDays?: number | null;
-      lateEntryPolicy?: ('allow' | 'penalty' | 'deny') | null;
+      latePolicy?: ('allow' | 'penalty' | 'deny') | null;
     };
-    reportSettings?: {
+    reportConfig?: {
       headerBranding?: (number | null) | Media;
       footerText?: string | null;
       signatureRequired?: boolean | null;
@@ -2115,17 +2115,17 @@ export interface UniversitiesSelect<T extends boolean = true> {
           | T
           | {
               maxRetakes?: T;
-              weightReplacement?: T;
+              weightRepl?: T;
               capRule?: T;
             };
-        assessmentWindows?:
+        assessWindows?:
           | T
           | {
               defaultOpenDays?: T;
               defaultCloseDays?: T;
-              lateEntryPolicy?: T;
+              latePolicy?: T;
             };
-        reportSettings?:
+        reportConfig?:
           | T
           | {
               headerBranding?: T;
