@@ -441,7 +441,79 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			},
 		});
 
-		// 12. Create Course Instances
+		// 12. Create Users (Professor and Students)
+		console.log("Creating users...");
+		const professor = await payload.create({
+			collection: "users",
+			data: {
+				name: "Dr. Sarah Johnson",
+				firstName: "Sarah",
+				lastName: "Johnson",
+				email: "sarah.johnson@demouniversity.edu",
+				password: "password123",
+				role: "professor",
+				university: university.id,
+				faculty: faculty.id,
+				department: department.id,
+				employeeId: "EMP001",
+				phone: "+1-555-0101",
+				officeLocation: "CS Building, Room 205",
+				officeHours: "Mon/Wed 2:00-4:00 PM",
+				specializations: ["Software Engineering", "Algorithms", "Data Structures"],
+				biography: "Dr. Johnson has 15 years of experience in software engineering and algorithm design.",
+				isActive: true,
+			},
+		});
+
+		const student1 = await payload.create({
+			collection: "users",
+			data: {
+				name: "Alex Chen",
+				firstName: "Alex",
+				lastName: "Chen",
+				email: "alex.chen@demouniversity.edu",
+				password: "password123",
+				role: "student",
+				university: university.id,
+				faculty: faculty.id,
+				department: department.id,
+				program: program.id,
+				programYear: programYear.id,
+				studentId: "STU001",
+				phone: "+1-555-0102",
+				dateOfBirth: "2003-05-15",
+				enrollmentDate: "2022-09-01",
+				expectedGraduation: "2026-05-15",
+				academicStatus: "active",
+				isActive: true,
+			},
+		});
+
+		const student2 = await payload.create({
+			collection: "users",
+			data: {
+				name: "Emma Rodriguez",
+				firstName: "Emma",
+				lastName: "Rodriguez",
+				email: "emma.rodriguez@demouniversity.edu",
+				password: "password123",
+				role: "student",
+				university: university.id,
+				faculty: faculty.id,
+				department: department.id,
+				program: program.id,
+				programYear: programYear.id,
+				studentId: "STU002",
+				phone: "+1-555-0103",
+				dateOfBirth: "2003-08-22",
+				enrollmentDate: "2022-09-01",
+				expectedGraduation: "2026-05-15",
+				academicStatus: "active",
+				isActive: true,
+			},
+		});
+
+		// 13. Create Course Instances
 		console.log("Creating course instances...");
 		const introProgrammingInstance = await payload.create({
 			collection: "course-instances",
@@ -459,7 +531,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Morning section with hands-on programming labs",
-				professors: [],
+				professors: [professor.id],
 			},
 		});
 
@@ -479,7 +551,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Afternoon section with algorithm analysis focus",
-				professors: [],
+				professors: [professor.id],
 			},
 		});
 
@@ -499,137 +571,10 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "planning",
 				notes: "Project-based course with team assignments",
-				professors: [],
+				professors: [professor.id],
 			},
 		});
 
-		// 13. Create Users (Professor and Students)
-		console.log("Creating users...");
-		const professor = await payload.create({
-			collection: "users",
-			data: {
-				name: "Dr. Sarah Johnson",
-				firstName: "Sarah",
-				lastName: "Johnson",
-				email: "sarah.johnson@demouniversity.edu",
-				password: "password123",
-				role: "professor",
-				university: university.id,
-				faculty: faculty.id,
-				department: department.id,
-				employeeId: "EMP001",
-				profile: {
-					dateOfBirth: "1980-05-15T00:00:00.000Z",
-					phone: "+1-555-0200",
-					address: "456 Faculty Lane, Demo City, DC 12345",
-				},
-				academicInfo: {
-					enrollmentDate: "2020-09-01T00:00:00.000Z",
-					status: "active",
-					gpa: 3.8,
-					totalCreditsEarned: 120,
-				},
-				permissions: {
-					canImpersonate: false,
-					canManageUsers: false,
-					canManageCourses: true,
-					canGrade: true,
-					canViewReports: true,
-					scope: "department",
-				},
-				isActive: true,
-			},
-		});
-
-		const student1 = await payload.create({
-			collection: "users",
-			data: {
-				name: "Alex Chen",
-				firstName: "Alex",
-				lastName: "Chen",
-				email: "alex.chen@demouniversity.edu",
-				password: "password123",
-				role: "student",
-				university: university.id,
-				faculty: faculty.id,
-				department: department.id,
-				program: program.id,
-				programYear: programYear1.id,
-				studentId: "STU001",
-				profile: {
-					dateOfBirth: "2003-03-20T00:00:00.000Z",
-					phone: "+1-555-0300",
-					address: "789 Student Street, Demo City, DC 12345",
-					emergencyContact: {
-						name: "Maria Chen",
-						relationship: "Mother",
-						phone: "+1-555-0301",
-						email: "maria.chen@email.com",
-					},
-				},
-				academicInfo: {
-					enrollmentDate: "2024-09-01T00:00:00.000Z",
-					expectedGraduation: "2028-05-15T00:00:00.000Z",
-					status: "active",
-					gpa: 3.2,
-					totalCreditsEarned: 15,
-				},
-				permissions: {
-					canImpersonate: false,
-					canManageUsers: false,
-					canManageCourses: false,
-					canGrade: false,
-					canViewReports: false,
-					scope: "self",
-				},
-				isActive: true,
-			},
-		});
-
-		const student2 = await payload.create({
-			collection: "users",
-			data: {
-				name: "Emma Rodriguez",
-				firstName: "Emma",
-				lastName: "Rodriguez",
-				email: "emma.rodriguez@demouniversity.edu",
-				password: "password123",
-				role: "student",
-				university: university.id,
-				faculty: faculty.id,
-				department: department.id,
-				program: program.id,
-				programYear: programYear2.id,
-				studentId: "STU002",
-				profile: {
-					dateOfBirth: "2002-07-10T00:00:00.000Z",
-					phone: "+1-555-0302",
-					address: "321 College Avenue, Demo City, DC 12345",
-					emergencyContact: {
-						name: "Carlos Rodriguez",
-						relationship: "Father",
-						phone: "+1-555-0303",
-						email: "carlos.rodriguez@email.com",
-					},
-				},
-				academicInfo: {
-					enrollmentDate: "2023-09-01T00:00:00.000Z",
-					expectedGraduation: "2027-05-15T00:00:00.000Z",
-					status: "active",
-					gpa: 3.7,
-					totalCreditsEarned: 45,
-				},
-				permissions: {
-					canImpersonate: false,
-					canManageUsers: false,
-					canManageCourses: false,
-					canGrade: false,
-					canViewReports: false,
-					scope: "self",
-				},
-				isActive: true,
-			},
-		});
 
 		// 14. Create Assessment Templates
 		console.log("Creating assessment templates...");
