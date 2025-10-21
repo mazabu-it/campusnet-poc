@@ -459,6 +459,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Morning section with hands-on programming labs",
+				professors: [],
 			},
 		});
 
@@ -478,6 +479,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "open",
 				notes: "Afternoon section with algorithm analysis focus",
+				professors: [],
 			},
 		});
 
@@ -497,6 +499,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				status: "planning",
 				notes: "Project-based course with team assignments",
+				professors: [],
 			},
 		});
 
@@ -973,7 +976,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				publishedAt: "2024-12-18T15:00:00.000Z",
 				assessmentBreakdown: [
 					{
-						assessmentTemplateId: introProgrammingMidterm.id,
+						assessmentTemplate: introProgrammingMidterm.id,
 						score: 85,
 						maxScore: 100,
 						weight: 30,
@@ -982,7 +985,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						isExcused: false,
 					},
 					{
-						assessmentTemplateId: introProgrammingProject.id,
+						assessmentTemplate: introProgrammingProject.id,
 						score: 92,
 						maxScore: 100,
 						weight: 30,
@@ -991,7 +994,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						isExcused: false,
 					},
 					{
-						assessmentTemplateId: introProgrammingFinal.id,
+						assessmentTemplate: introProgrammingFinal.id,
 						score: 88,
 						maxScore: 100,
 						weight: 40,
@@ -1020,7 +1023,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				publishedAt: "2024-12-18T16:00:00.000Z",
 				assessmentBreakdown: [
 					{
-						assessmentTemplateId: dataStructuresMidterm.id,
+						assessmentTemplate: dataStructuresMidterm.id,
 						score: 94,
 						maxScore: 100,
 						weight: 35,
@@ -1029,7 +1032,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						isExcused: false,
 					},
 					{
-						assessmentTemplateId: dataStructuresAssignment.id,
+						assessmentTemplate: dataStructuresAssignment.id,
 						score: 96,
 						maxScore: 100,
 						weight: 20,
@@ -1038,7 +1041,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						isExcused: false,
 					},
 					{
-						assessmentTemplateId: dataStructuresFinal.id,
+						assessmentTemplate: dataStructuresFinal.id,
 						score: 92,
 						maxScore: 100,
 						weight: 45,
