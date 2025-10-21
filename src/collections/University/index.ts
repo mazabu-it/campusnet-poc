@@ -72,7 +72,6 @@ export const University: CollectionConfig = {
 				{
 					name: "roundingRule",
 					type: "select",
-					dbName: "rounding_rule",
 					options: [
 						{ label: "Bankers Rounding", value: "bankers" },
 						{ label: "Round Half Up", value: "round-half-up" },
@@ -83,7 +82,6 @@ export const University: CollectionConfig = {
 				{
 					name: "decimalPrecision",
 					type: "number",
-					dbName: "decimal_prec",
 					defaultValue: 2,
 					min: 0,
 					max: 4,
@@ -101,7 +99,6 @@ export const University: CollectionConfig = {
 						{
 							name: "weightReplacement",
 							type: "select",
-							dbName: "weight_repl",
 							options: [
 								{ label: "Replace Original", value: "replace" },
 								{ label: "Average Both", value: "average" },
@@ -112,7 +109,6 @@ export const University: CollectionConfig = {
 						{
 							name: "capRule",
 							type: "select",
-							dbName: "cap_rule",
 							options: [
 								{ label: "No Cap", value: "none" },
 								{ label: "Pass Grade Cap", value: "pass-cap" },
@@ -125,26 +121,22 @@ export const University: CollectionConfig = {
 				{
 					name: "assessmentWindows",
 					type: "group",
-					dbName: "assess_windows",
 					fields: [
 						{
 							name: "defaultOpenDays",
 							type: "number",
-							dbName: "open_days",
 							defaultValue: 7,
 							min: 1,
 						},
 						{
 							name: "defaultCloseDays",
 							type: "number",
-							dbName: "close_days",
 							defaultValue: 14,
 							min: 1,
 						},
 						{
 							name: "lateEntryPolicy",
 							type: "select",
-							dbName: "late_policy",
 							options: [
 								{ label: "Allow Late Entry", value: "allow" },
 								{ label: "Penalty for Late Entry", value: "penalty" },
@@ -157,35 +149,29 @@ export const University: CollectionConfig = {
 				{
 					name: "reportSettings",
 					type: "group",
-					dbName: "report_settings",
 					fields: [
 						{
 							name: "headerBranding",
 							type: "upload",
-							dbName: "header_brand",
 							relationTo: "media",
 						},
 						{
 							name: "footerText",
 							type: "textarea",
-							dbName: "footer_text",
 						},
 						{
 							name: "signatureRequired",
 							type: "checkbox",
-							dbName: "sig_required",
 							defaultValue: true,
 						},
 						{
 							name: "watermarking",
 							type: "checkbox",
-							dbName: "watermark",
 							defaultValue: false,
 						},
 						{
 							name: "exportFormat",
 							type: "select",
-							dbName: "export_fmt",
 							options: [
 								{ label: "PDF", value: "pdf" },
 								{ label: "PDF + Excel", value: "pdf-excel" },
