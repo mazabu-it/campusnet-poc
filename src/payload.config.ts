@@ -41,6 +41,7 @@ import {
   submitScoreEndpoint,
 } from './endpoints/campusnet'
 import { seedCampusnetEndpoint } from './endpoints/seed'
+import { resetAndSeedEndpoint } from './endpoints/seed/reset-and-seed'
 import { generateStudentReportEndpoint, generateFacultySummaryEndpoint } from './endpoints/reports'
 
 const filename = fileURLToPath(import.meta.url)
@@ -137,6 +138,7 @@ export default buildConfig({
     enrollStudentEndpoint,
     submitScoreEndpoint,
     seedCampusnetEndpoint,
+    resetAndSeedEndpoint,
     generateStudentReportEndpoint,
     generateFacultySummaryEndpoint,
   ],
