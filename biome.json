@@ -10,7 +10,8 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "tab",
+		"indentWidth": 4
 	},
 	"linter": {
 		"enabled": true,
@@ -21,7 +22,14 @@
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double",
-			"indentStyle": "tab"
+			"indentStyle": "tab",
+			"indentWidth": 4
+		}
+	},
+	"json": {
+		"formatter": {
+			"indentStyle": "tab",
+			"indentWidth": 4
 		}
 	},
 	"assist": {

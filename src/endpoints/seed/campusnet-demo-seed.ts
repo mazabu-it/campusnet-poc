@@ -201,7 +201,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				name: "Demo University",
 				code: `DEMO-${Date.now()}`,
-				description: "A comprehensive demo university for testing Campusnet",
+				description:
+					"A comprehensive demo university for testing Campusnet",
 				locale: "en",
 				timezone: "Europe/Brussels",
 				gradingScale: gradingScale.id,
@@ -245,7 +246,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				university: university.id,
 				name: "Faculty of Computer Science",
 				code: "CS",
-				description: "Faculty specializing in computer science and technology",
+				description:
+					"Faculty specializing in computer science and technology",
 				contactInfo: {
 					address: "Building A, Demo University",
 					phone: "+1-555-0124",
@@ -346,7 +348,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				code: "CS101",
 				title: "Introduction to Programming",
-				description: "Fundamentals of programming concepts and practices",
+				description:
+					"Fundamentals of programming concepts and practices",
 				credits: 3,
 				owningDepartment: department.id,
 				courseType: "required",
@@ -364,7 +367,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				code: "CS201",
 				title: "Data Structures and Algorithms",
-				description: "Advanced data structures and algorithmic thinking",
+				description:
+					"Advanced data structures and algorithmic thinking",
 				credits: 4,
 				owningDepartment: department.id,
 				courseType: "required",
@@ -502,8 +506,12 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						},
 					},
 					academicInfo: {
-						enrollmentDate: faker.date.past({ years: 2 }).toISOString(),
-						expectedGraduation: faker.date.future({ years: 2 }).toISOString(),
+						enrollmentDate: faker.date
+							.past({ years: 2 })
+							.toISOString(),
+						expectedGraduation: faker.date
+							.future({ years: 2 })
+							.toISOString(),
 						status: faker.helpers.arrayElement([
 							"active",
 							"active",
@@ -663,13 +671,15 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				courseInstance: introProgrammingInstance.id,
 				name: "Midterm Exam",
-				description: "Midterm examination covering programming fundamentals",
+				description:
+					"Midterm examination covering programming fundamentals",
 				weightPercent: 30,
 				minScore: 0,
 				maxScore: 100,
 				isOptional: false,
 				assessmentType: "exam",
-				instructions: "Complete all programming problems. Show your work.",
+				instructions:
+					"Complete all programming problems. Show your work.",
 				isActive: true,
 				rubric: [
 					{
@@ -702,7 +712,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				maxScore: 100,
 				isOptional: false,
 				assessmentType: "exam",
-				instructions: "Complete all sections. Partial credit will be given.",
+				instructions:
+					"Complete all sections. Partial credit will be given.",
 				isActive: true,
 			},
 		});
@@ -735,7 +746,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				maxScore: 100,
 				isOptional: false,
 				assessmentType: "exam",
-				instructions: "Analyze algorithms and implement data structures.",
+				instructions:
+					"Analyze algorithms and implement data structures.",
 				isActive: true,
 			},
 		});
@@ -751,7 +763,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				maxScore: 100,
 				isOptional: false,
 				assessmentType: "exam",
-				instructions: "Complete all algorithm and data structure problems.",
+				instructions:
+					"Complete all algorithm and data structure problems.",
 				isActive: true,
 			},
 		});
@@ -779,7 +792,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				courseInstance: softwareEngineeringInstance.id,
 				name: "Midterm Exam",
-				description: "Software engineering principles and methodologies",
+				description:
+					"Software engineering principles and methodologies",
 				weightPercent: 30,
 				minScore: 0,
 				maxScore: 100,
@@ -832,7 +846,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				assessmentTemplate: introProgrammingMidterm.id,
 				title: "Fall 2024 Midterm Exam - CS101",
-				description: "Midterm examination for Introduction to Programming",
+				description:
+					"Midterm examination for Introduction to Programming",
 				date: "2024-10-15T09:00:00.000Z",
 				startTime: "09:00",
 				endTime: "11:00",
@@ -860,7 +875,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				assessmentTemplate: introProgrammingFinal.id,
 				title: "Fall 2024 Final Exam - CS101",
-				description: "Final examination for Introduction to Programming",
+				description:
+					"Final examination for Introduction to Programming",
 				date: "2024-12-10T09:00:00.000Z",
 				startTime: "09:00",
 				endTime: "12:00",
@@ -905,8 +921,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 				instructions:
 					"Create a complete program that demonstrates your understanding of programming concepts.",
-				notes:
-					"Project must be original work. Include documentation and comments.",
+				notes: "Project must be original work. Include documentation and comments.",
 			},
 		});
 
@@ -915,7 +930,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			data: {
 				assessmentTemplate: dataStructuresMidterm.id,
 				title: "Fall 2024 Midterm Exam - CS201",
-				description: "Midterm examination for Data Structures and Algorithms",
+				description:
+					"Midterm examination for Data Structures and Algorithms",
 				date: "2024-10-20T14:00:00.000Z",
 				startTime: "14:00",
 				endTime: "16:00",
@@ -959,7 +975,10 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						"pending",
 					]),
 					enrolledAt: faker.date.past({ years: 1 }).toISOString(),
-					enrollmentType: faker.helpers.arrayElement(["required", "elective"]),
+					enrollmentType: faker.helpers.arrayElement([
+						"required",
+						"elective",
+					]),
 					notes: faker.lorem.sentence(),
 				},
 			});
@@ -981,7 +1000,10 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						"pending",
 					]),
 					enrolledAt: faker.date.past({ years: 1 }).toISOString(),
-					enrollmentType: faker.helpers.arrayElement(["required", "elective"]),
+					enrollmentType: faker.helpers.arrayElement([
+						"required",
+						"elective",
+					]),
 					notes: faker.lorem.sentence(),
 				},
 			});
@@ -1004,7 +1026,10 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						"pending",
 					]),
 					enrolledAt: faker.date.future({ years: 1 }).toISOString(),
-					enrollmentType: faker.helpers.arrayElement(["required", "elective"]),
+					enrollmentType: faker.helpers.arrayElement([
+						"required",
+						"elective",
+					]),
 					notes: faker.lorem.sentence(),
 				},
 			});
@@ -1081,7 +1106,12 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					enrollment: enrollments[0].id,
 					gradeTitle: `${students[0].name} - Sample Grade`,
 					finalNumeric: faker.number.int({ min: 70, max: 100 }),
-					finalLetter: faker.helpers.arrayElement(["A", "B", "C", "D"]),
+					finalLetter: faker.helpers.arrayElement([
+						"A",
+						"B",
+						"C",
+						"D",
+					]),
 					passFail: "pass",
 					gpaPoints: faker.number.float({
 						min: 2.0,
@@ -1122,7 +1152,9 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		console.log("");
 		console.log("🎓 Demo Credentials:");
 		console.log("  All users have password: password123");
-		console.log(`  Professors: ${professors.map((p) => p.email).join(", ")}`);
+		console.log(
+			`  Professors: ${professors.map((p) => p.email).join(", ")}`,
+		);
 		console.log(
 			`  Students: ${students
 				.slice(0, 5)
