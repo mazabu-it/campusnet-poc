@@ -3,12 +3,15 @@ import { type NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
 	try {
 		// Call the Payload endpoint
-		const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/reset-and-seed`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/api/reset-and-seed`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
 			},
-		});
+		);
 
 		const result = await response.json();
 
@@ -16,7 +19,7 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(
 				{
 					success: false,
-					error: result.error || 'Failed to reset and seed database',
+					error: result.error || "Failed to reset and seed database",
 					details: result.details,
 				},
 				{ status: response.status },
@@ -25,7 +28,7 @@ export async function POST(req: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			message: 'Database reset and demo data seeded successfully!',
+			message: "Database reset and demo data seeded successfully!",
 			data: result.data,
 		});
 	} catch (error) {
