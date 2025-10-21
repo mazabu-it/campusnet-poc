@@ -491,7 +491,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				faculty: faculty.id,
 				department: department.id,
 				program: program.id,
-				programYear: programYear.id,
+				programYear: programYear1.id,
 				studentId: "STU001",
 				profile: {
 					dateOfBirth: "2003-05-15",
@@ -530,7 +530,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				faculty: faculty.id,
 				department: department.id,
 				program: program.id,
-				programYear: programYear.id,
+				programYear: programYear1.id,
 				studentId: "STU002",
 				profile: {
 					dateOfBirth: "2003-08-22",
