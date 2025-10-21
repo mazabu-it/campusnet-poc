@@ -6,7 +6,7 @@ export const calculateGradeEndpoint: Endpoint = {
 	method: "post",
 	handler: async (req) => {
 		try {
-			const enrollmentId = req.url.split("/").pop();
+			const enrollmentId = req.url?.split("/").pop();
 
 			if (!enrollmentId) {
 				return Response.json(
@@ -34,7 +34,7 @@ export const updateGradeAggregateEndpoint: Endpoint = {
 	method: "post",
 	handler: async (req) => {
 		try {
-			const enrollmentId = req.url.split("/").pop();
+			const enrollmentId = req.url?.split("/").pop();
 
 			if (!enrollmentId) {
 				return Response.json(
@@ -62,7 +62,7 @@ export const calculateStudentGPAEndpoint: Endpoint = {
 	method: "get",
 	handler: async (req) => {
 		try {
-			const studentId = req.url.split("/").pop();
+			const studentId = req.url?.split("/").pop();
 
 			if (!studentId) {
 				return Response.json(
@@ -94,7 +94,7 @@ export const enrollStudentEndpoint: Endpoint = {
 				studentId,
 				courseInstanceId,
 				enrollmentType = "required",
-			} = await req.json();
+			} = (await req.json?.()) || {};
 
 			if (!studentId || !courseInstanceId) {
 				return Response.json(
@@ -134,7 +134,7 @@ export const enrollStudentEndpoint: Endpoint = {
 					courseInstance: courseInstanceId,
 					enrollmentType,
 					status: "pending",
-					enrolledAt: new Date(),
+					enrolledAt: new Date().toISOString(),
 				},
 			});
 
@@ -169,7 +169,7 @@ export const submitScoreEndpoint: Endpoint = {
 	handler: async (req) => {
 		try {
 			const { assessmentId, studentId, value, feedback, notes } =
-				await req.json();
+				(await req.json?.()) || {};
 
 			if (!assessmentId || !studentId || value === undefined) {
 				return Response.json(
@@ -209,14 +209,17 @@ export const submitScoreEndpoint: Endpoint = {
 				assessment: assessmentId,
 				student: studentId,
 				value,
-				maxValue: assessment.assessmentTemplate.maxScore,
-				gradedBy: req.user?.id,
-				gradedAt: new Date(),
+				maxValue:
+					typeof assessment.assessmentTemplate === "object"
+						? assessment.assessmentTemplate.maxScore
+						: 100, // fallback value
+				gradedBy: req.user?.id || 0,
+				gradedAt: new Date().toISOString(),
 				feedback,
 				notes,
 			};
 
-			let score: Record<string, unknown>;
+			let score: any;
 			if (existingScore.docs.length > 0) {
 				// Update existing score
 				score = await req.payload.update({
