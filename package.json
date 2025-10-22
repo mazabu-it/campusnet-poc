@@ -15,7 +15,7 @@
 		"ii": "bun install",
 		"lint": "bun run next lint",
 		"lint:fix": "bun run next lint --fix",
-		"payload": "bun run payload",
+		"payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
 		"reinstall": "bun run rm -rf node_modules && bun run rm -f bun.lockb && bun install",
 		"start": "bun run next start",
 		"test": "bun run test:int && bun run test:e2e",

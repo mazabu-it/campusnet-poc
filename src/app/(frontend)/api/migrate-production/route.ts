@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getPayload } from "payload";
 import configPromise from "@payload-config";
+import { type NextRequest, NextResponse } from "next/server";
+import { getPayload } from "payload";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
 		// Run the production migration
 		await payload.db.migrate({
-			migrationDir: "./src/migrations",
+			migrations: [], // Payload will automatically find migrations in the configured directory
 		});
 
 		console.log("✅ Production migration completed successfully!");
