@@ -2,7 +2,6 @@
 
 // Avoid build-time DB access; render dynamically
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
