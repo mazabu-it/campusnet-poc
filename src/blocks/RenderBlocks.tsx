@@ -3,14 +3,17 @@ import { Fragment } from "react";
 import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { ContentBlock } from "@/blocks/Content/Component";
+import { CTASectionComponent } from "@/blocks/CTASection/Component";
 import { DashboardStatsComponent } from "@/blocks/DashboardStats/Component";
 import { FacultyShowcaseComponent } from "@/blocks/FacultyShowcase/Component";
 import { FeaturesComponent } from "@/blocks/Features/Component";
+import { FeaturesGridComponent } from "@/blocks/FeaturesGrid/Component";
 import { FormBlock } from "@/blocks/Form/Component";
 import { MediaBlock } from "@/blocks/MediaBlock/Component";
 import { NewsEventsComponent } from "@/blocks/NewsEvents/Component";
 import { ProgramsShowcaseComponent } from "@/blocks/ProgramsShowcase/Component";
 import { RegistrationFormComponent } from "@/blocks/RegistrationForm/Component";
+import { TestimonialsComponent } from "@/blocks/Testimonials/Component";
 import { UniversityHeroComponent } from "@/blocks/UniversityHero/Component";
 import type { Page } from "@/payload-types";
 
@@ -18,6 +21,7 @@ const blockComponents = {
 	archive: ArchiveBlock,
 	content: ContentBlock,
 	cta: CallToActionBlock,
+	ctaSection: CTASectionComponent,
 	formBlock: FormBlock,
 	mediaBlock: MediaBlock,
 	"university-hero": UniversityHeroComponent,
@@ -27,6 +31,8 @@ const blockComponents = {
 	"news-events": NewsEventsComponent,
 	"faculty-showcase": FacultyShowcaseComponent,
 	features: FeaturesComponent,
+	featuresGrid: FeaturesGridComponent,
+	testimonials: TestimonialsComponent,
 };
 
 export const RenderBlocks: React.FC<{

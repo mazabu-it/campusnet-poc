@@ -36,7 +36,7 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 			whileInView={{ opacity: 1 }}
 			viewport={{ once: true }}
 			transition={{ duration: 0.6 }}
-			className="py-20 bg-gray-50 dark:bg-gray-900"
+			className="py-20 bg-background"
 		>
 			<div className="container mx-auto px-4">
 				<motion.div
@@ -46,10 +46,10 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 					transition={{ delay: 0.2, duration: 0.6 }}
 					className="text-center mb-16"
 				>
-					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+					<h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
 						{block.title || "Our Faculty"}
 					</h2>
-					<p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+					<p className="text-xl text-muted-foreground max-w-3xl mx-auto">
 						{block.subtitle ||
 							"Meet our world-class faculty members"}
 					</p>
@@ -64,7 +64,7 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 							viewport={{ once: true }}
 							transition={{ delay: 0.1, duration: 0.6 }}
 						>
-							<Card className="h-full hover:shadow-xl transition-all duration-300 group bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+							<Card className="h-full hover:shadow-xl transition-all duration-300 group bg-card border-border">
 								<CardHeader className="text-center pb-4">
 									<Avatar className="w-24 h-24 mx-auto mb-4">
 										<AvatarImage
@@ -78,7 +78,7 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 												.join("")}
 										</AvatarFallback>
 									</Avatar>
-									<CardTitle className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+									<CardTitle className="text-xl font-bold text-card-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
 										{member.name}
 									</CardTitle>
 									<div className="text-blue-600 dark:text-blue-400 font-medium">
@@ -89,7 +89,7 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 									</div>
 								</CardHeader>
 								<CardContent>
-									<p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+									<p className="text-muted-foreground mb-4 line-clamp-3">
 										{member.bio}
 									</p>
 

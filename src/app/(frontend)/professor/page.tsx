@@ -220,7 +220,7 @@ export default function ProfessorDashboard() {
 	// Check if user is professor or faculty-staff
 	if (!userStore.user) {
 		return (
-			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
+			<div className="min-h-screen bg-background flex items-center justify-center">
 				<div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
 			</div>
 		);
@@ -231,18 +231,18 @@ export default function ProfessorDashboard() {
 		userStore.user.role !== "faculty-staff"
 	) {
 		return (
-			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
-				<Card className="w-full max-w-md bg-gray-800 border-gray-700">
+			<div className="min-h-screen bg-background flex items-center justify-center">
+				<Card className="w-full max-w-md bg-card border-border">
 					<CardContent className="pt-6">
 						<div className="text-center">
 							<Icon
 								icon="lucide:lock"
 								className="w-12 h-12 text-red-500 mx-auto mb-4"
 							/>
-							<h2 className="text-xl font-semibold text-white mb-2">
+							<h2 className="text-xl font-semibold text-card-foreground mb-2">
 								Access Denied
 							</h2>
-							<p className="text-gray-300">
+							<p className="text-muted-foreground">
 								You need professor or faculty-staff privileges
 								to access this page.
 							</p>
@@ -466,24 +466,24 @@ export default function ProfessorDashboard() {
 
 	if (loading) {
 		return (
-			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
-				<div className="text-white">Loading...</div>
+			<div className="min-h-screen bg-background flex items-center justify-center">
+				<div className="text-card-foreground">Loading...</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-900 pt-20">
+		<div className="min-h-screen bg-background pt-20">
 			<div className="container mx-auto px-4 py-8">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					className="mb-8"
 				>
-					<h1 className="text-3xl font-bold text-white mb-2">
+					<h1 className="text-3xl font-bold text-card-foreground mb-2">
 						Professor Dashboard
 					</h1>
-					<p className="text-gray-300 mb-6">
+					<p className="text-muted-foreground mb-6">
 						Welcome, {userStore.user?.name}. Manage your courses and
 						grade assessments.
 					</p>
@@ -494,7 +494,7 @@ export default function ProfessorDashboard() {
 							onClick={() => {
 								window.location.href = "/professor/progress";
 							}}
-							className="bg-green-600 hover:bg-green-700 text-white h-16 flex flex-col items-center justify-center"
+							className="bg-green-600 hover:bg-green-700 text-card-foreground h-16 flex flex-col items-center justify-center"
 						>
 							<Icon
 								icon="lucide:bar-chart-3"
@@ -507,9 +507,9 @@ export default function ProfessorDashboard() {
 
 				{/* Unified view: Courses → Assessments → Grading */}
 				<div className="space-y-6">
-					<Card className="bg-gray-800 border-gray-700">
+					<Card className="bg-card border-border">
 						<CardHeader>
-							<CardTitle className="text-white">
+							<CardTitle className="text-card-foreground">
 								Course Instances
 							</CardTitle>
 						</CardHeader>
@@ -521,9 +521,9 @@ export default function ProfessorDashboard() {
 										whileHover={{ scale: 1.02 }}
 										whileTap={{ scale: 0.98 }}
 									>
-										<Card className="bg-gray-700 border-gray-600 hover:border-gray-500 transition-colors">
+										<Card className="bg-card border-border hover:border-border transition-colors">
 											<CardHeader>
-												<CardTitle className="text-white text-lg">
+												<CardTitle className="text-card-foreground text-lg">
 													{course.courseVariation
 														?.course?.code ||
 														course.courseVariation
@@ -531,7 +531,7 @@ export default function ProfessorDashboard() {
 														"N/A"}{" "}
 													- {course.instanceTitle}
 												</CardTitle>
-												<p className="text-gray-300">
+												<p className="text-muted-foreground">
 													{course.courseVariation
 														?.course?.name ||
 														course.courseVariation
@@ -546,7 +546,7 @@ export default function ProfessorDashboard() {
 															icon="lucide:users"
 															className="w-4 h-4 text-gray-400"
 														/>
-														<span className="text-gray-300">
+														<span className="text-muted-foreground">
 															{
 																course
 																	.professors
@@ -575,9 +575,9 @@ export default function ProfessorDashboard() {
 					</Card>
 
 					{selectedCourse && (
-						<Card className="bg-gray-800 border-gray-700">
+						<Card className="bg-card border-border">
 							<CardHeader>
-								<CardTitle className="text-white">
+								<CardTitle className="text-card-foreground">
 									Assessments
 								</CardTitle>
 							</CardHeader>
@@ -588,16 +588,16 @@ export default function ProfessorDashboard() {
 											key={assessment.id}
 											whileHover={{ scale: 1.01 }}
 										>
-											<Card className="bg-gray-700 border-gray-600">
+											<Card className="bg-card border-border">
 												<CardContent className="pt-6">
 													<div className="flex items-center justify-between">
 														<div className="space-y-2">
-															<h3 className="text-white font-semibold">
+															<h3 className="text-card-foreground font-semibold">
 																{
 																	assessment.title
 																}
 															</h3>
-															<p className="text-gray-300 text-sm">
+															<p className="text-muted-foreground text-sm">
 																{
 																	assessment.description
 																}
@@ -662,11 +662,11 @@ export default function ProfessorDashboard() {
 					)}
 
 					{selectedAssessment && (
-						<Card className="bg-gray-800 border-gray-700">
+						<Card className="bg-card border-border">
 							<CardHeader>
 								<div className="flex items-center justify-between">
 									<div>
-										<CardTitle className="text-white">
+										<CardTitle className="text-card-foreground">
 											Grade Students
 										</CardTitle>
 										{(() => {
@@ -683,7 +683,7 @@ export default function ProfessorDashboard() {
 												);
 											return (
 												<div className="mt-2 space-y-2">
-													<div className="text-sm text-gray-300">
+													<div className="text-sm text-muted-foreground">
 														<div className="font-medium">
 															{selectedCourseData
 																?.courseVariation
@@ -736,7 +736,7 @@ export default function ProfessorDashboard() {
 														/>
 														<Label
 															htmlFor={checkboxId}
-															className="text-sm text-gray-300 cursor-pointer"
+															className="text-sm text-muted-foreground cursor-pointer"
 														>
 															Mark as completed
 															(include in final
@@ -768,7 +768,7 @@ export default function ProfessorDashboard() {
 														setGradingMode(false)
 													}
 													variant="outline"
-													className="border-gray-600 text-gray-300 hover:bg-gray-700"
+													className="border-border text-muted-foreground hover:bg-card"
 												>
 													Cancel
 												</Button>
@@ -790,20 +790,20 @@ export default function ProfessorDashboard() {
 							<CardContent>
 								<Table>
 									<TableHeader>
-										<TableRow className="border-gray-700">
-											<TableHead className="text-gray-300">
+										<TableRow className="border-border">
+											<TableHead className="text-muted-foreground">
 												Student
 											</TableHead>
-											<TableHead className="text-gray-300">
+											<TableHead className="text-muted-foreground">
 												Student ID
 											</TableHead>
-											<TableHead className="text-gray-300">
+											<TableHead className="text-muted-foreground">
 												Score
 											</TableHead>
-											<TableHead className="text-gray-300">
+											<TableHead className="text-muted-foreground">
 												Percentage
 											</TableHead>
-											<TableHead className="text-gray-300">
+											<TableHead className="text-muted-foreground">
 												Feedback
 											</TableHead>
 										</TableRow>
@@ -835,12 +835,12 @@ export default function ProfessorDashboard() {
 											return (
 												<TableRow
 													key={student.id}
-													className="border-gray-700"
+													className="border-border"
 												>
-													<TableCell className="text-white">
+													<TableCell className="text-card-foreground">
 														{student.name}
 													</TableCell>
-													<TableCell className="text-gray-300">
+													<TableCell className="text-muted-foreground">
 														{student.studentId}
 													</TableCell>
 													<TableCell>
@@ -871,15 +871,15 @@ export default function ProfessorDashboard() {
 																		),
 																	)
 																}
-																className="w-20 bg-gray-700 border-gray-600 text-white"
+																className="w-20 bg-card border-border text-card-foreground"
 															/>
 														) : (
-															<span className="text-white">
+															<span className="text-card-foreground">
 																{currentScore}
 															</span>
 														)}
 													</TableCell>
-													<TableCell className="text-gray-300">
+													<TableCell className="text-muted-foreground">
 														{Math.round(
 															(currentScore /
 																(assessments.find(
@@ -908,11 +908,11 @@ export default function ProfessorDashboard() {
 																	)
 																}
 																placeholder="Enter feedback..."
-																className="w-64 bg-gray-700 border-gray-600 text-white"
+																className="w-64 bg-card border-border text-card-foreground"
 																rows={2}
 															/>
 														) : (
-															<span className="text-gray-300">
+															<span className="text-muted-foreground">
 																{currentFeedback ||
 																	"No feedback"}
 															</span>

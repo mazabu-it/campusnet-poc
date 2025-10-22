@@ -245,7 +245,7 @@ const facultyData = {
 
 export default function UniversityHomepage() {
 	return (
-		<div className="min-h-screen bg-white dark:bg-gray-900">
+		<div className="min-h-screen bg-background">
 			{/* Hero Section */}
 			<UniversityHeroComponent block={heroData} />
 
@@ -270,7 +270,7 @@ export default function UniversityHomepage() {
 				whileInView={{ opacity: 1 }}
 				viewport={{ once: true }}
 				transition={{ duration: 0.6 }}
-				className="bg-gray-900 text-white py-16"
+				className="bg-card text-card-foreground py-16"
 			>
 				<div className="container mx-auto px-4">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-8">

@@ -85,5 +85,18 @@ export const homeStatic: RequiredDataFromCollectionSlug<"pages"> = {
 		title: "Campusnet University - Invest in Your Future",
 	},
 	title: "Home",
-	layout: [],
+	layout: [
+		{
+			blockName: "Features Grid",
+			blockType: "featuresGrid",
+		},
+		{
+			blockName: "Testimonials",
+			blockType: "testimonials",
+		},
+		{
+			blockName: "CTA Section",
+			blockType: "ctaSection",
+		},
+	],
 };

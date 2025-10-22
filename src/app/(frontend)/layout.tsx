@@ -1,10 +1,8 @@
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
-import { draftMode } from "next/headers";
 import type React from "react";
 
-import { AdminBar } from "@/components/AdminBar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Footer } from "@/Footer/Component";
 import { HeaderComponent } from "@/Header/Component";
@@ -22,8 +20,6 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const { isEnabled } = await draftMode();
-
 	return (
 		<html
 			className={cn(GeistSans.variable, GeistMono.variable)}
@@ -39,12 +35,6 @@ export default async function RootLayout({
 				<ErrorBoundary>
 					<QueryProvider>
 						<Providers>
-							<AdminBar
-								adminBarProps={{
-									preview: isEnabled,
-								}}
-							/>
-
 							<HeaderComponent />
 							{children}
 							<Footer />

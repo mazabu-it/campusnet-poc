@@ -113,22 +113,96 @@ export default function FacultyPage() {
 	];
 
 	return (
-		<div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-			{/* Hero Section */}
+		<div className="min-h-screen bg-background">
+			{/* Hero Section - Modern Minimal Design */}
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
-				className="bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 text-white py-20"
+				className="relative overflow-hidden py-24 md:py-32"
 			>
-				<div className="container mx-auto px-4 text-center">
-					<h1 className="text-5xl md:text-6xl font-bold mb-6">
-						Our Faculty
-					</h1>
-					<p className="text-xl md:text-2xl text-purple-100 max-w-3xl mx-auto">
-						Meet our world-class faculty members who are leading
-						experts in their fields
-					</p>
+				{/* Subtle gradient background */}
+				<div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-indigo-500/5 to-transparent dark:from-purple-500/10 dark:via-indigo-500/10" />
+
+				{/* Decorative elements */}
+				<div className="absolute top-20 left-20 w-72 h-72 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl" />
+				<div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-3xl" />
+
+				<div className="container mx-auto px-4 text-center relative z-10">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.2, duration: 0.6 }}
+					>
+						<Badge className="mb-6 px-4 py-1.5 text-sm font-medium bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800">
+							<Icon
+								icon="lucide:users"
+								className="mr-2 h-4 w-4"
+							/>
+							Meet Our Faculty
+						</Badge>
+					</motion.div>
+
+					<motion.h1
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.3, duration: 0.6 }}
+						className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
+					>
+						Learn From
+						<span className="block mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+							World Leaders
+						</span>
+					</motion.h1>
+
+					<motion.p
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.4, duration: 0.6 }}
+						className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+					>
+						Expert educators and researchers dedicated to your
+						success
+					</motion.p>
+
+					{/* Quick stats */}
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.5, duration: 0.6 }}
+						className="flex flex-wrap justify-center gap-8 mt-12"
+					>
+						{[
+							{
+								icon: "lucide:user-check",
+								label: "PhD Faculty",
+								value: "95%",
+							},
+							{
+								icon: "lucide:award",
+								label: "Research Papers",
+								value: "200+",
+							},
+							{
+								icon: "lucide:globe",
+								label: "Countries",
+								value: "15+",
+							},
+						].map((stat) => (
+							<div key={stat.label} className="text-center">
+								<div className="flex items-center justify-center gap-2 text-foreground font-bold text-2xl mb-1">
+									<Icon
+										icon={stat.icon}
+										className="h-6 w-6 text-purple-600 dark:text-purple-400"
+									/>
+									{stat.value}
+								</div>
+								<div className="text-sm text-muted-foreground">
+									{stat.label}
+								</div>
+							</div>
+						))}
+					</motion.div>
 				</div>
 			</motion.div>
 
@@ -249,7 +323,7 @@ export default function FacultyPage() {
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true }}
 				transition={{ duration: 0.6 }}
-				className="bg-gray-900 dark:bg-gray-800 text-white py-16"
+				className="bg-card text-card-foreground py-16"
 			>
 				<div className="container mx-auto px-4">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">

@@ -56,7 +56,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 			whileInView={{ opacity: 1 }}
 			viewport={{ once: true }}
 			transition={{ duration: 0.6 }}
-			className="py-20 bg-gray-50 dark:bg-gray-900"
+			className="py-20 bg-background"
 		>
 			<div className="container mx-auto px-4">
 				<motion.div
@@ -66,10 +66,10 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 					transition={{ delay: 0.2, duration: 0.6 }}
 					className="text-center mb-16"
 				>
-					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+					<h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
 						{block.title}
 					</h2>
-					<p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+					<p className="text-xl text-muted-foreground max-w-3xl mx-auto">
 						{block.subtitle}
 					</p>
 				</motion.div>
@@ -84,7 +84,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 							viewport={{ once: true }}
 							transition={{ delay: index * 0.1, duration: 0.6 }}
 						>
-							<Card className="hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+							<Card className="hover:shadow-lg transition-shadow duration-300 bg-card border-border">
 								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
 										{metric.label}
@@ -95,7 +95,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 									/>
 								</CardHeader>
 								<CardContent>
-									<div className="text-2xl font-bold text-gray-900 dark:text-white">
+									<div className="text-2xl font-bold text-card-foreground">
 										{metric.value}
 									</div>
 									<div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -135,9 +135,9 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 						viewport={{ once: true }}
 						transition={{ delay: 0.4, duration: 0.6 }}
 					>
-						<Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+						<Card className="bg-card border-border">
 							<CardHeader>
-								<CardTitle className="flex items-center text-gray-900 dark:text-white">
+								<CardTitle className="flex items-center text-card-foreground">
 									<Icon
 										icon="lucide:trending-up"
 										className="mr-2 text-blue-600 dark:text-blue-400"
@@ -171,9 +171,9 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 						viewport={{ once: true }}
 						transition={{ delay: 0.6, duration: 0.6 }}
 					>
-						<Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+						<Card className="bg-card border-border">
 							<CardHeader>
-								<CardTitle className="flex items-center text-gray-900 dark:text-white">
+								<CardTitle className="flex items-center text-card-foreground">
 									<Icon
 										icon="lucide:pie-chart"
 										className="mr-2 text-purple-600 dark:text-purple-400"
@@ -225,9 +225,9 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 					viewport={{ once: true }}
 					transition={{ delay: 0.8, duration: 0.6 }}
 				>
-					<Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+					<Card className="bg-card border-border">
 						<CardHeader>
-							<CardTitle className="flex items-center text-gray-900 dark:text-white">
+							<CardTitle className="flex items-center text-card-foreground">
 								<Icon
 									icon="lucide:target"
 									className="mr-2 text-green-600 dark:text-green-400"

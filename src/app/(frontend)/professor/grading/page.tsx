@@ -248,13 +248,15 @@ export default function ProfessorGradingPage() {
 							gradedAt: new Date().toISOString(),
 							feedback: scoreData.feedback,
 							notes: scoreData.notes ?? "",
-						isLate: Boolean(scoreData.isLate),
-						latePenaltyApplied: Number(
-							(scoreData as { latePenaltyApplied?: number }).latePenaltyApplied || 0,
-						),
-						isExcused: Boolean(
-							(scoreData as { isExcused?: boolean }).isExcused || false,
-						),
+							isLate: Boolean(scoreData.isLate),
+							latePenaltyApplied: Number(
+								(scoreData as { latePenaltyApplied?: number })
+									.latePenaltyApplied || 0,
+							),
+							isExcused: Boolean(
+								(scoreData as { isExcused?: boolean })
+									.isExcused || false,
+							),
 						}),
 					});
 					if (!response.ok)
@@ -286,11 +288,11 @@ export default function ProfessorGradingPage() {
 
 	if (loading) {
 		return (
-			<div className="min-h-screen bg-gray-900 pt-20">
+			<div className="min-h-screen bg-background pt-20">
 				<div className="container mx-auto px-4 py-8">
 					<div className="flex items-center justify-center">
-						<Loader2 className="h-8 w-8 animate-spin text-white" />
-						<span className="ml-2 text-white">
+						<Loader2 className="h-8 w-8 animate-spin text-card-foreground" />
+						<span className="ml-2 text-card-foreground">
 							Loading grading interface...
 						</span>
 					</div>
@@ -301,7 +303,7 @@ export default function ProfessorGradingPage() {
 
 	if (error) {
 		return (
-			<div className="min-h-screen bg-gray-900 pt-20">
+			<div className="min-h-screen bg-background pt-20">
 				<div className="container mx-auto px-4 py-8">
 					<Alert variant="destructive">
 						<AlertCircle className="h-4 w-4" />
@@ -313,13 +315,13 @@ export default function ProfessorGradingPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-900 pt-20">
+		<div className="min-h-screen bg-background pt-20">
 			<div className="container mx-auto px-4 py-8">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-white mb-2">
+					<h1 className="text-3xl font-bold text-card-foreground mb-2">
 						Grade Management
 					</h1>
-					<p className="text-gray-300">
+					<p className="text-muted-foreground">
 						Input and manage student scores for assessments
 					</p>
 				</div>
@@ -338,9 +340,9 @@ export default function ProfessorGradingPage() {
 					</TabsList>
 
 					<TabsContent value="assessments" className="space-y-6">
-						<Card className="bg-gray-800 border-gray-700">
+						<Card className="bg-card border-border">
 							<CardHeader>
-								<CardTitle className="text-white">
+								<CardTitle className="text-card-foreground">
 									Available Assessments
 								</CardTitle>
 							</CardHeader>
@@ -349,7 +351,7 @@ export default function ProfessorGradingPage() {
 									{assessments.map((assessment) => (
 										<Card
 											key={assessment.id}
-											className="bg-gray-700 border-gray-600 cursor-pointer hover:bg-gray-600 transition-colors"
+											className="bg-card border-border cursor-pointer hover:bg-card transition-colors"
 											onClick={() =>
 												handleAssessmentSelect(
 													assessment,
@@ -359,10 +361,10 @@ export default function ProfessorGradingPage() {
 											<CardContent className="p-4">
 												<div className="flex justify-between items-start">
 													<div>
-														<h3 className="text-lg font-semibold text-white">
+														<h3 className="text-lg font-semibold text-card-foreground">
 															{assessment.title}
 														</h3>
-														<p className="text-gray-300 text-sm">
+														<p className="text-muted-foreground text-sm">
 															{
 																assessment
 																	.assessmentTemplate
@@ -409,7 +411,7 @@ export default function ProfessorGradingPage() {
 													</div>
 													<Badge
 														variant="secondary"
-														className="bg-blue-600 text-white"
+														className="bg-blue-600 text-card-foreground"
 													>
 														{assessment.status}
 													</Badge>
@@ -425,12 +427,12 @@ export default function ProfessorGradingPage() {
 					<TabsContent value="grading" className="space-y-6">
 						{selectedAssessment && (
 							<>
-								<Card className="bg-gray-800 border-gray-700">
+								<Card className="bg-card border-border">
 									<CardHeader>
-										<CardTitle className="text-white">
+										<CardTitle className="text-card-foreground">
 											Grading: {selectedAssessment.title}
 										</CardTitle>
-										<p className="text-gray-300">
+										<p className="text-muted-foreground">
 											{selectedAssessment
 												?.assessmentTemplate
 												?.courseInstance
@@ -472,10 +474,10 @@ export default function ProfessorGradingPage() {
 									</CardHeader>
 								</Card>
 
-								<Card className="bg-gray-800 border-gray-700">
+								<Card className="bg-card border-border">
 									<CardHeader>
 										<div className="flex justify-between items-center">
-											<CardTitle className="text-white">
+											<CardTitle className="text-card-foreground">
 												Student Scores (
 												{enrollments.length} students)
 											</CardTitle>
@@ -485,7 +487,7 @@ export default function ProfessorGradingPage() {
 													saving ||
 													scores.length === 0
 												}
-												className="bg-green-600 hover:bg-green-700 text-white"
+												className="bg-green-600 hover:bg-green-700 text-card-foreground"
 											>
 												{saving ? (
 													<>
@@ -526,20 +528,20 @@ export default function ProfessorGradingPage() {
 															enrollment.student
 																.id
 														}
-														className="bg-gray-700 border-gray-600"
+														className="bg-card border-border"
 													>
 														<CardContent className="p-4">
 															<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 																<div className="md:col-span-1">
 																	<div className="space-y-2">
-																		<h4 className="font-semibold text-white">
+																		<h4 className="font-semibold text-card-foreground">
 																			{
 																				enrollment
 																					.student
 																					.name
 																			}
 																		</h4>
-																		<p className="text-gray-300 text-sm">
+																		<p className="text-muted-foreground text-sm">
 																			{
 																				enrollment
 																					.student
@@ -559,7 +561,7 @@ export default function ProfessorGradingPage() {
 																<div className="md:col-span-1">
 																	<Label
 																		htmlFor={`score-${enrollment.student.id}`}
-																		className="text-white"
+																		className="text-card-foreground"
 																	>
 																		Score
 																	</Label>
@@ -590,7 +592,7 @@ export default function ProfessorGradingPage() {
 																					0,
 																			)
 																		}
-																		className="bg-gray-600 border-gray-500 text-white"
+																		className="bg-card border-border text-card-foreground"
 																	/>
 																	<p className="text-gray-400 text-sm">
 																		{
@@ -606,7 +608,7 @@ export default function ProfessorGradingPage() {
 																<div className="md:col-span-1">
 																	<Label
 																		htmlFor={`feedback-${enrollment.student.id}`}
-																		className="text-white"
+																		className="text-card-foreground"
 																	>
 																		Feedback
 																	</Label>
@@ -630,7 +632,7 @@ export default function ProfessorGradingPage() {
 																			)
 																		}
 																		placeholder="Enter feedback for this student..."
-																		className="bg-gray-600 border-gray-500 text-white"
+																		className="bg-card border-border text-card-foreground"
 																		rows={2}
 																	/>
 																</div>
@@ -638,7 +640,7 @@ export default function ProfessorGradingPage() {
 																<div className="md:col-span-1">
 																	<Label
 																		htmlFor={`notes-${enrollment.student.id}`}
-																		className="text-white"
+																		className="text-card-foreground"
 																	>
 																		Notes
 																	</Label>
@@ -662,7 +664,7 @@ export default function ProfessorGradingPage() {
 																			)
 																		}
 																		placeholder="Internal notes..."
-																		className="bg-gray-600 border-gray-500 text-white"
+																		className="bg-card border-border text-card-foreground"
 																		rows={2}
 																	/>
 																	<div className="flex items-center mt-2">
@@ -690,7 +692,7 @@ export default function ProfessorGradingPage() {
 																		/>
 																		<Label
 																			htmlFor={`late-${enrollment.student.id}`}
-																			className="text-gray-300 text-sm"
+																			className="text-muted-foreground text-sm"
 																		>
 																			Late
 																			submission

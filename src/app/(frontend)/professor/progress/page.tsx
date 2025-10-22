@@ -449,11 +449,11 @@ export default function ProfessorProgressPage() {
 
 	if (loading) {
 		return (
-			<div className="min-h-screen bg-gray-900 pt-20">
+			<div className="min-h-screen bg-background pt-20">
 				<div className="container mx-auto px-4 py-8">
 					<div className="flex items-center justify-center">
-						<Loader2 className="h-8 w-8 animate-spin text-white" />
-						<span className="ml-2 text-white">
+						<Loader2 className="h-8 w-8 animate-spin text-foreground" />
+						<span className="ml-2 text-foreground">
 							Loading progress tracking...
 						</span>
 					</div>
@@ -464,7 +464,7 @@ export default function ProfessorProgressPage() {
 
 	if (error) {
 		return (
-			<div className="min-h-screen bg-gray-900 pt-20">
+			<div className="min-h-screen bg-background pt-20">
 				<div className="container mx-auto px-4 py-8">
 					<Alert variant="destructive">
 						<AlertCircle className="h-4 w-4" />
@@ -476,22 +476,22 @@ export default function ProfessorProgressPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-900 pt-20">
+		<div className="min-h-screen bg-background pt-20">
 			<div className="container mx-auto px-4 py-8">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-white mb-2">
+					<h1 className="text-3xl font-bold text-foreground mb-2">
 						Student Progress Tracking
 					</h1>
-					<p className="text-gray-300">
+					<p className="text-muted-foreground">
 						Monitor student performance and progress across your
 						courses
 					</p>
 				</div>
 
 				{!selectedCourseInstance ? (
-					<Card className="bg-gray-800 border-gray-700">
+					<Card className="bg-card border-border">
 						<CardHeader>
-							<CardTitle className="text-white">
+							<CardTitle className="text-card-foreground">
 								Select a Course
 							</CardTitle>
 						</CardHeader>
@@ -500,7 +500,7 @@ export default function ProfessorProgressPage() {
 								{courseInstances.map((courseInstance) => (
 									<Card
 										key={courseInstance.id}
-										className="bg-gray-700 border-gray-600 cursor-pointer hover:bg-gray-600 transition-colors"
+										className="bg-card border-border cursor-pointer hover:bg-muted transition-colors"
 										onClick={() =>
 											handleCourseInstanceSelect(
 												courseInstance,
@@ -510,7 +510,7 @@ export default function ProfessorProgressPage() {
 										<CardContent className="p-4">
 											<div className="flex justify-between items-start">
 												<div>
-													<h3 className="text-lg font-semibold text-white">
+													<h3 className="text-lg font-semibold text-card-foreground">
 														{
 															courseInstance
 																.courseVariation
@@ -523,7 +523,7 @@ export default function ProfessorProgressPage() {
 																.course.title
 														}
 													</h3>
-													<p className="text-gray-300 text-sm">
+													<p className="text-muted-foreground text-sm">
 														{
 															courseInstance.instanceTitle
 														}
@@ -537,7 +537,7 @@ export default function ProfessorProgressPage() {
 															.join(", ")}
 													</p>
 												</div>
-												<Button className="bg-blue-600 hover:bg-blue-700 text-white">
+												<Button className="bg-blue-600 hover:bg-blue-700 text-card-foreground">
 													View Progress
 												</Button>
 											</div>
@@ -550,11 +550,11 @@ export default function ProfessorProgressPage() {
 				) : (
 					<div className="space-y-6">
 						{/* Course Header */}
-						<Card className="bg-gray-800 border-gray-700">
+						<Card className="bg-card border-border">
 							<CardHeader>
 								<div className="flex justify-between items-center">
 									<div>
-										<CardTitle className="text-white">
+										<CardTitle className="text-card-foreground">
 											{
 												selectedCourseInstance
 													.courseVariation.course.code
@@ -566,7 +566,7 @@ export default function ProfessorProgressPage() {
 													.title
 											}
 										</CardTitle>
-										<p className="text-gray-300">
+										<p className="text-muted-foreground">
 											{
 												selectedCourseInstance.instanceTitle
 											}
@@ -580,7 +580,7 @@ export default function ProfessorProgressPage() {
 													selectedCourseInstance,
 												)
 											}
-											className="border-gray-600 text-gray-300 hover:bg-gray-700"
+											className="border-border text-muted-foreground hover:bg-card"
 										>
 											<RefreshCw className="h-4 w-4 mr-2" />
 											Refresh Data
@@ -590,7 +590,7 @@ export default function ProfessorProgressPage() {
 											onClick={() =>
 												setSelectedCourseInstance(null)
 											}
-											className="border-gray-600 text-gray-300 hover:bg-gray-700"
+											className="border-border text-muted-foreground hover:bg-card"
 										>
 											Back to Courses
 										</Button>
@@ -601,15 +601,15 @@ export default function ProfessorProgressPage() {
 
 						{/* Overview Stats */}
 						<div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-							<Card className="bg-gray-800 border-gray-700">
+							<Card className="bg-card border-border">
 								<CardContent className="p-6">
 									<div className="flex items-center">
 										<Users className="h-8 w-8 text-blue-500" />
 										<div className="ml-4">
-											<p className="text-sm font-medium text-gray-300">
+											<p className="text-sm font-medium text-muted-foreground">
 												Total Students
 											</p>
-											<p className="text-2xl font-bold text-white">
+											<p className="text-2xl font-bold text-card-foreground">
 												{enrollments.length}
 											</p>
 										</div>
@@ -617,15 +617,15 @@ export default function ProfessorProgressPage() {
 								</CardContent>
 							</Card>
 
-							<Card className="bg-gray-800 border-gray-700">
+							<Card className="bg-card border-border">
 								<CardContent className="p-6">
 									<div className="flex items-center">
 										<BookOpen className="h-8 w-8 text-green-500" />
 										<div className="ml-4">
-											<p className="text-sm font-medium text-gray-300">
+											<p className="text-sm font-medium text-muted-foreground">
 												Assessments
 											</p>
-											<p className="text-2xl font-bold text-white">
+											<p className="text-2xl font-bold text-card-foreground">
 												{assessments.length}
 											</p>
 										</div>
@@ -633,15 +633,15 @@ export default function ProfessorProgressPage() {
 								</CardContent>
 							</Card>
 
-							<Card className="bg-gray-800 border-gray-700">
+							<Card className="bg-card border-border">
 								<CardContent className="p-6">
 									<div className="flex items-center">
 										<TrendingUp className="h-8 w-8 text-yellow-500" />
 										<div className="ml-4">
-											<p className="text-sm font-medium text-gray-300">
+											<p className="text-sm font-medium text-muted-foreground">
 												Avg Score
 											</p>
-											<p className="text-2xl font-bold text-white">
+											<p className="text-2xl font-bold text-card-foreground">
 												{enrollments.length > 0
 													? Math.round(
 															enrollments.reduce(
@@ -667,15 +667,15 @@ export default function ProfessorProgressPage() {
 								</CardContent>
 							</Card>
 
-							<Card className="bg-gray-800 border-gray-700">
+							<Card className="bg-card border-border">
 								<CardContent className="p-6">
 									<div className="flex items-center">
 										<Award className="h-8 w-8 text-purple-500" />
 										<div className="ml-4">
-											<p className="text-sm font-medium text-gray-300">
+											<p className="text-sm font-medium text-muted-foreground">
 												Pass Rate
 											</p>
-											<p className="text-2xl font-bold text-white">
+											<p className="text-2xl font-bold text-card-foreground">
 												{enrollments.length > 0
 													? Math.round(
 															(enrollments.filter(
@@ -728,9 +728,9 @@ export default function ProfessorProgressPage() {
 							<TabsContent value="overview" className="space-y-6">
 								<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 									{/* Grade Distribution */}
-									<Card className="bg-gray-800 border-gray-700">
+									<Card className="bg-card border-border">
 										<CardHeader>
-											<CardTitle className="text-white">
+											<CardTitle className="text-card-foreground">
 												Grade Distribution
 											</CardTitle>
 										</CardHeader>
@@ -776,9 +776,9 @@ export default function ProfessorProgressPage() {
 									</Card>
 
 									{/* Assessment Performance */}
-									<Card className="bg-gray-800 border-gray-700">
+									<Card className="bg-card border-border">
 										<CardHeader>
-											<CardTitle className="text-white">
+											<CardTitle className="text-card-foreground">
 												Assessment Performance
 											</CardTitle>
 										</CardHeader>
@@ -820,9 +820,9 @@ export default function ProfessorProgressPage() {
 							</TabsContent>
 
 							<TabsContent value="students" className="space-y-6">
-								<Card className="bg-gray-800 border-gray-700">
+								<Card className="bg-card border-border">
 									<CardHeader>
-										<CardTitle className="text-white">
+										<CardTitle className="text-card-foreground">
 											Student Performance
 										</CardTitle>
 									</CardHeader>
@@ -850,19 +850,19 @@ export default function ProfessorProgressPage() {
 												return (
 													<Card
 														key={enrollment.id}
-														className="bg-gray-700 border-gray-600"
+														className="bg-card border-border"
 													>
 														<CardContent className="p-4">
 															<div className="flex justify-between items-start">
 																<div>
-																	<h4 className="font-semibold text-white">
+																	<h4 className="font-semibold text-card-foreground">
 																		{
 																			enrollment
 																				.student
 																				.name
 																		}
 																	</h4>
-																	<p className="text-gray-300 text-sm">
+																	<p className="text-muted-foreground text-sm">
 																		{
 																			enrollment
 																				.student
@@ -884,7 +884,7 @@ export default function ProfessorProgressPage() {
 																	</p>
 																</div>
 																<div className="text-right">
-																	<p className="text-lg font-bold text-white">
+																	<p className="text-lg font-bold text-card-foreground">
 																		{
 																			averageScore
 																		}
@@ -896,8 +896,8 @@ export default function ProfessorProgressPage() {
 																			className={
 																				gradeAggregate.passFail ===
 																				"pass"
-																					? "bg-green-600 text-white"
-																					: "bg-red-600 text-white"
+																					? "bg-green-600 text-card-foreground"
+																					: "bg-red-600 text-card-foreground"
 																			}
 																		>
 																			{
@@ -925,9 +925,9 @@ export default function ProfessorProgressPage() {
 								value="assessments"
 								className="space-y-6"
 							>
-								<Card className="bg-gray-800 border-gray-700">
+								<Card className="bg-card border-border">
 									<CardHeader>
-										<CardTitle className="text-white">
+										<CardTitle className="text-card-foreground">
 											Assessment Details
 										</CardTitle>
 									</CardHeader>
@@ -976,19 +976,19 @@ export default function ProfessorProgressPage() {
 												return (
 													<Card
 														key={assessment.id}
-														className="bg-gray-700 border-gray-600"
+														className="bg-card border-border"
 													>
 														<CardContent className="p-4">
 															<div className="flex justify-between items-start">
 																<div>
-																	<h4 className="font-semibold text-white">
+																	<h4 className="font-semibold text-card-foreground">
 																		{
 																			assessment
 																				.assessmentTemplate
 																				.name
 																		}
 																	</h4>
-																	<p className="text-gray-300 text-sm">
+																	<p className="text-muted-foreground text-sm">
 																		{
 																			assessment.title
 																		}
@@ -1016,7 +1016,7 @@ export default function ProfessorProgressPage() {
 																	</p>
 																</div>
 																<div className="text-right">
-																	<p className="text-lg font-bold text-white">
+																	<p className="text-lg font-bold text-card-foreground">
 																		{
 																			averageScore
 																		}
@@ -1031,7 +1031,7 @@ export default function ProfessorProgressPage() {
 																	<div className="flex gap-2">
 																		<Badge
 																			variant="secondary"
-																			className="bg-blue-600 text-white"
+																			className="bg-blue-600 text-card-foreground"
 																		>
 																			{
 																				assessment.status
@@ -1040,14 +1040,14 @@ export default function ProfessorProgressPage() {
 																		{assessment.isCompleted ? (
 																			<Badge
 																				variant="secondary"
-																				className="bg-green-600 text-white"
+																				className="bg-green-600 text-card-foreground"
 																			>
 																				completed
 																			</Badge>
 																		) : (
 																			<Badge
 																				variant="secondary"
-																				className="bg-yellow-600 text-white"
+																				className="bg-yellow-600 text-card-foreground"
 																			>
 																				not
 																				completed
