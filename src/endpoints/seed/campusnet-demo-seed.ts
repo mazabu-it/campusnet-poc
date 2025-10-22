@@ -1287,6 +1287,11 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// Introduction to Programming Assessments
 		for (const template of introProgrammingTemplates.docs) {
+			// Mark exam and project assessments as completed
+			const isCompleted =
+				template.assessmentType === "exam" ||
+				template.assessmentType === "project";
+
 			const assessment = await payload.create({
 				collection: "assessments",
 				data: {
@@ -1301,6 +1306,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					endTime: "12:00",
 					location: "Salle de cours INFO101",
 					status: "published",
+					isCompleted, // Mark as completed for graded assessments
 					submissionWindow: {
 						opensAt: faker.date
 							.past({ years: 1 })
@@ -1333,6 +1339,11 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// Data Structures Assessments
 		for (const template of dataStructuresTemplates.docs) {
+			// Mark exam and project assessments as completed
+			const isCompleted =
+				template.assessmentType === "exam" ||
+				template.assessmentType === "project";
+
 			const assessment = await payload.create({
 				collection: "assessments",
 				data: {
@@ -1347,6 +1358,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					endTime: "17:00",
 					location: "Salle de cours INFO201",
 					status: "published",
+					isCompleted, // Mark as completed for graded assessments
 					submissionWindow: {
 						opensAt: faker.date
 							.past({ years: 1 })
@@ -1379,6 +1391,11 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// Software Engineering Assessments
 		for (const template of softwareEngineeringTemplates.docs) {
+			// Mark exam and project assessments as completed
+			const isCompleted =
+				template.assessmentType === "exam" ||
+				template.assessmentType === "project";
+
 			const assessment = await payload.create({
 				collection: "assessments",
 				data: {
@@ -1393,6 +1410,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					endTime: "13:00",
 					location: "Salle de cours INFO301",
 					status: "published",
+					isCompleted, // Mark as completed for graded assessments
 					submissionWindow: {
 						opensAt: faker.date
 							.past({ years: 1 })
