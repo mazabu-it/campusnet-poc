@@ -156,10 +156,9 @@ export const FormBlock: React.FC<
 						<form id={formID} onSubmit={handleSubmit(onSubmit)}>
 							<div className="mb-4 last:mb-0">
 								{formFromProps?.fields?.map((field, index) => {
-									const Field: React.FC<unknown> =
-										fields?.[
-											field.blockType as keyof typeof fields
-										];
+									const Field = fields?.[
+										field.blockType as keyof typeof fields
+									] as React.ComponentType<any>;
 									if (Field) {
 										return (
 											<div
