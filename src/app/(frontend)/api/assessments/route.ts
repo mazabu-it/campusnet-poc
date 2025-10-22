@@ -18,9 +18,11 @@ export async function GET(request: NextRequest) {
 
 		// Get query parameters
 		const { searchParams } = new URL(request.url);
-		const courseInstanceId = searchParams.get(
-			"where[assessmentTemplate.courseInstance][equals]",
-		);
+		const courseInstanceId =
+			searchParams.get("courseInstanceId") ||
+			searchParams.get(
+				"where[assessmentTemplate.courseInstance][equals]",
+			);
 
 		let whereClause = {};
 		if (courseInstanceId) {

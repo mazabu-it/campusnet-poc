@@ -4,7 +4,7 @@ import { getPayload } from "payload";
 
 export async function PATCH(
 	request: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
 		const payload = await getPayload({ config });
@@ -20,7 +20,7 @@ export async function PATCH(
 		}
 
 		const body = await request.json();
-		const assessmentId = params.id;
+		const { id: assessmentId } = await params;
 
 		const result = await payload.update({
 			collection: "assessments",

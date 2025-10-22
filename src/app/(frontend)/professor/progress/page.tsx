@@ -123,7 +123,9 @@ export default function ProfessorProgressPage() {
 	// Fetch course instances for the professor
 	const fetchCourseInstances = useCallback(async () => {
 		try {
-			const response = await fetch("/api/course-instances");
+			const response = await fetch("/api/course-instances", {
+				credentials: "include",
+			});
 			if (!response.ok)
 				throw new Error("Failed to fetch course instances");
 			const data = await response.json();
@@ -139,6 +141,9 @@ export default function ProfessorProgressPage() {
 		try {
 			const response = await fetch(
 				`/api/enrollments?courseInstanceId=${courseInstanceId}`,
+				{
+					credentials: "include",
+				},
 			);
 			if (!response.ok) throw new Error("Failed to fetch enrollments");
 			const data = await response.json();
@@ -154,6 +159,9 @@ export default function ProfessorProgressPage() {
 		try {
 			const response = await fetch(
 				`/api/assessments?courseInstanceId=${courseInstanceId}`,
+				{
+					credentials: "include",
+				},
 			);
 			if (!response.ok) throw new Error("Failed to fetch assessments");
 			const data = await response.json();
@@ -169,9 +177,13 @@ export default function ProfessorProgressPage() {
 		try {
 			const response = await fetch(
 				`/api/scores?courseInstanceId=${courseInstanceId}`,
+				{
+					credentials: "include",
+				},
 			);
 			if (!response.ok) throw new Error("Failed to fetch scores");
 			const data = await response.json();
+			console.log(`Fetched ${data.docs?.length || 0} scores:`, data.docs);
 			setScores(data.docs || []);
 		} catch (err) {
 			console.error("Error fetching scores:", err);
@@ -185,6 +197,9 @@ export default function ProfessorProgressPage() {
 			try {
 				const response = await fetch(
 					`/api/grade-aggregates?courseInstanceId=${courseInstanceId}`,
+					{
+						credentials: "include",
+					},
 				);
 				if (!response.ok)
 					throw new Error("Failed to fetch grade aggregates");
@@ -245,12 +260,22 @@ export default function ProfessorProgressPage() {
 		if (typeof score.student === "string") {
 			return score.student;
 		}
-		return (score.student as any)?.id || "";
+		if (typeof score.student === "number") {
+			return String(score.student);
+		}
+		return String((score.student as any)?.id || "");
 	};
 
 	// Get scores for a specific student
 	const getStudentScores = (studentId: string): Score[] => {
-		return scores.filter((score) => getScoreStudentId(score) === studentId);
+		const filtered = scores.filter(
+			(score) => getScoreStudentId(score) === String(studentId),
+		);
+		console.log(
+			`getStudentScores(${studentId}): found ${filtered.length} scores`,
+			filtered,
+		);
+		return filtered;
 	};
 
 	// Get grade aggregate for a specific student
@@ -281,6 +306,15 @@ export default function ProfessorProgressPage() {
 			return assessment?.isCompleted === true;
 		});
 
+		console.log(`Student ${studentId}:`, {
+			totalScores: studentScores.length,
+			completedScores: completedScores.length,
+			assessments: assessments.map((a) => ({
+				id: a.id,
+				isCompleted: a.isCompleted,
+			})),
+		});
+
 		if (completedScores.length === 0) return 0;
 
 		// Calculate weighted score
@@ -293,15 +327,35 @@ export default function ProfessorProgressPage() {
 			);
 			if (assessment?.assessmentTemplate?.weightPercent) {
 				const weight = assessment.assessmentTemplate.weightPercent;
-				const scorePercentage = score.percentage || 0;
+				const maxScore =
+					assessment.assessmentTemplate.maxScore ||
+					score.maxValue ||
+					100;
+				const scoreValue = score.value || 0;
+				// Calculate percentage from value and max score
+				const scorePercentage =
+					maxScore > 0 ? (scoreValue / maxScore) * 100 : 0;
 				totalWeightedScore += (scorePercentage * weight) / 100;
 				totalWeight += weight;
+				console.log(`  Score (raw):`, score);
+				console.log(`  Score (calculated):`, {
+					assessment: assessment.title,
+					scoreValue,
+					maxScore,
+					scorePercentage: Math.round(scorePercentage * 10) / 10,
+					weight,
+					contribution: (scorePercentage * weight) / 100,
+				});
 			}
 		});
 
 		// Return weighted score as a percentage of total completed weight
 		if (totalWeight === 0) return 0;
-		return Math.round((totalWeightedScore / totalWeight) * 100);
+		const finalScore = Math.round((totalWeightedScore / totalWeight) * 100);
+		console.log(
+			`  Final: ${totalWeightedScore}/${totalWeight} = ${finalScore}%`,
+		);
+		return finalScore;
 	};
 
 	// Get grade distribution data
@@ -743,17 +797,22 @@ export default function ProfessorProgressPage() {
 									<CardContent>
 										<div className="space-y-4">
 											{enrollments.map((enrollment) => {
+												// Extract student ID properly
+												const studentId =
+													typeof enrollment.student ===
+													"string"
+														? enrollment.student
+														: enrollment.student.id;
+
 												const studentScores =
-													getStudentScores(
-														enrollment.student.id,
-													);
+													getStudentScores(studentId);
 												const averageScore =
 													calculateAverageScore(
-														enrollment.student.id,
+														studentId,
 													);
 												const gradeAggregate =
 													getStudentGradeAggregate(
-														enrollment.student.id,
+														studentId,
 													);
 
 												return (
@@ -921,14 +980,32 @@ export default function ProfessorProgressPage() {
 																		}{" "}
 																		students
 																	</p>
-																	<Badge
-																		variant="secondary"
-																		className="bg-blue-600 text-white"
-																	>
-																		{
-																			assessment.status
-																		}
-																	</Badge>
+																	<div className="flex gap-2">
+																		<Badge
+																			variant="secondary"
+																			className="bg-blue-600 text-white"
+																		>
+																			{
+																				assessment.status
+																			}
+																		</Badge>
+																		{assessment.isCompleted ? (
+																			<Badge
+																				variant="secondary"
+																				className="bg-green-600 text-white"
+																			>
+																				completed
+																			</Badge>
+																		) : (
+																			<Badge
+																				variant="secondary"
+																				className="bg-yellow-600 text-white"
+																			>
+																				not
+																				completed
+																			</Badge>
+																		)}
+																	</div>
 																</div>
 															</div>
 														</CardContent>
