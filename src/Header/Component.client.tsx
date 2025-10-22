@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import type { Header } from "@/payload-types";
 import { useHeaderTheme } from "@/providers/HeaderTheme";
-import { useAppStore } from "@/stores/app-store";
+import { useAppStore, useUserStore } from "@/stores/app-store";
 import { cn } from "@/utilities/ui";
 
 interface HeaderClientProps {
@@ -26,6 +26,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 	const { headerTheme, setHeaderTheme } = useHeaderTheme();
 	const pathname = usePathname();
 	const { user } = useAppStore();
+	const { logout: logoutStore } = useUserStore();
 
 	useEffect(() => {
 		setHeaderTheme(null);
@@ -53,6 +54,27 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 			return "/professor";
 		}
 		return "/dashboard";
+	};
+
+	// Handle logout
+	const handleLogout = async () => {
+		try {
+			const response = await fetch("/api/users/logout", {
+				method: "POST",
+				credentials: "include",
+			});
+
+			if (response.ok) {
+				// Clear user from store
+				logoutStore();
+				// Redirect to home page
+				window.location.href = "/";
+			} else {
+				console.error("Logout failed:", await response.text());
+			}
+		} catch (error) {
+			console.error("Logout error:", error);
+		}
 	};
 
 	const navigationItems = [
@@ -119,21 +141,37 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 
 					{/* Action Buttons */}
 					<div className="hidden lg:flex items-center space-x-3">
-						<Button variant="ghost" size="sm" asChild>
-							<Link
-								href="/login"
-								className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+						{user.user ? (
+							<>
+								<div className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400">
+									<Icon
+										icon="lucide:user"
+										className="w-4 h-4"
+									/>
+									<span>{user.user.email}</span>
+								</div>
+								<Button
+									variant="ghost"
+									size="sm"
+									onClick={handleLogout}
+									className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+								>
+									<Icon
+										icon="lucide:log-out"
+										className="w-4 h-4 mr-2"
+									/>
+									Sign out
+								</Button>
+							</>
+						) : (
+							<Button
+								size="sm"
+								asChild
+								className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100"
 							>
-								Sign in
-							</Link>
-						</Button>
-						<Button
-							size="sm"
-							asChild
-							className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100"
-						>
-							<Link href="/registration">Get started</Link>
-						</Button>
+								<Link href="/login">Sign in</Link>
+							</Button>
+						)}
 					</div>
 
 					{/* Mobile Menu */}
@@ -199,38 +237,53 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 								</nav>
 
 								<div className="pt-4 border-t space-y-3">
-									<Button
-										variant="outline"
-										className="w-full"
-										asChild
-									>
-										<Link
-											href="/login"
-											onClick={() =>
-												setIsMobileMenuOpen(false)
-											}
-										>
-											<Icon
-												icon="lucide:log-in"
-												className="w-4 h-4 mr-2"
-											/>
-											Login
-										</Link>
-									</Button>
-									<Button className="w-full" asChild>
-										<Link
-											href="/registration"
-											onClick={() =>
-												setIsMobileMenuOpen(false)
-											}
-										>
-											<Icon
-												icon="lucide:user-plus"
-												className="w-4 h-4 mr-2"
-											/>
-											Apply Now
-										</Link>
-									</Button>
+									{user.user ? (
+										<>
+											<div className="flex items-center space-x-2 px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+												<Icon
+													icon="lucide:user"
+													className="w-5 h-5 text-gray-600 dark:text-gray-400"
+												/>
+												<div className="flex-1 min-w-0">
+													<p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+														{user.user.email}
+													</p>
+													<p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+														{user.user.role}
+													</p>
+												</div>
+											</div>
+											<Button
+												variant="outline"
+												className="w-full"
+												onClick={() => {
+													setIsMobileMenuOpen(false);
+													handleLogout();
+												}}
+											>
+												<Icon
+													icon="lucide:log-out"
+													className="w-4 h-4 mr-2"
+												/>
+												Sign out
+											</Button>
+										</>
+									) : (
+										<Button className="w-full" asChild>
+											<Link
+												href="/login"
+												onClick={() =>
+													setIsMobileMenuOpen(false)
+												}
+											>
+												<Icon
+													icon="lucide:log-in"
+													className="w-4 h-4 mr-2"
+												/>
+												Sign in
+											</Link>
+										</Button>
+									)}
 								</div>
 							</div>
 						</SheetContent>
