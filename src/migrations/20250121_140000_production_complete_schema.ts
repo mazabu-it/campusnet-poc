@@ -427,13 +427,7 @@ export async function up({
    END $$;
   `);
 
-	await db.execute(sql`
-   DO $$ BEGIN
-     ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_student_id_fk" FOREIGN KEY ("student_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-   EXCEPTION
-     WHEN duplicate_object THEN null;
-   END $$;
-  `);
+	// Skipping FK to users: created later by Payload's users collection
 
 	await db.execute(sql`
    DO $$ BEGIN
@@ -443,13 +437,7 @@ export async function up({
    END $$;
   `);
 
-	await db.execute(sql`
-   DO $$ BEGIN
-     ALTER TABLE "scores" ADD CONSTRAINT "scores_student_id_fk" FOREIGN KEY ("student_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-   EXCEPTION
-     WHEN duplicate_object THEN null;
-   END $$;
-  `);
+	// Skipping FK to users: created later by Payload's users collection
 
 	await db.execute(sql`
    DO $$ BEGIN
@@ -459,13 +447,7 @@ export async function up({
    END $$;
   `);
 
-	await db.execute(sql`
-   DO $$ BEGIN
-     ALTER TABLE "scores" ADD CONSTRAINT "scores_graded_by_id_fk" FOREIGN KEY ("graded_by_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-   EXCEPTION
-     WHEN duplicate_object THEN null;
-   END $$;
-  `);
+	// Skipping FK to users: created later by Payload's users collection
 
 	await db.execute(sql`
    DO $$ BEGIN
@@ -475,13 +457,7 @@ export async function up({
    END $$;
   `);
 
-	await db.execute(sql`
-   DO $$ BEGIN
-     ALTER TABLE "grade_aggregates" ADD CONSTRAINT "grade_aggregates_calculated_by_id_fk" FOREIGN KEY ("calculated_by_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-   EXCEPTION
-     WHEN duplicate_object THEN null;
-   END $$;
-  `);
+	// Skipping FK to users: created later by Payload's users collection
 
 	await db.execute(sql`
    DO $$ BEGIN
@@ -516,14 +492,24 @@ export async function down({
 	await db.execute(sql`DROP TABLE IF EXISTS "universities"`);
 
 	// Drop enum types
-	await db.execute(sql`DROP TYPE IF EXISTS "enum_grading_scales_calculation_method"`);
-	await db.execute(sql`DROP TYPE IF EXISTS "enum_grade_aggregates_pass_fail"`);
+	await db.execute(
+		sql`DROP TYPE IF EXISTS "enum_grading_scales_calculation_method"`,
+	);
+	await db.execute(
+		sql`DROP TYPE IF EXISTS "enum_grade_aggregates_pass_fail"`,
+	);
 	await db.execute(sql`DROP TYPE IF EXISTS "enum_enrollments_status"`);
 	await db.execute(sql`DROP TYPE IF EXISTS "enum_assessments_status"`);
-	await db.execute(sql`DROP TYPE IF EXISTS "enum_assessment_templates_assessment_type"`);
-	await db.execute(sql`DROP TYPE IF EXISTS "enum_universities_configuration_rounding_rule"`);
+	await db.execute(
+		sql`DROP TYPE IF EXISTS "enum_assessment_templates_assessment_type"`,
+	);
+	await db.execute(
+		sql`DROP TYPE IF EXISTS "enum_universities_configuration_rounding_rule"`,
+	);
 	await db.execute(sql`DROP TYPE IF EXISTS "enum_universities_locale"`);
 	await db.execute(sql`DROP TYPE IF EXISTS "enum_users_permissions_scope"`);
-	await db.execute(sql`DROP TYPE IF EXISTS "enum_users_academic_info_status"`);
+	await db.execute(
+		sql`DROP TYPE IF EXISTS "enum_users_academic_info_status"`,
+	);
 	await db.execute(sql`DROP TYPE IF EXISTS "enum_users_role"`);
 }
