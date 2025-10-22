@@ -99,7 +99,9 @@ export default function ProfessorGradingPage() {
 	// Fetch assessments
 	const fetchAssessments = useCallback(async () => {
 		try {
-			const response = await fetch("/api/assessments");
+			const response = await fetch("/api/assessments", {
+				credentials: "include",
+			});
 			if (!response.ok) throw new Error("Failed to fetch assessments");
 			const data = await response.json();
 			setAssessments(data.docs || []);
@@ -114,6 +116,7 @@ export default function ProfessorGradingPage() {
 		try {
 			const response = await fetch(
 				`/api/enrollments?courseInstanceId=${courseInstanceId}`,
+				{ credentials: "include" },
 			);
 			if (!response.ok) throw new Error("Failed to fetch enrollments");
 			const data = await response.json();
@@ -129,6 +132,7 @@ export default function ProfessorGradingPage() {
 		try {
 			const response = await fetch(
 				`/api/scores?where[assessment][equals]=${assessmentId}`,
+				{ credentials: "include" },
 			);
 			if (!response.ok) throw new Error("Failed to fetch scores");
 			const data = await response.json();
@@ -230,7 +234,28 @@ export default function ProfessorGradingPage() {
 					const response = await fetch("/api/scores", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(scoreData),
+						credentials: "include",
+						body: JSON.stringify({
+							assessment: Number(
+								selectedAssessment?.id ?? selectedAssessment,
+							),
+							student: Number(score.student),
+							value: scoreData.value,
+							maxValue: scoreData.maxValue,
+							percentage: scoreData.percentage,
+							finalValue: scoreData.value,
+							gradedBy: Number((user as any)?.id ?? 0),
+							gradedAt: new Date().toISOString(),
+							feedback: scoreData.feedback,
+							notes: scoreData.notes ?? "",
+							isLate: Boolean(scoreData.isLate),
+							latePenaltyApplied: Number(
+								scoreData.latePenaltyApplied || 0,
+							),
+							isExcused: Boolean(
+								(scoreData as any).isExcused || false,
+							),
+						}),
 					});
 					if (!response.ok)
 						throw new Error(
@@ -406,19 +431,29 @@ export default function ProfessorGradingPage() {
 											Grading: {selectedAssessment.title}
 										</CardTitle>
 										<p className="text-gray-300">
-											{
+											{selectedAssessment
+												?.assessmentTemplate
+												?.courseInstance
+												?.courseVariation?.course
+												?.code ??
 												selectedAssessment
-													.assessmentTemplate
-													.courseInstance
-													.courseVariation.course.code
-											}{" "}
+													?.assessmentTemplate
+													?.courseInstance
+													?.courseVariation
+													?.codeVariant ??
+												"N/A"}{" "}
 											-{" "}
-											{
+											{selectedAssessment
+												?.assessmentTemplate
+												?.courseInstance
+												?.courseVariation?.course
+												?.name ??
 												selectedAssessment
-													.assessmentTemplate
-													.courseInstance
-													.courseVariation.course.name
-											}
+													?.assessmentTemplate
+													?.courseInstance
+													?.courseVariation
+													?.titleVariant ??
+												"Course name not available"}
 										</p>
 										<p className="text-gray-400 text-sm">
 											Max Score:{" "}

@@ -45,11 +45,24 @@ export async function POST(request: Request) {
 		for (const enrollment of enrollments) {
 			try {
 				// Get all assessments for this course instance
+				const courseInstanceId =
+					typeof enrollment.courseInstance === "string"
+						? enrollment.courseInstance
+						: enrollment.courseInstance.id;
+
+				// Extract student ID correctly
+				const studentId =
+					typeof enrollment.student === "string"
+						? enrollment.student
+						: typeof enrollment.student === "number"
+							? enrollment.student
+							: enrollment.student?.id;
+
 				const assessmentsResult = await payload.find({
 					collection: "assessments",
 					where: {
 						"assessmentTemplate.courseInstance": {
-							equals: enrollment.courseInstance,
+							equals: courseInstanceId,
 						},
 					},
 					depth: 2,
@@ -60,7 +73,7 @@ export async function POST(request: Request) {
 					collection: "scores",
 					where: {
 						and: [
-							{ student: { equals: enrollment.student } },
+							{ student: { equals: studentId } },
 							{
 								assessment: {
 									in: assessmentsResult.docs.map((a) => a.id),

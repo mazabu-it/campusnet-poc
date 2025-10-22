@@ -66,6 +66,16 @@ export const Assessment: CollectionConfig = {
 			required: true,
 		},
 		{
+			name: "isCompleted",
+			type: "checkbox",
+			defaultValue: false,
+			admin: {
+				description:
+					"Mark as completed to include in final grade calculations. Uncheck for assessments that haven't been graded yet.",
+				position: "sidebar",
+			},
+		},
+		{
 			name: "submissionWindow",
 			type: "group",
 			fields: [

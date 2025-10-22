@@ -770,46 +770,62 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// Assign professors to course instances
 		console.log("Assigning professors to course instances...");
+		console.log(`Number of professors created: ${professors.length}`);
 
 		// Update course instances with professor assignment (including test professor)
-		const professorIds = [professors[0].id];
-		if (testProfessor) {
+		const professorIds = [];
+		if (professors[0]?.id) {
+			professorIds.push(professors[0].id);
+		}
+		if (testProfessor?.id) {
 			professorIds.push(testProfessor.id);
 		}
 
-		await payload.update({
-			collection: "course-instances",
-			id: introProgrammingInstance.id,
-			data: {
-				professors: professorIds,
-			},
-		});
+		if (professorIds.length > 0) {
+			await payload.update({
+				collection: "course-instances",
+				id: introProgrammingInstance.id,
+				data: {
+					professors: professorIds,
+				},
+			});
+		}
 
-		const professorIds2 = [professors[1].id];
-		if (testProfessor) {
+		const professorIds2 = [];
+		if (professors[1]?.id) {
+			professorIds2.push(professors[1].id);
+		}
+		if (testProfessor?.id) {
 			professorIds2.push(testProfessor.id);
 		}
 
-		await payload.update({
-			collection: "course-instances",
-			id: dataStructuresInstance.id,
-			data: {
-				professors: professorIds2,
-			},
-		});
+		if (professorIds2.length > 0) {
+			await payload.update({
+				collection: "course-instances",
+				id: dataStructuresInstance.id,
+				data: {
+					professors: professorIds2,
+				},
+			});
+		}
 
-		const professorIds3 = [professors[2].id];
-		if (testProfessor) {
+		const professorIds3 = [];
+		if (professors[2]?.id) {
+			professorIds3.push(professors[2].id);
+		}
+		if (testProfessor?.id) {
 			professorIds3.push(testProfessor.id);
 		}
 
-		await payload.update({
-			collection: "course-instances",
-			id: softwareEngineeringInstance.id,
-			data: {
-				professors: professorIds3,
-			},
-		});
+		if (professorIds3.length > 0) {
+			await payload.update({
+				collection: "course-instances",
+				id: softwareEngineeringInstance.id,
+				data: {
+					professors: professorIds3,
+				},
+			});
+		}
 
 		console.log(
 			"Course instances created and professors assigned successfully!",
@@ -826,7 +842,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					"Midterm examination covering programming fundamentals",
 				weightPercent: 30,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "exam",
 				instructions:
@@ -860,7 +876,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				description: "Comprehensive final examination",
 				weightPercent: 40,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "exam",
 				instructions:
@@ -877,7 +893,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				description: "Individual programming project",
 				weightPercent: 30,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "project",
 				instructions:
@@ -894,7 +910,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				description: "Data structures and algorithm analysis",
 				weightPercent: 35,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "exam",
 				instructions:
@@ -911,7 +927,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				description: "Comprehensive final examination",
 				weightPercent: 45,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "exam",
 				instructions:
@@ -928,7 +944,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				description: "Written assignment on algorithm complexity",
 				weightPercent: 20,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "assignment",
 				instructions:
@@ -947,7 +963,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					"Software engineering principles and methodologies",
 				weightPercent: 30,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "exam",
 				instructions:
@@ -964,7 +980,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				description: "Group software development project",
 				weightPercent: 50,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "project",
 				instructions:
@@ -981,7 +997,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				description: "Comprehensive final examination",
 				weightPercent: 20,
 				minScore: 0,
-				maxScore: 100,
+				maxScore: 20,
 				isOptional: false,
 				assessmentType: "exam",
 				instructions:
@@ -1004,6 +1020,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				endTime: "11:00",
 				location: "A101",
 				status: "published",
+				isCompleted: true, // Mark as completed since scores have been entered
 				submissionWindow: {
 					opensAt: "2024-10-15T09:00:00.000Z",
 					closesAt: "2024-10-15T11:00:00.000Z",
@@ -1088,6 +1105,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				endTime: "16:00",
 				location: "A205",
 				status: "published",
+				isCompleted: true, // Mark as completed since scores have been entered
 				submissionWindow: {
 					opensAt: "2024-10-20T14:00:00.000Z",
 					closesAt: "2024-10-20T16:00:00.000Z",
@@ -1537,7 +1555,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							}),
 							latePenaltyApplied: 0,
 							finalValue: scoreValue,
-							gradedBy: professors[0].id,
+							gradedBy: professors[0]?.id || testProfessor?.id,
 							gradedAt: faker.date
 								.past({ years: 1 })
 								.toISOString(),
@@ -1691,8 +1709,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			await payload.create({
 				collection: "grade-aggregates",
 				data: {
-					enrollment: enrollments[0].id,
-					gradeTitle: `${students[0].name} - Sample Grade`,
+					enrollment: enrollments[0]?.id,
+					gradeTitle: `${students[0]?.name || "Sample Student"} - Sample Grade`,
 					finalNumeric: faker.number.int({ min: 70, max: 100 }),
 					finalLetter: faker.helpers.arrayElement([
 						"A",
@@ -1709,7 +1727,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					calculationMethod: "weighted-average",
 					decisionNotes: "Sample grade aggregate for demonstration",
 					calculatedAt: new Date().toISOString(),
-					calculatedBy: professors[0].id,
+					calculatedBy: professors[0]?.id || testProfessor?.id,
 					isPublished: true,
 					publishedAt: new Date().toISOString(),
 					assessmentBreakdown: [],

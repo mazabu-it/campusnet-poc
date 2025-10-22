@@ -41,12 +41,27 @@ export class GradeCalculationEngine {
 			throw new Error("Enrollment not found");
 		}
 
+		// Extract IDs properly
+		const courseInstanceId =
+			typeof enrollment.courseInstance === "string"
+				? enrollment.courseInstance
+				: typeof enrollment.courseInstance === "number"
+					? enrollment.courseInstance
+					: enrollment.courseInstance?.id;
+
+		const studentId =
+			typeof enrollment.student === "string"
+				? enrollment.student
+				: typeof enrollment.student === "number"
+					? enrollment.student
+					: enrollment.student?.id;
+
 		// Get all assessments for this course instance
 		const assessments = await this.req.payload.find({
 			collection: "assessments",
 			where: {
 				"assessmentTemplate.courseInstance": {
-					equals: enrollment.courseInstance,
+					equals: courseInstanceId,
 				},
 				status: {
 					in: ["locked", "published"],
@@ -60,7 +75,7 @@ export class GradeCalculationEngine {
 			collection: "assessment-templates",
 			where: {
 				courseInstance: {
-					equals: enrollment.courseInstance,
+					equals: courseInstanceId,
 				},
 			},
 		});
@@ -70,7 +85,7 @@ export class GradeCalculationEngine {
 			collection: "scores",
 			where: {
 				student: {
-					equals: enrollment.student,
+					equals: studentId,
 				},
 				assessment: {
 					in: assessments.docs.map((a) => a.id),

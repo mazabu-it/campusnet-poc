@@ -84,9 +84,43 @@ export async function POST(request: NextRequest) {
 		}
 
 		const body = await request.json();
+
+		// Log the incoming data for debugging
+		console.log("POST /api/scores - Incoming data:", {
+			assessment: body.assessment,
+			student: body.student,
+			gradedBy: user.user.id,
+			assessmentType: typeof body.assessment,
+			studentType: typeof body.student,
+			gradedByType: typeof user.user.id,
+		});
+
+		// Verify the assessment exists
+		const assessmentCheck = await payload.findByID({
+			collection: "assessments",
+			id: body.assessment,
+		});
+		console.log(
+			"Assessment exists:",
+			!!assessmentCheck,
+			"ID:",
+			body.assessment,
+		);
+
+		// Verify the student exists
+		const studentCheck = await payload.findByID({
+			collection: "users",
+			id: body.student,
+		});
+		console.log("Student exists:", !!studentCheck, "ID:", body.student);
+
+		// Convert string IDs to numbers for Payload relationships
+		// Payload expects numeric IDs when the database ID field is numeric
 		const scoreData = {
 			...body,
-			gradedBy: user.user.id,
+			assessment: Number(body.assessment),
+			student: Number(body.student),
+			gradedBy: Number(user.user.id),
 			gradedAt: new Date().toISOString(),
 		};
 
@@ -99,7 +133,7 @@ export async function POST(request: NextRequest) {
 	} catch (error) {
 		console.error("Create score error:", error);
 		return NextResponse.json(
-			{ message: "Failed to create score" },
+			{ message: "Failed to create score", error: String(error) },
 			{ status: 500 },
 		);
 	}
@@ -130,15 +164,17 @@ export async function PATCH(request: NextRequest) {
 		}
 
 		const body = await request.json();
+
+		// Convert gradedBy to number for Payload relationships
 		const scoreData = {
 			...body,
-			gradedBy: user.user.id,
+			gradedBy: Number(user.user.id),
 			gradedAt: new Date().toISOString(),
 		};
 
 		const result = await payload.update({
 			collection: "scores",
-			id: scoreId,
+			id: Number(scoreId),
 			data: scoreData,
 		});
 

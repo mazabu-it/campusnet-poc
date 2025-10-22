@@ -1555,6 +1555,10 @@ export interface Assessment {
   endTime?: string | null;
   location?: string | null;
   status: 'draft' | 'open' | 'locked' | 'published';
+  /**
+   * Mark as completed to include in final grade calculations. Uncheck for assessments that haven't been graded yet.
+   */
+  isCompleted?: boolean | null;
   submissionWindow?: {
     /**
      * When students can start submitting
@@ -2858,6 +2862,7 @@ export interface AssessmentsSelect<T extends boolean = true> {
   endTime?: T;
   location?: T;
   status?: T;
+  isCompleted?: T;
   submissionWindow?:
     | T
     | {

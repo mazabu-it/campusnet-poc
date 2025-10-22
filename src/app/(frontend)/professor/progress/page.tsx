@@ -5,6 +5,7 @@ import {
 	Award,
 	BookOpen,
 	Loader2,
+	RefreshCw,
 	TrendingUp,
 	Users,
 } from "lucide-react";
@@ -14,8 +15,6 @@ import {
 	BarChart,
 	CartesianGrid,
 	Cell,
-	Line,
-	LineChart,
 	Pie,
 	PieChart,
 	ResponsiveContainer,
@@ -70,6 +69,7 @@ interface Assessment {
 	description: string;
 	date: string;
 	status: string;
+	isCompleted?: boolean;
 	assessmentTemplate: {
 		id: string;
 		name: string;
@@ -198,6 +198,20 @@ export default function ProfessorProgressPage() {
 		[],
 	);
 
+	// Handle course instance selection
+	const handleCourseInstanceSelect = useCallback(
+		async (courseInstance: CourseInstance) => {
+			setSelectedCourseInstance(courseInstance);
+			await Promise.all([
+				fetchEnrollments(courseInstance.id),
+				fetchAssessments(courseInstance.id),
+				fetchScores(courseInstance.id),
+				fetchGradeAggregates(courseInstance.id),
+			]);
+		},
+		[fetchEnrollments, fetchAssessments, fetchScores, fetchGradeAggregates],
+	);
+
 	// Load initial data
 	useEffect(() => {
 		const loadData = async () => {
@@ -208,22 +222,35 @@ export default function ProfessorProgressPage() {
 		loadData();
 	}, [fetchCourseInstances]);
 
-	// Handle course instance selection
-	const handleCourseInstanceSelect = async (
-		courseInstance: CourseInstance,
-	) => {
-		setSelectedCourseInstance(courseInstance);
-		await Promise.all([
-			fetchEnrollments(courseInstance.id),
-			fetchAssessments(courseInstance.id),
-			fetchScores(courseInstance.id),
-			fetchGradeAggregates(courseInstance.id),
-		]);
+	// Refresh data when component becomes visible (e.g., when navigating back)
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			if (!document.hidden && selectedCourseInstance) {
+				// Refresh data when page becomes visible
+				handleCourseInstanceSelect(selectedCourseInstance);
+			}
+		};
+
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+		return () => {
+			document.removeEventListener(
+				"visibilitychange",
+				handleVisibilityChange,
+			);
+		};
+	}, [selectedCourseInstance, handleCourseInstanceSelect]);
+
+	// Helper to extract student ID from score
+	const getScoreStudentId = (score: Score): string => {
+		if (typeof score.student === "string") {
+			return score.student;
+		}
+		return (score.student as any)?.id || "";
 	};
 
 	// Get scores for a specific student
 	const getStudentScores = (studentId: string): Score[] => {
-		return scores.filter((score) => score.student === studentId);
+		return scores.filter((score) => getScoreStudentId(score) === studentId);
 	};
 
 	// Get grade aggregate for a specific student
@@ -241,15 +268,40 @@ export default function ProfessorProgressPage() {
 		);
 	};
 
-	// Calculate average score for a student
+	// Calculate weighted score for a student based on completed assessments
 	const calculateAverageScore = (studentId: string): number => {
 		const studentScores = getStudentScores(studentId);
 		if (studentScores.length === 0) return 0;
-		const totalScore = studentScores.reduce(
-			(sum, score) => sum + score.percentage,
-			0,
-		);
-		return Math.round(totalScore / studentScores.length);
+
+		// Get only scores for completed assessments
+		const completedScores = studentScores.filter((score) => {
+			const assessment = assessments.find(
+				(a) => a.id === getScoreAssessmentId(score),
+			);
+			return assessment?.isCompleted === true;
+		});
+
+		if (completedScores.length === 0) return 0;
+
+		// Calculate weighted score
+		let totalWeightedScore = 0;
+		let totalWeight = 0;
+
+		completedScores.forEach((score) => {
+			const assessment = assessments.find(
+				(a) => a.id === getScoreAssessmentId(score),
+			);
+			if (assessment?.assessmentTemplate?.weightPercent) {
+				const weight = assessment.assessmentTemplate.weightPercent;
+				const scorePercentage = score.percentage || 0;
+				totalWeightedScore += (scorePercentage * weight) / 100;
+				totalWeight += weight;
+			}
+		});
+
+		// Return weighted score as a percentage of total completed weight
+		if (totalWeight === 0) return 0;
+		return Math.round((totalWeightedScore / totalWeight) * 100);
 	};
 
 	// Get grade distribution data
@@ -281,11 +333,19 @@ export default function ProfessorProgressPage() {
 		}));
 	};
 
+	// Helper to extract assessment ID from score
+	const getScoreAssessmentId = (score: Score): string => {
+		if (typeof score.assessment === "string") {
+			return score.assessment;
+		}
+		return (score.assessment as any)?.id || "";
+	};
+
 	// Get assessment performance data
 	const getAssessmentPerformance = () => {
 		return assessments.map((assessment) => {
 			const assessmentScores = scores.filter(
-				(score) => score.assessment === assessment.id,
+				(score) => getScoreAssessmentId(score) === assessment.id,
 			);
 			const averageScore =
 				assessmentScores.length > 0
@@ -443,15 +503,29 @@ export default function ProfessorProgressPage() {
 											}
 										</p>
 									</div>
-									<Button
-										variant="outline"
-										onClick={() =>
-											setSelectedCourseInstance(null)
-										}
-										className="border-gray-600 text-gray-300 hover:bg-gray-700"
-									>
-										Back to Courses
-									</Button>
+									<div className="flex gap-2">
+										<Button
+											variant="outline"
+											onClick={() =>
+												handleCourseInstanceSelect(
+													selectedCourseInstance,
+												)
+											}
+											className="border-gray-600 text-gray-300 hover:bg-gray-700"
+										>
+											<RefreshCw className="h-4 w-4 mr-2" />
+											Refresh Data
+										</Button>
+										<Button
+											variant="outline"
+											onClick={() =>
+												setSelectedCourseInstance(null)
+											}
+											className="border-gray-600 text-gray-300 hover:bg-gray-700"
+										>
+											Back to Courses
+										</Button>
+									</div>
 								</div>
 							</CardHeader>
 						</Card>
@@ -684,10 +758,7 @@ export default function ProfessorProgressPage() {
 
 												return (
 													<Card
-														key={
-															enrollment.student
-																.id
-														}
+														key={enrollment.id}
 														className="bg-gray-700 border-gray-600"
 													>
 														<CardContent className="p-4">
@@ -775,8 +846,9 @@ export default function ProfessorProgressPage() {
 												const assessmentScores =
 													scores.filter(
 														(score) =>
-															score.assessment ===
-															assessment.id,
+															getScoreAssessmentId(
+																score,
+															) === assessment.id,
 													);
 												const averageScore =
 													assessmentScores.length > 0

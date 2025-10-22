@@ -2,12 +2,13 @@
 
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
 	Table,
 	TableBody,
@@ -16,7 +17,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAppStore } from "@/stores/app-store";
 
@@ -46,6 +46,7 @@ interface Assessment {
 	description: string;
 	maxScore: number;
 	dueDate: string;
+	isCompleted?: boolean;
 	assessmentTemplate: {
 		id: string;
 		name: string;
@@ -73,6 +74,7 @@ interface Score {
 
 export default function ProfessorDashboard() {
 	const { user: userStore } = useAppStore();
+	const checkboxId = useId();
 	const [courseInstances, setCourseInstances] = useState<CourseInstance[]>(
 		[],
 	);
@@ -83,7 +85,7 @@ export default function ProfessorDashboard() {
 	const [selectedAssessment, setSelectedAssessment] = useState<string>("");
 	const [loading, setLoading] = useState(true);
 	const [gradingMode, setGradingMode] = useState(false);
-	const [activeTab, setActiveTab] = useState("courses");
+	// Unified view - no tabs
 	const [newScores, setNewScores] = useState<
 		Record<string, { value: number; feedback: string }>
 	>({});
@@ -122,6 +124,17 @@ export default function ProfessorDashboard() {
 		}
 	}, [selectedCourse]);
 
+	// Helper function to extract student ID from score
+	const getStudentIdFromScore = (score: any): string | number => {
+		if (
+			typeof score.student === "string" ||
+			typeof score.student === "number"
+		) {
+			return score.student;
+		}
+		return score.student?.id;
+	};
+
 	const fetchStudentsAndScores = useCallback(async () => {
 		if (!selectedAssessment) return;
 		try {
@@ -145,16 +158,26 @@ export default function ProfessorDashboard() {
 							: student.id;
 					}) || [];
 
-				if (studentIds.length > 0) {
+				// Remove duplicate student IDs
+				const uniqueStudentIds = Array.from(new Set(studentIds));
+
+				if (uniqueStudentIds.length > 0) {
 					const studentsResponse = await fetch(
-						`/api/users?where[id][in]=${studentIds.join(",")}`,
+						`/api/users?where[id][in]=${uniqueStudentIds.join(",")}`,
 						{
 							credentials: "include",
 						},
 					);
 					if (studentsResponse.ok) {
 						const studentsData = await studentsResponse.json();
-						setStudents(studentsData.docs || []);
+						// Ensure students are unique by ID
+						const uniqueStudents = (studentsData.docs || []).filter(
+							(student: any, index: number, self: any[]) =>
+								index ===
+								self.findIndex((s: any) => s.id === student.id),
+						);
+						console.log("Unique students:", uniqueStudents);
+						setStudents(uniqueStudents);
 					}
 				}
 			}
@@ -168,6 +191,7 @@ export default function ProfessorDashboard() {
 			);
 			if (scoresResponse.ok) {
 				const scoresData = await scoresResponse.json();
+				console.log("Fetched scores:", scoresData.docs);
 				setScores(scoresData.docs || []);
 			}
 		} catch (error) {
@@ -188,7 +212,7 @@ export default function ProfessorDashboard() {
 	useEffect(() => {
 		if (selectedAssessment) {
 			fetchStudentsAndScores();
-			setActiveTab("grading"); // Automatically switch to grading tab
+			// removed tab switch in unified view
 		}
 	}, [selectedAssessment, fetchStudentsAndScores]);
 
@@ -248,70 +272,149 @@ export default function ProfessorDashboard() {
 		}));
 	};
 
+	const toggleAssessmentCompletion = async (
+		assessmentId: string,
+		isCompleted: boolean,
+	) => {
+		try {
+			const response = await fetch(`/api/assessments/${assessmentId}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				credentials: "include",
+				body: JSON.stringify({ isCompleted }),
+			});
+
+			if (!response.ok) {
+				throw new Error("Failed to update assessment");
+			}
+
+			// Update local state
+			setAssessments((prev) =>
+				prev.map((a) =>
+					a.id === assessmentId ? { ...a, isCompleted } : a,
+				),
+			);
+
+			toast.success(
+				isCompleted
+					? "Assessment marked as completed"
+					: "Assessment marked as incomplete",
+			);
+		} catch (error) {
+			console.error("Error updating assessment:", error);
+			toast.error("Failed to update assessment status");
+		}
+	};
+
 	const saveScores = async () => {
 		try {
 			const selectedAssessmentData = assessments.find(
 				(a) => a.id === selectedAssessment,
 			);
-			if (!selectedAssessmentData) return;
+			if (!selectedAssessmentData) {
+				toast.error("Assessment not found");
+				return;
+			}
+
+			if (Object.keys(newScores).length === 0) {
+				toast.error("No scores to save");
+				return;
+			}
+
+			console.log("Saving scores:", newScores);
+			console.log("Selected course:", selectedCourse);
+			console.log("Selected assessment:", selectedAssessment);
 
 			const promises = Object.entries(newScores).map(
 				async ([studentId, scoreData]) => {
 					const existingScore = scores.find(
-						(s) => s.student === studentId,
+						(s) =>
+							String(getStudentIdFromScore(s)) ===
+							String(studentId),
 					);
+
+					console.log(`Processing student ${studentId}:`, {
+						existingScore,
+						scoreData,
+					});
 
 					if (existingScore) {
 						// Update existing score
-						return fetch(`/api/scores/${existingScore.id}`, {
-							method: "PATCH",
-							headers: { "Content-Type": "application/json" },
-							credentials: "include",
-							body: JSON.stringify({
-								value: scoreData.value,
-								percentage: Math.round(
-									(scoreData.value /
-										selectedAssessmentData.maxScore) *
-										100,
-								),
-								finalValue: scoreData.value,
-								feedback: scoreData.feedback,
-								gradedBy: userStore.user?.id,
-								gradedAt: new Date().toISOString(),
-							}),
-						});
+						const response = await fetch(
+							`/api/scores?id=${Number(existingScore.id)}`,
+							{
+								method: "PATCH",
+								headers: { "Content-Type": "application/json" },
+								credentials: "include",
+								body: JSON.stringify({
+									value: scoreData.value,
+									percentage: Math.round(
+										(scoreData.value /
+											selectedAssessmentData.maxScore) *
+											100,
+									),
+									finalValue: scoreData.value,
+									feedback: scoreData.feedback,
+									gradedBy: Number(userStore.user?.id),
+									gradedAt: new Date().toISOString(),
+								}),
+							},
+						);
+
+						if (!response.ok) {
+							const errorText = await response.text();
+							throw new Error(
+								`Failed to update score: ${errorText}`,
+							);
+						}
+
+						return response.json();
 					} else {
 						// Create new score
-						return fetch("/api/scores", {
+						const payload = {
+							assessment: Number(selectedAssessment),
+							student: Number(studentId),
+							scoreTitle: `${students.find((s) => s.id === studentId)?.name} - ${selectedAssessmentData.title}`,
+							value: scoreData.value,
+							maxValue: selectedAssessmentData.maxScore,
+							percentage: Math.round(
+								(scoreData.value /
+									selectedAssessmentData.maxScore) *
+									100,
+							),
+							finalValue: scoreData.value,
+							gradedBy: Number(userStore.user?.id),
+							gradedAt: new Date().toISOString(),
+							feedback: scoreData.feedback,
+							notes: "",
+							isLate: false,
+							latePenaltyApplied: 0,
+							isExcused: false,
+						};
+
+						console.log("Creating score with payload:", payload);
+
+						const response = await fetch("/api/scores", {
 							method: "POST",
 							headers: { "Content-Type": "application/json" },
 							credentials: "include",
-							body: JSON.stringify({
-								assessment: selectedAssessment,
-								student: studentId,
-								scoreTitle: `${students.find((s) => s.id === studentId)?.name} - ${selectedAssessmentData.title}`,
-								value: scoreData.value,
-								maxValue: selectedAssessmentData.maxScore,
-								percentage: Math.round(
-									(scoreData.value /
-										selectedAssessmentData.maxScore) *
-										100,
-								),
-								finalValue: scoreData.value,
-								gradedBy: userStore.user?.id,
-								gradedAt: new Date().toISOString(),
-								feedback: scoreData.feedback,
-								notes: "",
-								isLate: false,
-								latePenaltyApplied: 0,
-								isExcused: false,
-							}),
+							body: JSON.stringify(payload),
 						});
+
+						if (!response.ok) {
+							const errorText = await response.text();
+							throw new Error(
+								`Failed to create score: ${errorText}`,
+							);
+						}
+
+						return response.json();
 					}
 				},
 			);
 
-			await Promise.all(promises);
+			const results = await Promise.all(promises);
+			console.log("Save results:", results);
 
 			// Trigger automatic grade calculation
 			try {
@@ -319,7 +422,11 @@ export default function ProfessorDashboard() {
 					(c) => c.id === selectedCourse,
 				);
 				if (selectedCourseData) {
-					await fetch("/api/grades/calculate", {
+					console.log(
+						"Triggering grade calculation for course:",
+						selectedCourse,
+					);
+					const calcResponse = await fetch("/api/grades/calculate", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						credentials: "include",
@@ -327,6 +434,13 @@ export default function ProfessorDashboard() {
 							courseInstanceId: selectedCourse,
 						}),
 					});
+
+					if (!calcResponse.ok) {
+						const errorText = await calcResponse.text();
+						console.error("Grade calculation failed:", errorText);
+					} else {
+						console.log("Grade calculation successful");
+					}
 				}
 			} catch (error) {
 				console.error("Error calculating grades:", error);
@@ -338,7 +452,9 @@ export default function ProfessorDashboard() {
 			fetchStudentsAndScores(); // Refresh data
 		} catch (error) {
 			console.error("Error saving scores:", error);
-			toast.error("Failed to save scores");
+			toast.error(
+				`Failed to save scores: ${error instanceof Error ? error.message : "Unknown error"}`,
+			);
 		}
 	};
 
@@ -367,23 +483,11 @@ export default function ProfessorDashboard() {
 					</p>
 
 					{/* Quick Navigation */}
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+					<div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-8">
 						<Button
-							onClick={() =>
-								(window.location.href = "/professor/grading")
-							}
-							className="bg-blue-600 hover:bg-blue-700 text-white h-16 flex flex-col items-center justify-center"
-						>
-							<Icon
-								icon="lucide:clipboard-list"
-								className="h-6 w-6 mb-2"
-							/>
-							<span className="text-sm">Grade Students</span>
-						</Button>
-						<Button
-							onClick={() =>
-								(window.location.href = "/professor/progress")
-							}
+							onClick={() => {
+								window.location.href = "/professor/progress";
+							}}
 							className="bg-green-600 hover:bg-green-700 text-white h-16 flex flex-col items-center justify-center"
 						>
 							<Icon
@@ -392,99 +496,151 @@ export default function ProfessorDashboard() {
 							/>
 							<span className="text-sm">Track Progress</span>
 						</Button>
-						<Button
-							onClick={() => setActiveTab("courses")}
-							className="bg-purple-600 hover:bg-purple-700 text-white h-16 flex flex-col items-center justify-center"
-						>
-							<Icon
-								icon="lucide:book-open"
-								className="h-6 w-6 mb-2"
-							/>
-							<span className="text-sm">View Courses</span>
-						</Button>
 					</div>
 				</motion.div>
 
-				<Tabs
-					value={activeTab}
-					onValueChange={setActiveTab}
-					className="space-y-6"
-				>
-					<TabsList className="bg-gray-800 border-gray-700">
-						<TabsTrigger
-							value="courses"
-							className="text-gray-300 data-[state=active]:text-white"
-						>
-							My Courses
-						</TabsTrigger>
-						<TabsTrigger
-							value="grading"
-							className="text-gray-300 data-[state=active]:text-white"
-						>
-							Grading
-						</TabsTrigger>
-					</TabsList>
+				{/* Unified view: Courses → Assessments → Grading */}
+				<div className="space-y-6">
+					<Card className="bg-gray-800 border-gray-700">
+						<CardHeader>
+							<CardTitle className="text-white">
+								Course Instances
+							</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+								{courseInstances.map((course) => (
+									<motion.div
+										key={course.id}
+										whileHover={{ scale: 1.02 }}
+										whileTap={{ scale: 0.98 }}
+									>
+										<Card className="bg-gray-700 border-gray-600 hover:border-gray-500 transition-colors">
+											<CardHeader>
+												<CardTitle className="text-white text-lg">
+													{course.courseVariation
+														?.course?.code ||
+														course.courseVariation
+															?.codeVariant ||
+														"N/A"}{" "}
+													- {course.instanceTitle}
+												</CardTitle>
+												<p className="text-gray-300">
+													{course.courseVariation
+														?.course?.name ||
+														course.courseVariation
+															?.titleVariant ||
+														"Course name not available"}
+												</p>
+											</CardHeader>
+											<CardContent>
+												<div className="space-y-2">
+													<div className="flex items-center gap-2">
+														<Icon
+															icon="lucide:users"
+															className="w-4 h-4 text-gray-400"
+														/>
+														<span className="text-gray-300">
+															{
+																course
+																	.professors
+																	.length
+															}{" "}
+															Professor(s)
+														</span>
+													</div>
+													<Button
+														onClick={() =>
+															setSelectedCourse(
+																course.id,
+															)
+														}
+														className="w-full bg-blue-600 hover:bg-blue-700"
+													>
+														Select Course
+													</Button>
+												</div>
+											</CardContent>
+										</Card>
+									</motion.div>
+								))}
+							</div>
+						</CardContent>
+					</Card>
 
-					<TabsContent value="courses" className="space-y-6">
+					{selectedCourse && (
 						<Card className="bg-gray-800 border-gray-700">
 							<CardHeader>
 								<CardTitle className="text-white">
-									Course Instances
+									Assessments
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-									{courseInstances.map((course) => (
+								<div className="space-y-4">
+									{assessments.map((assessment) => (
 										<motion.div
-											key={course.id}
-											whileHover={{ scale: 1.02 }}
-											whileTap={{ scale: 0.98 }}
+											key={assessment.id}
+											whileHover={{ scale: 1.01 }}
 										>
-											<Card className="bg-gray-700 border-gray-600 hover:border-gray-500 transition-colors">
-												<CardHeader>
-													<CardTitle className="text-white text-lg">
-														{course.courseVariation
-															?.course?.code ||
-															course
-																.courseVariation
-																?.codeVariant ||
-															"N/A"}{" "}
-														- {course.instanceTitle}
-													</CardTitle>
-													<p className="text-gray-300">
-														{course.courseVariation
-															?.course?.name ||
-															course
-																.courseVariation
-																?.titleVariant ||
-															"Course name not available"}
-													</p>
-												</CardHeader>
-												<CardContent>
-													<div className="space-y-2">
-														<div className="flex items-center gap-2">
-															<Icon
-																icon="lucide:users"
-																className="w-4 h-4 text-gray-400"
-															/>
-															<span className="text-gray-300">
+											<Card className="bg-gray-700 border-gray-600">
+												<CardContent className="pt-6">
+													<div className="flex items-center justify-between">
+														<div className="space-y-2">
+															<h3 className="text-white font-semibold">
 																{
-																	course
-																		.professors
-																		.length
-																}{" "}
-																Professor(s)
-															</span>
+																	assessment.title
+																}
+															</h3>
+															<p className="text-gray-300 text-sm">
+																{
+																	assessment.description
+																}
+															</p>
+															<div className="flex items-center gap-4 text-sm text-gray-400">
+																<span>
+																	<Icon
+																		icon="lucide:calendar"
+																		className="w-4 h-4 inline mr-1"
+																	/>
+																	Due:{" "}
+																	{new Date(
+																		assessment.dueDate,
+																	).toLocaleDateString()}
+																</span>
+																<span>
+																	<Icon
+																		icon="lucide:target"
+																		className="w-4 h-4 inline mr-1"
+																	/>
+																	Max Score:{" "}
+																	{
+																		assessment.maxScore
+																	}
+																</span>
+																<span>
+																	<Icon
+																		icon="lucide:percent"
+																		className="w-4 h-4 inline mr-1"
+																	/>
+																	Weight:{" "}
+																	{
+																		assessment
+																			.assessmentTemplate
+																			.weightPercent
+																	}
+																	%
+																</span>
+															</div>
 														</div>
 														<Button
 															onClick={() =>
-																setSelectedCourse(
-																	course.id,
+																setSelectedAssessment(
+																	assessment.id,
 																)
 															}
-															className="w-full bg-blue-600 hover:bg-blue-700"
+															className="bg-green-600 hover:bg-green-700"
 														>
-															View Assessments
+															Start Grading
 														</Button>
 													</div>
 												</CardContent>
@@ -494,304 +650,269 @@ export default function ProfessorDashboard() {
 								</div>
 							</CardContent>
 						</Card>
+					)}
 
-						{selectedCourse && (
-							<Card className="bg-gray-800 border-gray-700">
-								<CardHeader>
-									<CardTitle className="text-white">
-										Assessments
-									</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<div className="space-y-4">
-										{assessments.map((assessment) => (
-											<motion.div
-												key={assessment.id}
-												whileHover={{ scale: 1.01 }}
-											>
-												<Card className="bg-gray-700 border-gray-600">
-													<CardContent className="pt-6">
-														<div className="flex items-center justify-between">
-															<div className="space-y-2">
-																<h3 className="text-white font-semibold">
-																	{
-																		assessment.title
-																	}
-																</h3>
-																<p className="text-gray-300 text-sm">
-																	{
-																		assessment.description
-																	}
-																</p>
-																<div className="flex items-center gap-4 text-sm text-gray-400">
-																	<span>
-																		<Icon
-																			icon="lucide:calendar"
-																			className="w-4 h-4 inline mr-1"
-																		/>
-																		Due:{" "}
-																		{new Date(
-																			assessment.dueDate,
-																		).toLocaleDateString()}
-																	</span>
-																	<span>
-																		<Icon
-																			icon="lucide:target"
-																			className="w-4 h-4 inline mr-1"
-																		/>
-																		Max
-																		Score:{" "}
-																		{
-																			assessment.maxScore
-																		}
-																	</span>
-																	<span>
-																		<Icon
-																			icon="lucide:percent"
-																			className="w-4 h-4 inline mr-1"
-																		/>
-																		Weight:{" "}
-																		{
-																			assessment
-																				.assessmentTemplate
-																				.weightPercent
-																		}
-																		%
-																	</span>
-																</div>
-															</div>
-															<div className="flex items-center gap-2">
-																<Badge
-																	variant="secondary"
-																	className="bg-gray-600 text-gray-200"
-																>
-																	{
-																		assessment
-																			.assessmentTemplate
-																			.assessmentType
-																	}
-																</Badge>
-																<Button
-																	onClick={() =>
-																		setSelectedAssessment(
-																			assessment.id,
-																		)
-																	}
-																	className="bg-green-600 hover:bg-green-700"
-																>
-																	Grade
-																	Students
-																</Button>
-															</div>
-														</div>
-													</CardContent>
-												</Card>
-											</motion.div>
-										))}
-									</div>
-								</CardContent>
-							</Card>
-						)}
-					</TabsContent>
-
-					<TabsContent value="grading" className="space-y-6">
-						{selectedAssessment && (
-							<Card className="bg-gray-800 border-gray-700">
-								<CardHeader>
-									<div className="flex items-center justify-between">
+					{selectedAssessment && (
+						<Card className="bg-gray-800 border-gray-700">
+							<CardHeader>
+								<div className="flex items-center justify-between">
+									<div>
 										<CardTitle className="text-white">
 											Grade Students
 										</CardTitle>
-										<div className="flex gap-2">
-											{!gradingMode ? (
+										{(() => {
+											const selectedCourseData =
+												courseInstances.find(
+													(c) =>
+														c.id === selectedCourse,
+												);
+											const selectedAssessmentData =
+												assessments.find(
+													(a) =>
+														a.id ===
+														selectedAssessment,
+												);
+											return (
+												<div className="mt-2 space-y-2">
+													<div className="text-sm text-gray-300">
+														<div className="font-medium">
+															{selectedCourseData
+																?.courseVariation
+																?.course
+																?.code ||
+																selectedCourseData
+																	?.courseVariation
+																	?.codeVariant ||
+																"N/A"}{" "}
+															-{" "}
+															{
+																selectedCourseData?.instanceTitle
+															}
+														</div>
+														<div className="text-gray-400">
+															Assessment:{" "}
+															{
+																selectedAssessmentData?.title
+															}{" "}
+															(Max:{" "}
+															{
+																selectedAssessmentData?.maxScore
+															}{" "}
+															points • Weight:{" "}
+															{
+																selectedAssessmentData
+																	?.assessmentTemplate
+																	?.weightPercent
+															}
+															%)
+														</div>
+													</div>
+													<div className="flex items-center space-x-2">
+														<Checkbox
+															id={checkboxId}
+															checked={
+																selectedAssessmentData?.isCompleted ||
+																false
+															}
+															onCheckedChange={(
+																checked,
+															) =>
+																toggleAssessmentCompletion(
+																	selectedAssessment,
+																	!!checked,
+																)
+															}
+														/>
+														<Label
+															htmlFor={checkboxId}
+															className="text-sm text-gray-300 cursor-pointer"
+														>
+															Mark as completed
+															(include in final
+															grade)
+														</Label>
+													</div>
+												</div>
+											);
+										})()}
+									</div>
+									<div className="flex gap-2">
+										{!gradingMode ? (
+											<Button
+												onClick={() =>
+													setGradingMode(true)
+												}
+												className="bg-blue-600 hover:bg-blue-700"
+											>
+												<Icon
+													icon="lucide:edit"
+													className="w-4 h-4 mr-2"
+												/>
+												Start Grading
+											</Button>
+										) : (
+											<>
 												<Button
 													onClick={() =>
-														setGradingMode(true)
+														setGradingMode(false)
 													}
-													className="bg-blue-600 hover:bg-blue-700"
+													variant="outline"
+													className="border-gray-600 text-gray-300 hover:bg-gray-700"
+												>
+													Cancel
+												</Button>
+												<Button
+													onClick={saveScores}
+													className="bg-green-600 hover:bg-green-700"
 												>
 													<Icon
-														icon="lucide:edit"
+														icon="lucide:save"
 														className="w-4 h-4 mr-2"
 													/>
-													Start Grading
+													Save All Scores
 												</Button>
-											) : (
-												<>
-													<Button
-														onClick={() =>
-															setGradingMode(
-																false,
-															)
-														}
-														variant="outline"
-														className="border-gray-600 text-gray-300 hover:bg-gray-700"
-													>
-														Cancel
-													</Button>
-													<Button
-														onClick={saveScores}
-														className="bg-green-600 hover:bg-green-700"
-													>
-														<Icon
-															icon="lucide:save"
-															className="w-4 h-4 mr-2"
-														/>
-														Save All Scores
-													</Button>
-												</>
-											)}
-										</div>
+											</>
+										)}
 									</div>
-								</CardHeader>
-								<CardContent>
-									<Table>
-										<TableHeader>
-											<TableRow className="border-gray-700">
-												<TableHead className="text-gray-300">
-													Student
-												</TableHead>
-												<TableHead className="text-gray-300">
-													Student ID
-												</TableHead>
-												<TableHead className="text-gray-300">
-													Score
-												</TableHead>
-												<TableHead className="text-gray-300">
-													Percentage
-												</TableHead>
-												<TableHead className="text-gray-300">
-													Feedback
-												</TableHead>
-											</TableRow>
-										</TableHeader>
-										<TableBody>
-											{students.map((student) => {
-												const existingScore =
-													scores.find(
-														(s) =>
-															s.student ===
-															student.id,
-													);
-												const currentScore = gradingMode
-													? (newScores[student.id]
-															?.value ??
-														existingScore?.value ??
-														0)
-													: (existingScore?.value ??
-														0);
-												const currentFeedback =
-													gradingMode
-														? (newScores[student.id]
-																?.feedback ??
-															existingScore?.feedback ??
-															"")
-														: (existingScore?.feedback ??
-															"");
+								</div>
+							</CardHeader>
+							<CardContent>
+								<Table>
+									<TableHeader>
+										<TableRow className="border-gray-700">
+											<TableHead className="text-gray-300">
+												Student
+											</TableHead>
+											<TableHead className="text-gray-300">
+												Student ID
+											</TableHead>
+											<TableHead className="text-gray-300">
+												Score
+											</TableHead>
+											<TableHead className="text-gray-300">
+												Percentage
+											</TableHead>
+											<TableHead className="text-gray-300">
+												Feedback
+											</TableHead>
+										</TableRow>
+									</TableHeader>
+									<TableBody>
+										{students.map((student) => {
+											const existingScore = scores.find(
+												(s) =>
+													String(
+														getStudentIdFromScore(
+															s,
+														),
+													) === String(student.id),
+											);
+											const currentScore = gradingMode
+												? (newScores[student.id]
+														?.value ??
+													existingScore?.value ??
+													0)
+												: (existingScore?.value ?? 0);
+											const currentFeedback = gradingMode
+												? (newScores[student.id]
+														?.feedback ??
+													existingScore?.feedback ??
+													"")
+												: (existingScore?.feedback ??
+													"");
 
-												return (
-													<TableRow
-														key={student.id}
-														className="border-gray-700"
-													>
-														<TableCell className="text-white">
-															{student.name}
-														</TableCell>
-														<TableCell className="text-gray-300">
-															{student.studentId}
-														</TableCell>
-														<TableCell>
-															{gradingMode ? (
-																<Input
-																	type="number"
-																	min="0"
-																	max={
-																		assessments.find(
-																			(
-																				a,
-																			) =>
-																				a.id ===
-																				selectedAssessment,
-																		)
-																			?.maxScore ||
-																		100
-																	}
-																	value={
-																		currentScore
-																	}
-																	onChange={(
-																		e,
-																	) =>
-																		handleScoreChange(
-																			student.id,
-																			Number(
-																				e
-																					.target
-																					.value,
-																			),
-																		)
-																	}
-																	className="w-20 bg-gray-700 border-gray-600 text-white"
-																/>
-															) : (
-																<span className="text-white">
-																	{
-																		currentScore
-																	}
-																</span>
-															)}
-														</TableCell>
-														<TableCell className="text-gray-300">
-															{Math.round(
-																(currentScore /
-																	(assessments.find(
+											return (
+												<TableRow
+													key={student.id}
+													className="border-gray-700"
+												>
+													<TableCell className="text-white">
+														{student.name}
+													</TableCell>
+													<TableCell className="text-gray-300">
+														{student.studentId}
+													</TableCell>
+													<TableCell>
+														{gradingMode ? (
+															<Input
+																type="number"
+																min="0"
+																max={
+																	assessments.find(
 																		(a) =>
 																			a.id ===
 																			selectedAssessment,
 																	)
 																		?.maxScore ||
-																		100)) *
-																	100,
-															)}
-															%
-														</TableCell>
-														<TableCell>
-															{gradingMode ? (
-																<Textarea
-																	value={
-																		currentFeedback
-																	}
-																	onChange={(
-																		e,
-																	) =>
-																		handleFeedbackChange(
-																			student.id,
+																	100
+																}
+																value={
+																	currentScore
+																}
+																onChange={(e) =>
+																	handleScoreChange(
+																		student.id,
+																		Number(
 																			e
 																				.target
 																				.value,
-																		)
-																	}
-																	placeholder="Enter feedback..."
-																	className="w-64 bg-gray-700 border-gray-600 text-white"
-																	rows={2}
-																/>
-															) : (
-																<span className="text-gray-300">
-																	{currentFeedback ||
-																		"No feedback"}
-																</span>
-															)}
-														</TableCell>
-													</TableRow>
-												);
-											})}
-										</TableBody>
-									</Table>
-								</CardContent>
-							</Card>
-						)}
-					</TabsContent>
-				</Tabs>
+																		),
+																	)
+																}
+																className="w-20 bg-gray-700 border-gray-600 text-white"
+															/>
+														) : (
+															<span className="text-white">
+																{currentScore}
+															</span>
+														)}
+													</TableCell>
+													<TableCell className="text-gray-300">
+														{Math.round(
+															(currentScore /
+																(assessments.find(
+																	(a) =>
+																		a.id ===
+																		selectedAssessment,
+																)?.maxScore ||
+																	100)) *
+																100,
+														)}
+														%
+													</TableCell>
+													<TableCell>
+														{gradingMode ? (
+															<Textarea
+																value={
+																	currentFeedback
+																}
+																onChange={(e) =>
+																	handleFeedbackChange(
+																		student.id,
+																		e.target
+																			.value,
+																	)
+																}
+																placeholder="Enter feedback..."
+																className="w-64 bg-gray-700 border-gray-600 text-white"
+																rows={2}
+															/>
+														) : (
+															<span className="text-gray-300">
+																{currentFeedback ||
+																	"No feedback"}
+															</span>
+														)}
+													</TableCell>
+												</TableRow>
+											);
+										})}
+									</TableBody>
+								</Table>
+							</CardContent>
+						</Card>
+					)}
+				</div>
 			</div>
 		</div>
 	);
