@@ -272,13 +272,13 @@ export class GradeCalculationEngine {
 				score >= (mapping as { minScore: number }).minScore &&
 				score <= (mapping as { maxScore: number }).maxScore
 			) {
-				return mapping;
+				return mapping as Record<string, unknown>;
 			}
 		}
 
 		// Return the lowest grade if no mapping found
 		return (
-			mappings[mappings.length - 1] || {
+			(mappings[mappings.length - 1] as Record<string, unknown>) || {
 				letterGrade: "F",
 				numericGrade: 0,
 				isPassing: false,
@@ -336,7 +336,7 @@ export class GradeCalculationEngine {
 				collection: "grade-aggregates",
 				id: existing.docs[0].id,
 				data: {
-					...(calculation as Record<string, unknown>),
+					...(calculation as unknown as Record<string, unknown>),
 					calculatedAt: new Date().toISOString(),
 				},
 			});
@@ -345,10 +345,11 @@ export class GradeCalculationEngine {
 			await this.req.payload.create({
 				collection: "grade-aggregates",
 				data: {
-					enrollment: enrollmentId,
-					...(calculation as Record<string, unknown>),
+					enrollment: enrollmentId as any,
+					...(calculation as unknown as Record<string, unknown>),
 					calculatedAt: new Date().toISOString(),
-				},
+					passFail: (calculation as any).passFail || "fail",
+				} as any,
 			});
 		}
 	}

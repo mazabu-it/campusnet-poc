@@ -2232,6 +2232,254 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		console.log("✅ Client-facing site pages created successfully!");
 
+		// 8. Create comprehensive score data for all assessments
+		console.log("Creating comprehensive score data for all assessments...");
+
+		// Get all assessments
+		const allAssessmentsData = await payload.find({
+			collection: "assessments",
+			limit: 1000,
+		});
+
+		// Get all enrollments
+		const allEnrollmentsData = await payload.find({
+			collection: "enrollments",
+			limit: 1000,
+		});
+
+		console.log(`Found ${allAssessmentsData.docs.length} assessments`);
+		console.log(`Found ${allEnrollmentsData.docs.length} enrollments`);
+
+		let comprehensiveScoreCount = 0;
+
+		// Create scores for each assessment and each enrolled student
+		for (const assessment of allAssessmentsData.docs) {
+			const assessmentTemplate = assessment.assessmentTemplate as any;
+
+			// Find all students enrolled in this course instance
+			const courseInstanceId = assessmentTemplate.courseInstance;
+			const enrolledStudents = allEnrollmentsData.docs.filter(
+				(enrollment: any) =>
+					enrollment.courseInstance.id === courseInstanceId,
+			);
+
+			console.log(`Creating scores for assessment: ${assessment.title}`);
+			console.log(`  Course Instance: ${courseInstanceId}`);
+			console.log(`  Enrolled Students: ${enrolledStudents.length}`);
+
+			if (enrolledStudents.length === 0) {
+				console.log(
+					`  ⚠️ No enrolled students found for course instance ${courseInstanceId}`,
+				);
+				continue;
+			}
+
+			for (const enrollment of enrolledStudents) {
+				const student = enrollment.student as any;
+
+				// Generate realistic score based on assessment type and student performance
+				let scoreValue: number;
+				let feedback: string;
+
+				// Test student gets excellent scores
+				if (student.email === "student@test.com") {
+					scoreValue = faker.number.int({ min: 85, max: 98 });
+					feedback = faker.helpers.arrayElement([
+						"Excellent work! Shows strong understanding of the concepts.",
+						"Outstanding performance. Keep up the great work!",
+						"Very well done. Demonstrates mastery of the material.",
+						"Exceptional quality. This is exemplary work.",
+						"Outstanding effort and attention to detail.",
+					]);
+				} else {
+					// Other students get varied scores
+					const assessmentType = assessmentTemplate.assessmentType;
+					if (assessmentType === "exam") {
+						scoreValue = faker.number.int({ min: 45, max: 95 });
+						feedback = faker.helpers.arrayElement([
+							"Good understanding of the material.",
+							"Shows improvement in key areas.",
+							"Solid performance with room for growth.",
+							"Demonstrates understanding of core concepts.",
+							"Good effort, continue practicing.",
+						]);
+					} else if (assessmentType === "project") {
+						scoreValue = faker.number.int({ min: 50, max: 92 });
+						feedback = faker.helpers.arrayElement([
+							"Creative approach to the problem.",
+							"Well-structured project with good documentation.",
+							"Shows initiative and problem-solving skills.",
+							"Good implementation with minor improvements needed.",
+							"Solid project work with clear objectives.",
+						]);
+					} else {
+						scoreValue = faker.number.int({ min: 40, max: 90 });
+						feedback = faker.helpers.arrayElement([
+							"Good attempt at the assignment.",
+							"Shows understanding of the requirements.",
+							"Decent work with some areas for improvement.",
+							"Meets expectations with room for enhancement.",
+							"Good effort, focus on details next time.",
+						]);
+					}
+				}
+
+				// Create the score
+				try {
+					const scoreData = {
+						student: student.id,
+						assessment: assessment.id,
+						value: scoreValue,
+						maxValue: assessmentTemplate.maxScore,
+						percentage: Math.round(
+							(scoreValue / assessmentTemplate.maxScore) * 100,
+						),
+						gradedBy: testProfessor?.id || professors[0].id,
+						gradedAt: faker.date.past({ years: 1 }).toISOString(),
+						feedback: feedback,
+						notes: faker.helpers.maybe(
+							() => faker.lorem.sentence(),
+							{ probability: 0.3 },
+						),
+						isLate: faker.datatype.boolean({ probability: 0.1 }),
+					};
+
+					console.log(
+						`Creating score for student ${student.email} in assessment ${assessment.title}:`,
+						scoreData,
+					);
+
+					await payload.create({
+						collection: "scores",
+						data: scoreData,
+					});
+
+					console.log(
+						`✅ Score created successfully for ${student.email}`,
+					);
+				} catch (scoreError) {
+					console.error(
+						`❌ Error creating score for ${student.email} in ${assessment.title}:`,
+						scoreError,
+					);
+					throw scoreError;
+				}
+
+				comprehensiveScoreCount++;
+			}
+		}
+
+		console.log(
+			`✅ Created ${comprehensiveScoreCount} comprehensive scores for all assessments`,
+		);
+
+		// 9. Recalculate grade aggregates for all enrollments
+		console.log("Recalculating grade aggregates for all enrollments...");
+
+		for (const enrollment of allEnrollmentsData.docs) {
+			// Get all scores for this student
+			const enrollmentScores = await payload.find({
+				collection: "scores",
+				where: {
+					student: {
+						equals:
+							typeof enrollment.student === "object" &&
+							enrollment.student !== null
+								? enrollment.student.id
+								: enrollment.student,
+					},
+				},
+			});
+
+			if (enrollmentScores.docs.length > 0) {
+				// Calculate weighted average
+				let totalWeightedScore = 0;
+				let totalWeight = 0;
+
+				for (const score of enrollmentScores.docs) {
+					const assessment = score.assessment as any;
+					const assessmentTemplate =
+						assessment.assessmentTemplate as any;
+					const weight = assessmentTemplate.weightPercent || 0;
+
+					totalWeightedScore +=
+						((score as any).score / (score as any).maxScore) *
+						weight;
+					totalWeight += weight;
+				}
+
+				const finalPercentage =
+					totalWeight > 0
+						? (totalWeightedScore / totalWeight) * 100
+						: 0;
+				const finalNumericGrade =
+					Math.round(finalPercentage * 100) / 100;
+
+				// Determine letter grade based on percentage
+				let letterGrade: string;
+				let gpaPoints: number;
+
+				if (finalPercentage >= 97) {
+					letterGrade = "A+";
+					gpaPoints = 4.0;
+				} else if (finalPercentage >= 93) {
+					letterGrade = "A";
+					gpaPoints = 4.0;
+				} else if (finalPercentage >= 90) {
+					letterGrade = "A-";
+					gpaPoints = 3.7;
+				} else if (finalPercentage >= 87) {
+					letterGrade = "B+";
+					gpaPoints = 3.3;
+				} else if (finalPercentage >= 83) {
+					letterGrade = "B";
+					gpaPoints = 3.0;
+				} else if (finalPercentage >= 80) {
+					letterGrade = "B-";
+					gpaPoints = 2.7;
+				} else if (finalPercentage >= 77) {
+					letterGrade = "C+";
+					gpaPoints = 2.3;
+				} else if (finalPercentage >= 73) {
+					letterGrade = "C";
+					gpaPoints = 2.0;
+				} else if (finalPercentage >= 70) {
+					letterGrade = "C-";
+					gpaPoints = 1.7;
+				} else if (finalPercentage >= 67) {
+					letterGrade = "D+";
+					gpaPoints = 1.3;
+				} else if (finalPercentage >= 63) {
+					letterGrade = "D";
+					gpaPoints = 1.0;
+				} else if (finalPercentage >= 60) {
+					letterGrade = "D-";
+					gpaPoints = 0.7;
+				} else {
+					letterGrade = "F";
+					gpaPoints = 0.0;
+				}
+
+				// Create or update grade aggregate
+				await payload.create({
+					collection: "grade-aggregates",
+					data: {
+						enrollment: enrollment.id,
+						finalNumeric: finalNumericGrade,
+						finalLetter: letterGrade,
+						passFail: finalPercentage >= 60 ? "pass" : "fail",
+						gpaPoints: gpaPoints,
+						calculationMethod: "weighted-average",
+						decisionNotes: `Calculated from ${enrollmentScores.docs.length} assessments`,
+						calculatedAt: new Date().toISOString(),
+						calculatedBy: testProfessor?.id || professors[0].id,
+					},
+				});
+			}
+		}
+
+		console.log("✅ Grade aggregates recalculated for all enrollments");
+
 		console.log("✅ Campusnet demo data seeding completed successfully!");
 		console.log("📊 Created:");
 		console.log("  - 1 University (University of Kinshasa)");
@@ -2248,7 +2496,7 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		console.log("  - 9 Assessment Templates");
 		console.log(`  - ${allAssessments.length} Assessments`);
 		console.log(`  - ${enrollments.length} Enrollments`);
-		console.log(`  - ${scoreCount} Comprehensive Scores`);
+		console.log(`  - ${comprehensiveScoreCount} Comprehensive Scores`);
 		console.log("  - Multiple Grade Aggregates");
 		console.log(
 			"  - 6 Client-Facing Pages (Home, University, Dashboard, Registration, News, Faculty)",

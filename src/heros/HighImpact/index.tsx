@@ -36,7 +36,7 @@ export const HighImpactHero: React.FC<Page["hero"]> = ({
 						<ul className="flex md:justify-center gap-4">
 							{links.map(({ link }, i) => {
 								return (
-									<li key={link.id || i}>
+									<li key={(link as any).id || i}>
 										<CMSLink {...link} />
 									</li>
 								);

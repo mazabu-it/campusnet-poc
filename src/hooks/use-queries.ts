@@ -174,7 +174,7 @@ export const useUser = () => {
 
 	React.useEffect(() => {
 		if (query.data) {
-			setUser(query.data.user);
+			setUser((query.data as any).user);
 			setAuthenticated(true);
 		} else if (query.error) {
 			logout();
@@ -196,7 +196,7 @@ export const useCourses = () => {
 
 	React.useEffect(() => {
 		if (query.data) {
-			setCourses(query.data);
+			setCourses(query.data as any);
 		}
 	}, [query.data, setCourses]);
 
@@ -214,7 +214,7 @@ export const useCourseInstances = () => {
 
 	React.useEffect(() => {
 		if (query.data) {
-			setCourseInstances(query.data);
+			setCourseInstances(query.data as any);
 		}
 	}, [query.data, setCourseInstances]);
 

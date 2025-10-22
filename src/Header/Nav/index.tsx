@@ -13,7 +13,11 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 		<nav className="flex gap-3 items-center">
 			{navItems.map(({ link }, i) => {
 				return (
-					<CMSLink key={link.id || i} {...link} appearance="link" />
+					<CMSLink
+						key={(link as any).id || i}
+						{...link}
+						appearance="link"
+					/>
 				);
 			})}
 			<Link href="/search">

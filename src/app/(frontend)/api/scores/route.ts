@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
 		// Get query parameters
 		const { searchParams } = new URL(request.url);
 		const assessmentId = searchParams.get("where[assessment][equals]");
+		const courseInstanceId = searchParams.get("courseInstanceId");
 
 		let whereClause = {};
 		if (assessmentId) {
@@ -27,6 +28,29 @@ export async function GET(request: NextRequest) {
 					equals: assessmentId,
 				},
 			};
+		} else if (courseInstanceId) {
+			// Get assessments for this course instance first
+			const assessmentsResponse = await payload.find({
+				collection: "assessments",
+				where: {
+					"assessmentTemplate.courseInstance": {
+						equals: courseInstanceId,
+					},
+				},
+				limit: 1000,
+			});
+
+			const assessmentIds = assessmentsResponse.docs.map(
+				(assessment: any) => assessment.id,
+			);
+
+			if (assessmentIds.length > 0) {
+				whereClause = {
+					assessment: {
+						in: assessmentIds,
+					},
+				};
+			}
 		}
 
 		const result = await payload.find({

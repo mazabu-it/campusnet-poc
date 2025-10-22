@@ -18,7 +18,7 @@ export const CollectionArchive: React.FC<Props> = (props) => {
 							return (
 								<div
 									className="col-span-4"
-									key={result.id || index}
+									key={(result as any).id || index}
 								>
 									<Card
 										className="h-full"

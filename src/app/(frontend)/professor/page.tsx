@@ -23,10 +23,15 @@ import { useAppStore } from "@/stores/app-store";
 interface CourseInstance {
 	id: string;
 	instanceTitle: string;
-	course: {
+	courseVariation: {
 		id: string;
-		code: string;
-		name: string;
+		course: {
+			id: string;
+			code: string;
+			name: string;
+		};
+		codeVariant: string;
+		titleVariant: string;
 	};
 	professors: Array<{
 		id: string;
@@ -78,6 +83,7 @@ export default function ProfessorDashboard() {
 	const [selectedAssessment, setSelectedAssessment] = useState<string>("");
 	const [loading, setLoading] = useState(true);
 	const [gradingMode, setGradingMode] = useState(false);
+	const [activeTab, setActiveTab] = useState("courses");
 	const [newScores, setNewScores] = useState<
 		Record<string, { value: number; feedback: string }>
 	>({});
@@ -129,10 +135,15 @@ export default function ProfessorDashboard() {
 			if (enrollmentsResponse.ok) {
 				const enrollmentsData = await enrollmentsResponse.json();
 				const studentIds =
-					enrollmentsData.docs?.map(
-						(enrollment: unknown) =>
-							(enrollment as { student: string }).student,
-					) || [];
+					enrollmentsData.docs?.map((enrollment: unknown) => {
+						const student = (
+							enrollment as { student: string | { id: string } }
+						).student;
+						// Handle both cases: student as ID string or student as object
+						return typeof student === "string"
+							? student
+							: student.id;
+					}) || [];
 
 				if (studentIds.length > 0) {
 					const studentsResponse = await fetch(
@@ -177,6 +188,7 @@ export default function ProfessorDashboard() {
 	useEffect(() => {
 		if (selectedAssessment) {
 			fetchStudentsAndScores();
+			setActiveTab("grading"); // Automatically switch to grading tab
 		}
 	}, [selectedAssessment, fetchStudentsAndScores]);
 
@@ -339,7 +351,7 @@ export default function ProfessorDashboard() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-900">
+		<div className="min-h-screen bg-gray-900 pt-20">
 			<div className="container mx-auto px-4 py-8">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
@@ -349,13 +361,55 @@ export default function ProfessorDashboard() {
 					<h1 className="text-3xl font-bold text-white mb-2">
 						Professor Dashboard
 					</h1>
-					<p className="text-gray-300">
+					<p className="text-gray-300 mb-6">
 						Welcome, {userStore.user?.name}. Manage your courses and
 						grade assessments.
 					</p>
+
+					{/* Quick Navigation */}
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+						<Button
+							onClick={() =>
+								(window.location.href = "/professor/grading")
+							}
+							className="bg-blue-600 hover:bg-blue-700 text-white h-16 flex flex-col items-center justify-center"
+						>
+							<Icon
+								icon="lucide:clipboard-list"
+								className="h-6 w-6 mb-2"
+							/>
+							<span className="text-sm">Grade Students</span>
+						</Button>
+						<Button
+							onClick={() =>
+								(window.location.href = "/professor/progress")
+							}
+							className="bg-green-600 hover:bg-green-700 text-white h-16 flex flex-col items-center justify-center"
+						>
+							<Icon
+								icon="lucide:bar-chart-3"
+								className="h-6 w-6 mb-2"
+							/>
+							<span className="text-sm">Track Progress</span>
+						</Button>
+						<Button
+							onClick={() => setActiveTab("courses")}
+							className="bg-purple-600 hover:bg-purple-700 text-white h-16 flex flex-col items-center justify-center"
+						>
+							<Icon
+								icon="lucide:book-open"
+								className="h-6 w-6 mb-2"
+							/>
+							<span className="text-sm">View Courses</span>
+						</Button>
+					</div>
 				</motion.div>
 
-				<Tabs defaultValue="courses" className="space-y-6">
+				<Tabs
+					value={activeTab}
+					onValueChange={setActiveTab}
+					className="space-y-6"
+				>
 					<TabsList className="bg-gray-800 border-gray-700">
 						<TabsTrigger
 							value="courses"
@@ -389,11 +443,21 @@ export default function ProfessorDashboard() {
 											<Card className="bg-gray-700 border-gray-600 hover:border-gray-500 transition-colors">
 												<CardHeader>
 													<CardTitle className="text-white text-lg">
-														{course.course.code} -{" "}
-														{course.instanceTitle}
+														{course.courseVariation
+															?.course?.code ||
+															course
+																.courseVariation
+																?.codeVariant ||
+															"N/A"}{" "}
+														- {course.instanceTitle}
 													</CardTitle>
 													<p className="text-gray-300">
-														{course.course.name}
+														{course.courseVariation
+															?.course?.name ||
+															course
+																.courseVariation
+																?.titleVariant ||
+															"Course name not available"}
 													</p>
 												</CardHeader>
 												<CardContent>
