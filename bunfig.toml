@@ -1,0 +1,47 @@
+[install]
+# Enable caching for faster installs
+cache = true
+# Use frozen lockfile in production
+frozen-lockfile = true
+# Install production dependencies only in production
+production = false
+# Use exact versions for better reproducibility
+exact = true
+# Enable auto-install for missing dependencies
+auto = true
+
+[install.scopes]
+# Configure scopes for different package registries if needed
+# "@company": "https://npm.company.com"
+
+[run]
+# Enable hot reloading for development
+hot = true
+# Enable watch mode for file changes
+watch = true
+
+[bunfig]
+# Enable experimental features
+experimental = true
+# Use Bun's built-in bundler
+bundler = true
+# Enable TypeScript support
+typescript = true
+
+[test]
+# Configure test runner
+preload = ["./vitest.setup.ts"]
+# Enable coverage reporting
+coverage = true
+# Use Bun's test runner instead of vitest
+runner = "bun"
+
+[build]
+# Use Bun's bundler for builds
+bundler = true
+# Enable minification
+minify = true
+# Enable source maps for debugging
+sourcemap = "external"
+# Target modern browsers
+target = "browser"

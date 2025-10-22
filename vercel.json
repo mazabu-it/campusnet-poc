@@ -1,6 +1,6 @@
 {
-	"installCommand": "npm install",
-	"buildCommand": "npm run payload migrate && npm run build",
+	"installCommand": "bun install",
+	"buildCommand": "bun run payload migrate && bun run build",
 	"crons": [
 		{
 			"path": "/api/payload-jobs/run",
