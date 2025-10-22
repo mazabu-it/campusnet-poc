@@ -52,7 +52,7 @@ export async function FooterComponent() {
 	];
 
 	return (
-		<footer className="bg-gray-900 text-white">
+		<footer className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white border-t border-gray-200 dark:border-gray-800">
 			{/* Main Footer Content */}
 			<div className="container mx-auto px-4 py-16">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
@@ -73,15 +73,15 @@ export async function FooterComponent() {
 								</svg>
 							</div>
 							<div>
-								<h2 className="text-xl font-bold text-white">
+								<h2 className="text-xl font-bold text-gray-900 dark:text-white">
 									Campusnet University
 								</h2>
-								<p className="text-gray-400 text-sm">
+								<p className="text-gray-600 dark:text-gray-400 text-sm">
 									Excellence in Education
 								</p>
 							</div>
 						</div>
-						<p className="text-gray-300 mb-6 max-w-sm">
+						<p className="text-gray-700 dark:text-gray-300 mb-6 max-w-sm">
 							Empowering tomorrow&apos;s leaders through
 							world-class education, innovative research, and
 							transformative experiences.
@@ -91,12 +91,12 @@ export async function FooterComponent() {
 								<a
 									key={social.label}
 									href={social.href}
-									className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors"
+									className="w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 dark:hover:bg-blue-600 transition-colors"
 									aria-label={social.label}
 								>
 									<Icon
 										icon={social.icon}
-										className="w-5 h-5"
+										className="w-5 h-5 text-gray-700 dark:text-gray-300 hover:text-white"
 									/>
 								</a>
 							))}
@@ -106,7 +106,7 @@ export async function FooterComponent() {
 					{/* Footer Sections */}
 					{footerSections.map((section) => (
 						<div key={section.title}>
-							<h3 className="font-semibold mb-4">
+							<h3 className="font-semibold mb-4 text-gray-900 dark:text-white">
 								{section.title}
 							</h3>
 							<ul className="space-y-3">
@@ -114,7 +114,7 @@ export async function FooterComponent() {
 									<li key={link.href}>
 										<Link
 											href={link.href}
-											className="text-gray-300 hover:text-white transition-colors"
+											className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
 										>
 											{link.label}
 										</Link>
@@ -125,30 +125,30 @@ export async function FooterComponent() {
 					))}
 				</div>
 
-				<Separator className="my-8 bg-gray-700" />
+				<Separator className="my-8 bg-gray-300 dark:bg-gray-700" />
 
 				{/* Bottom Footer */}
 				<div className="flex flex-col md:flex-row justify-between items-center">
 					<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-						<p className="text-gray-400 text-sm">
+						<p className="text-gray-600 dark:text-gray-400 text-sm">
 							© 2025 Campusnet University. All rights reserved.
 						</p>
 						<div className="flex space-x-6">
 							<Link
 								href="/privacy"
-								className="text-gray-400 hover:text-white text-sm transition-colors"
+								className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors"
 							>
 								Privacy Policy
 							</Link>
 							<Link
 								href="/terms"
-								className="text-gray-400 hover:text-white text-sm transition-colors"
+								className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors"
 							>
 								Terms of Service
 							</Link>
 							<Link
 								href="/accessibility"
-								className="text-gray-400 hover:text-white text-sm transition-colors"
+								className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors"
 							>
 								Accessibility
 							</Link>
@@ -163,28 +163,34 @@ export async function FooterComponent() {
 				{/* Quick Stats */}
 				<div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
 					<div className="text-center">
-						<div className="text-2xl font-bold text-blue-400">
+						<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
 							2,500+
 						</div>
-						<div className="text-gray-400 text-sm">Students</div>
+						<div className="text-gray-600 dark:text-gray-400 text-sm">
+							Students
+						</div>
 					</div>
 					<div className="text-center">
-						<div className="text-2xl font-bold text-blue-400">
+						<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
 							150+
 						</div>
-						<div className="text-gray-400 text-sm">Faculty</div>
+						<div className="text-gray-600 dark:text-gray-400 text-sm">
+							Faculty
+						</div>
 					</div>
 					<div className="text-center">
-						<div className="text-2xl font-bold text-blue-400">
+						<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
 							25+
 						</div>
-						<div className="text-gray-400 text-sm">Programs</div>
+						<div className="text-gray-600 dark:text-gray-400 text-sm">
+							Programs
+						</div>
 					</div>
 					<div className="text-center">
-						<div className="text-2xl font-bold text-blue-400">
+						<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
 							95%
 						</div>
-						<div className="text-gray-400 text-sm">
+						<div className="text-gray-600 dark:text-gray-400 text-sm">
 							Success Rate
 						</div>
 					</div>

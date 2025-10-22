@@ -25,12 +25,12 @@ export const UniversityHeroComponent: React.FC<Props> = ({ block }) => {
 	// Add error handling and default values
 	if (!block) {
 		return (
-			<section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+			<section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-indigo-950">
 				<div className="container mx-auto px-4 py-20 text-center">
 					<h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
 						Welcome to Demo University
 					</h1>
-					<p className="text-xl text-gray-600 mb-8">
+					<p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
 						Empowering Tomorrow&apos;s Leaders Through Excellence in
 						Education
 					</p>
@@ -52,10 +52,10 @@ export const UniversityHeroComponent: React.FC<Props> = ({ block }) => {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.6 }}
-			className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden"
+			className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-indigo-950 overflow-hidden"
 		>
 			{/* Background Pattern */}
-			<div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+			<div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:[mask-image:linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0))]" />
 
 			{/* Content */}
 			<div className="relative z-10 container mx-auto px-4 py-20">
@@ -74,7 +74,7 @@ export const UniversityHeroComponent: React.FC<Props> = ({ block }) => {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.4, duration: 0.6 }}
-						className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed"
+						className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
 					>
 						{subtitle}
 					</motion.p>
@@ -115,17 +115,17 @@ export const UniversityHeroComponent: React.FC<Props> = ({ block }) => {
 						{stats?.map((stat, index) => (
 							<Card
 								key={stat.label ?? index}
-								className="border-0 shadow-lg bg-white/80 backdrop-blur-sm"
+								className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
 							>
 								<CardContent className="p-6 text-center">
 									<Icon
 										icon={stat.icon}
-										className="text-4xl text-blue-600 mx-auto mb-4"
+										className="text-4xl text-blue-600 dark:text-blue-400 mx-auto mb-4"
 									/>
-									<div className="text-3xl font-bold text-gray-900 mb-2">
+									<div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
 										{stat.value}
 									</div>
-									<div className="text-gray-600">
+									<div className="text-gray-600 dark:text-gray-300">
 										{stat.label}
 									</div>
 								</CardContent>

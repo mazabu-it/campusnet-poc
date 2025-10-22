@@ -56,7 +56,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 			whileInView={{ opacity: 1 }}
 			viewport={{ once: true }}
 			transition={{ duration: 0.6 }}
-			className="py-20 bg-gray-50"
+			className="py-20 bg-gray-50 dark:bg-gray-900"
 		>
 			<div className="container mx-auto px-4">
 				<motion.div
@@ -66,10 +66,10 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 					transition={{ delay: 0.2, duration: 0.6 }}
 					className="text-center mb-16"
 				>
-					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
 						{block.title}
 					</h2>
-					<p className="text-xl text-gray-600 max-w-3xl mx-auto">
+					<p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
 						{block.subtitle}
 					</p>
 				</motion.div>
@@ -84,21 +84,21 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 							viewport={{ once: true }}
 							transition={{ delay: index * 0.1, duration: 0.6 }}
 						>
-							<Card className="hover:shadow-lg transition-shadow duration-300">
+							<Card className="hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
 								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-									<CardTitle className="text-sm font-medium text-gray-600">
+									<CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
 										{metric.label}
 									</CardTitle>
 									<Icon
 										icon={metric.icon}
-										className="h-4 w-4 text-gray-600"
+										className="h-4 w-4 text-gray-600 dark:text-gray-400"
 									/>
 								</CardHeader>
 								<CardContent>
-									<div className="text-2xl font-bold text-gray-900">
+									<div className="text-2xl font-bold text-gray-900 dark:text-white">
 										{metric.value}
 									</div>
-									<div className="flex items-center text-xs text-gray-500 mt-1">
+									<div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
 										<Icon
 											icon={
 												metric.trend === "up"
@@ -135,12 +135,12 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 						viewport={{ once: true }}
 						transition={{ delay: 0.4, duration: 0.6 }}
 					>
-						<Card>
+						<Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
 							<CardHeader>
-								<CardTitle className="flex items-center">
+								<CardTitle className="flex items-center text-gray-900 dark:text-white">
 									<Icon
 										icon="lucide:trending-up"
-										className="mr-2 text-blue-600"
+										className="mr-2 text-blue-600 dark:text-blue-400"
 									/>
 									Enrollment Trends
 								</CardTitle>
@@ -171,12 +171,12 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 						viewport={{ once: true }}
 						transition={{ delay: 0.6, duration: 0.6 }}
 					>
-						<Card>
+						<Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
 							<CardHeader>
-								<CardTitle className="flex items-center">
+								<CardTitle className="flex items-center text-gray-900 dark:text-white">
 									<Icon
 										icon="lucide:pie-chart"
-										className="mr-2 text-purple-600"
+										className="mr-2 text-purple-600 dark:text-purple-400"
 									/>
 									Program Distribution
 								</CardTitle>
@@ -225,12 +225,12 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 					viewport={{ once: true }}
 					transition={{ delay: 0.8, duration: 0.6 }}
 				>
-					<Card>
+					<Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
 						<CardHeader>
-							<CardTitle className="flex items-center">
+							<CardTitle className="flex items-center text-gray-900 dark:text-white">
 								<Icon
 									icon="lucide:target"
-									className="mr-2 text-green-600"
+									className="mr-2 text-green-600 dark:text-green-400"
 								/>
 								Academic Goals Progress
 							</CardTitle>
@@ -239,12 +239,12 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 							{block.goals?.map((goal, _index) => (
 								<div key={goal.name} className="space-y-2">
 									<div className="flex items-center justify-between">
-										<span className="text-sm font-medium text-gray-700">
+										<span className="text-sm font-medium text-gray-700 dark:text-gray-300">
 											{goal.name}
 										</span>
 										<Badge
 											variant="secondary"
-											className="bg-blue-100 text-blue-800"
+											className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
 										>
 											{goal.progress}%
 										</Badge>
@@ -253,7 +253,7 @@ export const DashboardStatsComponent: React.FC<Props> = ({ block }) => {
 										value={goal.progress}
 										className="h-2"
 									/>
-									<p className="text-xs text-gray-500">
+									<p className="text-xs text-gray-500 dark:text-gray-400">
 										{goal.description}
 									</p>
 								</div>

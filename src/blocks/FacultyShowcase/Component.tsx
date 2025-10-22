@@ -36,7 +36,7 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 			whileInView={{ opacity: 1 }}
 			viewport={{ once: true }}
 			transition={{ duration: 0.6 }}
-			className="py-20 bg-gray-50"
+			className="py-20 bg-gray-50 dark:bg-gray-900"
 		>
 			<div className="container mx-auto px-4">
 				<motion.div
@@ -46,10 +46,10 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 					transition={{ delay: 0.2, duration: 0.6 }}
 					className="text-center mb-16"
 				>
-					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
 						{block.title || "Our Faculty"}
 					</h2>
-					<p className="text-xl text-gray-600 max-w-3xl mx-auto">
+					<p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
 						{block.subtitle ||
 							"Meet our world-class faculty members"}
 					</p>
@@ -64,51 +64,51 @@ export const FacultyShowcaseComponent: React.FC<Props> = ({ block }) => {
 							viewport={{ once: true }}
 							transition={{ delay: 0.1, duration: 0.6 }}
 						>
-							<Card className="h-full hover:shadow-xl transition-all duration-300 group">
+							<Card className="h-full hover:shadow-xl transition-all duration-300 group bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
 								<CardHeader className="text-center pb-4">
 									<Avatar className="w-24 h-24 mx-auto mb-4">
 										<AvatarImage
 											src={member.avatar}
 											alt={member.name}
 										/>
-										<AvatarFallback className="text-2xl font-bold bg-blue-100 text-blue-600">
+										<AvatarFallback className="text-2xl font-bold bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-200">
 											{member.name
 												.split(" ")
 												.map((n) => n[0])
 												.join("")}
 										</AvatarFallback>
 									</Avatar>
-									<CardTitle className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+									<CardTitle className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
 										{member.name}
 									</CardTitle>
-									<div className="text-blue-600 font-medium">
+									<div className="text-blue-600 dark:text-blue-400 font-medium">
 										{member.title}
 									</div>
-									<div className="text-gray-600 text-sm">
+									<div className="text-gray-600 dark:text-gray-400 text-sm">
 										{member.department}
 									</div>
 								</CardHeader>
 								<CardContent>
-									<p className="text-gray-600 mb-4 line-clamp-3">
+									<p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
 										{member.bio}
 									</p>
 
 									<div className="space-y-2 mb-4">
-										<div className="flex items-center text-sm text-gray-500">
+										<div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
 											<Icon
 												icon="lucide:graduation-cap"
 												className="mr-2"
 											/>
 											{member.education}
 										</div>
-										<div className="flex items-center text-sm text-gray-500">
+										<div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
 											<Icon
 												icon="lucide:mail"
 												className="mr-2"
 											/>
 											{member.email}
 										</div>
-										<div className="flex items-center text-sm text-gray-500">
+										<div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
 											<Icon
 												icon="lucide:briefcase"
 												className="mr-2"

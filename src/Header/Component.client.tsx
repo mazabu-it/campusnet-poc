@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import type { Header } from "@/payload-types";
 import { useHeaderTheme } from "@/providers/HeaderTheme";
+import { ThemeSelector } from "@/providers/Theme/ThemeSelector";
 import { useAppStore, useUserStore } from "@/stores/app-store";
 import { cn } from "@/utilities/ui";
 
@@ -237,6 +238,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 								</nav>
 
 								<div className="pt-4 border-t space-y-3">
+									<div className="px-4 py-2">
+										<p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+											Theme
+										</p>
+										<ThemeSelector />
+									</div>
 									{user.user ? (
 										<>
 											<div className="flex items-center space-x-2 px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">

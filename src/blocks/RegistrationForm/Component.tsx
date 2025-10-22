@@ -62,13 +62,13 @@ export const RegistrationFormComponent: React.FC<Props> = ({ block }) => {
 	// Add error handling and default values
 	if (!block) {
 		return (
-			<section className="py-20 bg-white">
+			<section className="py-20 bg-gray-50 dark:bg-gray-900">
 				<div className="container mx-auto px-4">
 					<div className="text-center mb-16">
-						<h2 className="text-4xl font-bold text-gray-900 mb-4">
+						<h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
 							Start Your Journey
 						</h2>
-						<p className="text-xl text-gray-600 max-w-3xl mx-auto">
+						<p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
 							Apply to Demo University and begin your path to
 							success
 						</p>
@@ -117,7 +117,7 @@ export const RegistrationFormComponent: React.FC<Props> = ({ block }) => {
 			whileInView={{ opacity: 1 }}
 			viewport={{ once: true }}
 			transition={{ duration: 0.6 }}
-			className="py-20 bg-white"
+			className="py-20 bg-gray-50 dark:bg-gray-900"
 		>
 			<div className="container mx-auto px-4">
 				<motion.div
@@ -127,21 +127,21 @@ export const RegistrationFormComponent: React.FC<Props> = ({ block }) => {
 					transition={{ delay: 0.2, duration: 0.6 }}
 					className="text-center mb-16"
 				>
-					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
 						{title}
 					</h2>
-					<p className="text-xl text-gray-600 max-w-3xl mx-auto">
+					<p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
 						{subtitle}
 					</p>
 				</motion.div>
 
 				<div className="max-w-2xl mx-auto">
-					<Card className="shadow-xl">
+					<Card className="shadow-xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
 						<CardHeader className="text-center">
-							<CardTitle className="text-2xl font-bold text-gray-900">
+							<CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
 								<Icon
 									icon="lucide:user-plus"
-									className="mr-2 text-blue-600"
+									className="mr-2 text-blue-600 dark:text-blue-400"
 								/>
 								Student Registration
 							</CardTitle>
