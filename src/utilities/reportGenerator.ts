@@ -148,13 +148,30 @@ export class ReportGenerator {
 				(ga) => ga.enrollment === enrollment.id,
 			);
 
-			const courseInstance = enrollment.courseInstance as {
-				courseVariation?: { course?: unknown };
+			const courseInstance = (enrollment.courseInstance || {}) as {
+				courseVariation?: {
+					codeVariant?: string;
+					titleVariant?: string;
+					credits?: number;
+					course?: {
+						code?: string;
+						title?: string;
+						credits?: number;
+					};
+				};
 			};
-			const courseVariation = courseInstance?.courseVariation as {
-				course?: unknown;
+			const courseVariation = (courseInstance?.courseVariation || {}) as {
+				codeVariant?: string;
+				titleVariant?: string;
+				credits?: number;
+				course?: {
+					code?: string;
+					title?: string;
+					credits?: number;
+				};
 			};
-			const course = courseVariation?.course as {
+			const course = (courseVariation?.course || {}) as {
+				code?: string;
 				title?: string;
 				credits?: number;
 			};
@@ -169,21 +186,28 @@ export class ReportGenerator {
 					course?.credits ||
 					0,
 				assessments:
-					gradeAggregate?.assessmentBreakdown?.map(
-						(ab: {
-							assessmentTemplate?: { name?: string };
-							score?: number;
-							maxScore?: number;
-							weight?: number;
-							contribution?: number;
-						}) => ({
-							name: ab.assessmentTemplate?.name || "Assessment",
-							score: ab.score || 0,
-							maxScore: ab.maxScore,
-							weight: ab.weight,
-							contribution: ab.contribution,
-						}),
-					) || [],
+					(
+						gradeAggregate?.assessmentBreakdown as
+							| Array<{
+									assessmentTemplate?:
+										| { name?: string }
+										| number;
+									score?: number | null;
+									maxScore?: number | null;
+									weight?: number | null;
+									contribution?: number | null;
+							  }>
+							| undefined
+					)?.map((ab) => ({
+						name:
+							typeof ab.assessmentTemplate === "object"
+								? ab.assessmentTemplate?.name || "Assessment"
+								: "Assessment",
+						score: Number(ab.score || 0),
+						maxScore: Number(ab.maxScore || 0),
+						weight: Number(ab.weight || 0),
+						contribution: Number(ab.contribution || 0),
+					})) || [],
 				finalGrade: gradeAggregate?.finalNumeric || 0,
 				letterGrade: gradeAggregate?.finalLetter || "N/A",
 				passFail: gradeAggregate?.passFail || "incomplete",

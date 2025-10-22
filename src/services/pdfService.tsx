@@ -14,9 +14,9 @@ export const StudentReportPDF = ({
 	grades,
 	_courses,
 }: {
-	student: unknown;
-	grades: unknown;
-	_courses: unknown;
+	student: any;
+	grades: any;
+	_courses: any;
 }) => (
 	<Document>
 		<Page size="A4" style={styles.page}>
@@ -41,7 +41,7 @@ export const StudentReportPDF = ({
 
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Academic Performance</Text>
-				{grades?.map((grade: unknown, index: number) => (
+				{grades?.map((grade: any, index: number) => (
 					<View
 						key={(grade as { id?: string }).id || index}
 						style={styles.gradeItem}
@@ -117,14 +117,10 @@ const styles = StyleSheet.create({
 
 // PDF Service class for advanced PDF operations
 export class PDFService {
-	async generateStudentReport(
-		student: unknown,
-		grades: unknown[],
-		courses: unknown[],
-	) {
+	async generateStudentReport(student: any, grades: any[], courses: any[]) {
 		try {
 			const pdfDoc = await pdf(
-				StudentReportPDF({ student, grades, courses }),
+				StudentReportPDF({ student, grades, _courses: courses }),
 			).toBlob();
 			return pdfDoc;
 		} catch (error) {
@@ -133,7 +129,7 @@ export class PDFService {
 		}
 	}
 
-	async generateTranscript(student: unknown, academicHistory: unknown[]) {
+	async generateTranscript(student: any, academicHistory: any[]) {
 		try {
 			const pdfDoc = await PDFDocument.create();
 			const page = pdfDoc.addPage([600, 800]);
@@ -177,7 +173,7 @@ export class PDFService {
 
 			// Academic history
 			let yPosition = height - 180;
-			academicHistory.forEach((record: unknown) => {
+			(academicHistory as any[]).forEach((record) => {
 				page.drawText(`${record.course} - ${record.grade}`, {
 					x: 50,
 					y: yPosition,
