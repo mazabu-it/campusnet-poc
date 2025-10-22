@@ -188,18 +188,46 @@ export default function LoginPage() {
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="text-sm text-blue-700">
-						<p className="mb-2">
+						<p className="mb-3">
 							For testing purposes, you can use:
 						</p>
-						<div className="space-y-1">
-							<p>
-								<strong>Email:</strong> admin@demouniversity.edu
-							</p>
-							<p>
-								<strong>Password:</strong> password123
-							</p>
+						<div className="space-y-3">
+							<div className="p-2 bg-white rounded border">
+								<p className="font-semibold text-green-700 mb-1">
+									👨‍🎓 Student
+								</p>
+								<p>
+									<strong>Email:</strong> student@test.com
+								</p>
+								<p>
+									<strong>Password:</strong> test123
+								</p>
+							</div>
+							<div className="p-2 bg-white rounded border">
+								<p className="font-semibold text-blue-700 mb-1">
+									👨‍🏫 Professor
+								</p>
+								<p>
+									<strong>Email:</strong> professor@test.com
+								</p>
+								<p>
+									<strong>Password:</strong> test123
+								</p>
+							</div>
+							<div className="p-2 bg-white rounded border">
+								<p className="font-semibold text-purple-700 mb-1">
+									👨‍💼 Admin
+								</p>
+								<p>
+									<strong>Email:</strong>{" "}
+									admin@demouniversity.edu
+								</p>
+								<p>
+									<strong>Password:</strong> password123
+								</p>
+							</div>
 						</div>
-						<p className="mt-2 text-xs text-blue-600">
+						<p className="mt-3 text-xs text-blue-600">
 							Or access the admin panel at{" "}
 							<Link href="/admin" className="underline">
 								/admin

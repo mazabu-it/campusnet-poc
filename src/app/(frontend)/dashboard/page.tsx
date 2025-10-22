@@ -72,21 +72,26 @@ export default function StudentDashboard() {
 
 	const studentGrades = Array.isArray(gradeAggregates)
 		? gradeAggregates.filter(
-				(grade) =>
+				(grade: any) =>
 					Array.isArray(enrollments) &&
 					enrollments.some(
-						(enrollment) => enrollment.id === grade.enrollment,
+						(enrollment: any) => enrollment.id === grade.enrollment,
 					),
 			)
 		: [];
 
 	const gpa =
 		studentGrades.length > 0
-			? studentGrades.reduce((sum, grade) => sum + grade.gpaPoints, 0) /
-				studentGrades.length
+			? studentGrades.reduce(
+					(sum: number, grade: any) => sum + grade.gpaPoints,
+					0,
+				) / studentGrades.length
 			: 0;
 
-	const creditsCompleted = studentGrades.reduce((sum, _grade) => sum + 3, 0); // Assuming 3 credits per course
+	const creditsCompleted = studentGrades.reduce(
+		(sum: number, _grade: any) => sum + 3,
+		0,
+	); // Assuming 3 credits per course
 	const creditsRequired = 120; // Typical bachelor's degree
 	const progressPercentage = (creditsCompleted / creditsRequired) * 100;
 
@@ -94,23 +99,28 @@ export default function StudentDashboard() {
 	const gradeDistribution = [
 		{
 			grade: "A",
-			count: studentGrades.filter((g) => g.finalLetter === "A").length,
+			count: studentGrades.filter((g: any) => g.finalLetter === "A")
+				.length,
 		},
 		{
 			grade: "B",
-			count: studentGrades.filter((g) => g.finalLetter === "B").length,
+			count: studentGrades.filter((g: any) => g.finalLetter === "B")
+				.length,
 		},
 		{
 			grade: "C",
-			count: studentGrades.filter((g) => g.finalLetter === "C").length,
+			count: studentGrades.filter((g: any) => g.finalLetter === "C")
+				.length,
 		},
 		{
 			grade: "D",
-			count: studentGrades.filter((g) => g.finalLetter === "D").length,
+			count: studentGrades.filter((g: any) => g.finalLetter === "D")
+				.length,
 		},
 		{
 			grade: "F",
-			count: studentGrades.filter((g) => g.finalLetter === "F").length,
+			count: studentGrades.filter((g: any) => g.finalLetter === "F")
+				.length,
 		},
 	];
 
@@ -246,7 +256,7 @@ export default function StudentDashboard() {
 									</CardHeader>
 									<CardContent>
 										<div className="text-2xl font-bold text-white">
-											{creditsCompleted}
+											{creditsCompleted.toString()}
 										</div>
 										<p className="text-xs text-gray-500">
 											of {creditsRequired} required
@@ -273,7 +283,8 @@ export default function StudentDashboard() {
 									<CardContent>
 										<div className="text-2xl font-bold text-white">
 											{enrollments?.filter(
-												(e) => e.status === "active",
+												(e: any) =>
+													e.status === "active",
 											).length || 0}
 										</div>
 										<p className="text-xs text-gray-500">
@@ -446,7 +457,10 @@ export default function StudentDashboard() {
 											</div>
 										) : (
 											enrollments?.map(
-												(enrollment, index) => (
+												(
+													enrollment: any,
+													index: number,
+												) => (
 													<motion.div
 														key={enrollment.id}
 														initial={{
@@ -557,7 +571,7 @@ export default function StudentDashboard() {
 											</div>
 										) : (
 											studentGrades.map(
-												(grade, index) => (
+												(grade: any, index: number) => (
 													<motion.div
 														key={grade.id}
 														initial={{
@@ -656,8 +670,8 @@ export default function StudentDashboard() {
 													Degree Completion
 												</span>
 												<span className="text-sm text-gray-600">
-													{creditsCompleted} /{" "}
-													{creditsRequired} credits
+													{creditsCompleted.toString()}{" "}
+													/ {creditsRequired} credits
 												</span>
 											</div>
 											<Progress

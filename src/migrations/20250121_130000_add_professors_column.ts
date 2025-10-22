@@ -1,7 +1,6 @@
-import {
-	type MigrateDownArgs,
-	type MigrateUpArgs,
-	sql: _sql,
+import type {
+	MigrateDownArgs,
+	MigrateUpArgs,
 } from "@payloadcms/db-vercel-postgres";
 
 export async function up({

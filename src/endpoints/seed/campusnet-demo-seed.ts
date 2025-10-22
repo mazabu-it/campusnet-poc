@@ -475,12 +475,66 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			"Skipping test user creation - using existing test@test.com user",
 		);
 
-		// Create a test student for debugging
+		// Create a test professor for debugging
+		let testProfessor: any;
 		try {
-			const testStudent = await payload.create({
+			testProfessor = await payload.create({
 				collection: "users",
 				data: {
-					name: "Test Student",
+					name: "Dr. Marie Dubois",
+					firstName: "Marie",
+					lastName: "Dubois",
+					email: "professor@test.com",
+					password: "test123",
+					role: "professor",
+					university: university.id,
+					faculty: faculty.id,
+					department: department.id,
+					employeeId: "PROF001",
+					profile: {
+						dateOfBirth: "1975-03-15T00:00:00.000Z",
+						phone: "+243-81-700-0100",
+						address: "Avenue de l'Université 123, Kinshasa, RDC",
+						emergencyContact: {
+							name: "Jean Dubois",
+							relationship: "Spouse",
+							phone: "+243-81-700-0101",
+							email: "jean.dubois@email.com",
+						},
+					},
+					academicInfo: {
+						enrollmentDate: "2010-09-01T00:00:00.000Z",
+						expectedGraduation: null,
+						status: "active",
+						gpa: null,
+						totalCreditsEarned: null,
+					},
+					permissions: {
+						canImpersonate: false,
+						canManageUsers: false,
+						canManageCourses: true,
+						canGrade: true,
+						canViewReports: true,
+						scope: "department",
+					},
+					isActive: true,
+					lastLoginAt: new Date().toISOString(),
+				},
+			});
+			console.log("✅ Test professor created:", testProfessor.email);
+		} catch (error) {
+			console.log("❌ Test professor creation failed:", error);
+		}
+
+		// Create a test student for debugging
+		let testStudent: any;
+		try {
+			testStudent = await payload.create({
+				collection: "users",
+				data: {
+					name: "Jean-Pierre Mbuyi",
+					firstName: "Jean-Pierre",
+					lastName: "Mbuyi",
 					email: "student@test.com",
 					password: "test123",
 					role: "student",
@@ -489,18 +543,36 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					department: department.id,
 					program: program.id,
 					programYear: programYear1.id,
-					studentId: "TEST001",
+					studentId: "STU2024001",
 					profile: {
-						phone: "+32 2 123 4567",
-						address: "123 Test Street, Brussels, Belgium",
+						dateOfBirth: "2003-08-20T00:00:00.000Z",
+						phone: "+243-81-700-0200",
+						address:
+							"Commune de Limete, Avenue Kasa-Vubu, Kinshasa, RDC",
+						emergencyContact: {
+							name: "Marie Mbuyi",
+							relationship: "Mother",
+							phone: "+243-81-700-0201",
+							email: "marie.mbuyi@email.com",
+						},
 					},
 					academicInfo: {
-						enrollmentDate: new Date().toISOString(),
-						expectedGraduation: new Date(
-							Date.now() + 2 * 365 * 24 * 60 * 60 * 1000,
-						).toISOString(),
+						enrollmentDate: "2024-09-01T00:00:00.000Z",
+						expectedGraduation: "2027-06-30T00:00:00.000Z",
 						status: "active",
+						gpa: 3.2,
+						totalCreditsEarned: 45,
 					},
+					permissions: {
+						canImpersonate: false,
+						canManageUsers: false,
+						canManageCourses: false,
+						canGrade: false,
+						canViewReports: false,
+						scope: "self",
+					},
+					isActive: true,
+					lastLoginAt: new Date().toISOString(),
 				},
 			});
 			console.log("✅ Test student created:", testStudent.email);
@@ -699,28 +771,43 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		// Assign professors to course instances
 		console.log("Assigning professors to course instances...");
 
-		// Update course instances with professor assignment
+		// Update course instances with professor assignment (including test professor)
+		const professorIds = [professors[0].id];
+		if (testProfessor) {
+			professorIds.push(testProfessor.id);
+		}
+
 		await payload.update({
 			collection: "course-instances",
 			id: introProgrammingInstance.id,
 			data: {
-				professors: [professors[0].id],
+				professors: professorIds,
 			},
 		});
+
+		const professorIds2 = [professors[1].id];
+		if (testProfessor) {
+			professorIds2.push(testProfessor.id);
+		}
 
 		await payload.update({
 			collection: "course-instances",
 			id: dataStructuresInstance.id,
 			data: {
-				professors: [professors[1].id],
+				professors: professorIds2,
 			},
 		});
+
+		const professorIds3 = [professors[2].id];
+		if (testProfessor) {
+			professorIds3.push(testProfessor.id);
+		}
 
 		await payload.update({
 			collection: "course-instances",
 			id: softwareEngineeringInstance.id,
 			data: {
-				professors: [professors[2].id],
+				professors: professorIds3,
 			},
 		});
 
@@ -1100,6 +1187,58 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			enrollments.push(enrollment);
 		}
 
+		// Create enrollments for test student
+		if (testStudent) {
+			console.log("Creating enrollments for test student...");
+
+			// Enroll test student in Introduction to Programming
+			const testStudentIntroEnrollment = await payload.create({
+				collection: "enrollments",
+				data: {
+					student: testStudent.id,
+					courseInstance: introProgrammingInstance.id,
+					enrollmentTitle: `${testStudent.name} - Introduction to Programming Fall 2024`,
+					status: "active",
+					enrolledAt: "2024-09-01T08:00:00.000Z",
+					enrollmentType: "required",
+					notes: "Test student enrollment for demo purposes",
+				},
+			});
+			enrollments.push(testStudentIntroEnrollment);
+
+			// Enroll test student in Data Structures
+			const testStudentDataStructuresEnrollment = await payload.create({
+				collection: "enrollments",
+				data: {
+					student: testStudent.id,
+					courseInstance: dataStructuresInstance.id,
+					enrollmentTitle: `${testStudent.name} - Data Structures Fall 2024`,
+					status: "active",
+					enrolledAt: "2024-09-01T08:00:00.000Z",
+					enrollmentType: "required",
+					notes: "Test student enrollment for demo purposes",
+				},
+			});
+			enrollments.push(testStudentDataStructuresEnrollment);
+
+			// Enroll test student in Software Engineering
+			const testStudentSEEnrollment = await payload.create({
+				collection: "enrollments",
+				data: {
+					student: testStudent.id,
+					courseInstance: softwareEngineeringInstance.id,
+					enrollmentTitle: `${testStudent.name} - Software Engineering Spring 2025`,
+					status: "active",
+					enrolledAt: "2025-01-15T08:00:00.000Z",
+					enrollmentType: "required",
+					notes: "Test student enrollment for demo purposes",
+				},
+			});
+			enrollments.push(testStudentSEEnrollment);
+
+			console.log("✅ Test student enrollments created");
+		}
+
 		console.log(`Created ${enrollments.length} enrollments`);
 
 		// 17. Create Comprehensive Scores for All Students
@@ -1414,12 +1553,138 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			}
 		}
 
+		// Create specific scores for test student
+		if (testStudent) {
+			console.log("Creating specific scores for test student...");
+
+			// Get test student's enrollments
+			const testStudentEnrollments = enrollments.filter(
+				(enrollment) => enrollment.student === testStudent.id,
+			);
+
+			for (const enrollment of testStudentEnrollments) {
+				// Find assessments for this course instance
+				const courseAssessments = allAssessments.filter(
+					(assessment) =>
+						assessment.template.courseInstance ===
+						enrollment.courseInstance,
+				);
+
+				for (const assessment of courseAssessments) {
+					// Create realistic scores for test student (good performance)
+					let scoreValue: number;
+					let feedback: string;
+
+					switch (assessment.template.assessmentType) {
+						case "exam":
+							scoreValue = faker.number.int({ min: 75, max: 95 });
+							feedback =
+								"Excellent understanding of concepts. Shows strong analytical skills.";
+							break;
+						case "project":
+							scoreValue = faker.number.int({ min: 80, max: 98 });
+							feedback =
+								"Outstanding project implementation. Excellent code quality and documentation.";
+							break;
+						case "assignment":
+							scoreValue = faker.number.int({ min: 70, max: 90 });
+							feedback =
+								"Good work with clear explanations. Minor improvements possible.";
+							break;
+						default:
+							scoreValue = faker.number.int({ min: 75, max: 90 });
+							feedback = "Good performance overall.";
+					}
+
+					const percentage = Math.round(
+						(scoreValue / assessment.template.maxScore) * 100,
+					);
+
+					await payload.create({
+						collection: "scores",
+						data: {
+							assessment: assessment.id,
+							student: testStudent.id,
+							scoreTitle: `${testStudent.name} - ${assessment.title}`,
+							value: scoreValue,
+							maxValue: assessment.template.maxScore,
+							percentage: percentage,
+							finalValue: scoreValue,
+							gradedBy: testProfessor?.id || professors[0].id,
+							gradedAt: faker.date
+								.past({ years: 1 })
+								.toISOString(),
+							feedback: feedback,
+							notes: "Test student score for demo purposes",
+							isLate: false,
+							latePenaltyApplied: 0,
+							isExcused: false,
+						},
+					});
+					scoreCount++;
+				}
+			}
+
+			console.log("✅ Test student scores created");
+		}
+
 		console.log(
 			`Created ${scoreCount} comprehensive scores for all students`,
 		);
 
 		// 18. Create Grade Aggregates (Sample)
 		console.log("Creating sample grade aggregates...");
+
+		// Create grade aggregates for test student
+		if (testStudent) {
+			console.log("Creating grade aggregates for test student...");
+
+			const testStudentEnrollments = enrollments.filter(
+				(enrollment) => enrollment.student === testStudent.id,
+			);
+
+			for (const enrollment of testStudentEnrollments) {
+				// Calculate realistic final grade (good performance)
+				const finalNumeric = faker.number.int({ min: 78, max: 92 });
+				let finalLetter: string;
+				let gpaPoints: number;
+
+				if (finalNumeric >= 90) {
+					finalLetter = "A";
+					gpaPoints = 4.0;
+				} else if (finalNumeric >= 80) {
+					finalLetter = "B";
+					gpaPoints = 3.0;
+				} else if (finalNumeric >= 70) {
+					finalLetter = "C";
+					gpaPoints = 2.0;
+				} else {
+					finalLetter = "D";
+					gpaPoints = 1.0;
+				}
+
+				await payload.create({
+					collection: "grade-aggregates",
+					data: {
+						enrollment: enrollment.id,
+						gradeTitle: `${testStudent.name} - ${enrollment.enrollmentTitle}`,
+						finalNumeric: finalNumeric,
+						finalLetter: finalLetter,
+						passFail: finalNumeric >= 60 ? "pass" : "fail",
+						gpaPoints: gpaPoints,
+						calculationMethod: "weighted-average",
+						decisionNotes: `Final grade calculated for ${testStudent.name} - ${enrollment.enrollmentTitle}`,
+						calculatedAt: new Date().toISOString(),
+						calculatedBy: testProfessor?.id || professors[0].id,
+						isPublished: true,
+						publishedAt: new Date().toISOString(),
+						assessmentBreakdown: [],
+					},
+				});
+			}
+
+			console.log("✅ Test student grade aggregates created");
+		}
 
 		// Create a few sample grade aggregates for demonstration
 		if (enrollments.length > 0) {

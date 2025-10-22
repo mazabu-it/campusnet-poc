@@ -363,16 +363,16 @@ export const useAnalyticsStore = create<AnalyticsState>()(
 						});
 					}),
 				getPageViews: (page) => {
-					const state = get();
+					const state = _get();
 					return page
 						? state.pageViews[page] || 0
 						: Object.values(state.pageViews).reduce(
-								(sum, views) => sum + views,
+								(sum: number, views: number) => sum + views,
 								0,
 							);
 				},
 				getInteractionCount: (type) => {
-					const state = get();
+					const state = _get();
 					return type
 						? state.userInteractions.filter((i) => i.type === type)
 								.length

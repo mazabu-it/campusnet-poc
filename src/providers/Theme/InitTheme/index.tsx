@@ -24,28 +24,38 @@ export const InitTheme: React.FC = () => {
       return null
     }
 
-    function themeIsValid(theme) {
-      return theme === 'light' || theme === 'dark'
-    }
-
-    var themeToSet = '${defaultTheme}'
-    var preference = window.localStorage.getItem('${themeLocalStorageKey}')
-
-    if (themeIsValid(preference)) {
-      themeToSet = preference
-    } else {
-      var implicitPreference = getImplicitPreference()
-
-      if (implicitPreference) {
-        themeToSet = implicitPreference
+    function getStoredPreference() {
+      try {
+        return localStorage.getItem('${themeLocalStorageKey}')
+      } catch (err) {
+        return null
       }
     }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
-  })();
-  `,
+    function setTheme(theme) {
+      try {
+        localStorage.setItem('${themeLocalStorageKey}', theme)
+      } catch (err) {
+        // ignore
+      }
+    }
+
+    var colorScheme = getStoredPreference() || getImplicitPreference() || '${defaultTheme}'
+    var root = document.documentElement
+
+    root.style.setProperty('--initial-theme', colorScheme)
+    root.style.setProperty('color-scheme', colorScheme)
+
+    if (colorScheme === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+
+    setTheme(colorScheme)
+  })()
+`,
 			}}
-			strategy="beforeInteractive"
 		/>
 	);
 };
