@@ -9,6 +9,17 @@ export async function up({
 	payload: _payload,
 	req: _req,
 }: MigrateUpArgs): Promise<void> {
+	// Ensure migrations tracking table exists for Payload Drizzle
+	await db.execute(sql`
+   CREATE TABLE IF NOT EXISTS "payload_migrations" (
+     "id" serial PRIMARY KEY NOT NULL,
+     "name" varchar NOT NULL,
+     "batch" integer NOT NULL,
+     "created_at" timestamp(3) DEFAULT now() NOT NULL,
+     "updated_at" timestamp(3) DEFAULT now() NOT NULL
+   );
+  `);
+
 	// Create all enum types
 	await db.execute(sql`
    DO $$ BEGIN
