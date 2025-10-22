@@ -18,10 +18,26 @@ export async function Footer() {
 			{ label: "Terms", href: "/terms" },
 		],
 		connect: [
-			{ label: "LinkedIn", href: "#", icon: "lucide:linkedin" },
-			{ label: "Twitter", href: "#", icon: "lucide:twitter" },
-			{ label: "Facebook", href: "#", icon: "lucide:facebook" },
-			{ label: "Instagram", href: "#", icon: "lucide:instagram" },
+			{
+				label: "LinkedIn",
+				href: "https://linkedin.com",
+				icon: "lucide:linkedin",
+			},
+			{
+				label: "Twitter",
+				href: "https://twitter.com",
+				icon: "lucide:twitter",
+			},
+			{
+				label: "Facebook",
+				href: "https://facebook.com",
+				icon: "lucide:facebook",
+			},
+			{
+				label: "Instagram",
+				href: "https://instagram.com",
+				icon: "lucide:instagram",
+			},
 		],
 	};
 
@@ -36,12 +52,15 @@ export async function Footer() {
 							href="/"
 							className="flex items-center space-x-2 text-lg font-semibold"
 						>
-							<Icon icon="lucide:graduation-cap" className="h-6 w-6" />
+							<Icon
+								icon="lucide:graduation-cap"
+								className="h-6 w-6"
+							/>
 							<span>Campusnet</span>
 						</Link>
 						<p className="text-sm text-muted-foreground max-w-xs">
-							Excellence in education, empowering tomorrow's leaders
-							through innovative learning.
+							Excellence in education, empowering tomorrow's
+							leaders through innovative learning.
 						</p>
 					</div>
 
@@ -90,7 +109,10 @@ export async function Footer() {
 										className="flex items-center space-x-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
 									>
 										{link.icon && (
-											<Icon icon={link.icon} className="h-4 w-4" />
+											<Icon
+												icon={link.icon}
+												className="h-4 w-4"
+											/>
 										)}
 										<span>{link.label}</span>
 									</Link>
@@ -103,7 +125,8 @@ export async function Footer() {
 				{/* Bottom Bar */}
 				<div className="flex flex-col items-center justify-between gap-4 border-t border-border py-6 md:flex-row">
 					<p className="text-sm text-muted-foreground">
-						© {currentYear} Campusnet University. All rights reserved.
+						© {currentYear} Campusnet University. All rights
+						reserved.
 					</p>
 					<div className="flex items-center space-x-4">
 						<Link
