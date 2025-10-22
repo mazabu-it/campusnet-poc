@@ -11,28 +11,31 @@ import { RenderHero } from "@/heros/RenderHero";
 import { generateMeta } from "@/utilities/generateMeta";
 import PageClient from "./page.client";
 
-export async function generateStaticParams() {
-	const payload = await getPayload({ config: configPromise });
-	const pages = await payload.find({
-		collection: "pages",
-		draft: false,
-		limit: 1000,
-		overrideAccess: false,
-		pagination: false,
-		select: {
-			slug: true,
-		},
-	});
+// Avoid build-time DB access; render dynamically
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-	const params = pages.docs
-		?.filter((doc) => {
-			return doc.slug !== "home";
-		})
-		.map(({ slug }) => {
-			return { slug };
+export async function generateStaticParams() {
+	try {
+		const payload = await getPayload({ config: configPromise });
+		const pages = await payload.find({
+			collection: "pages",
+			draft: false,
+			limit: 1000,
+			overrideAccess: false,
+			pagination: false,
+			select: { slug: true },
 		});
 
-	return params;
+		return (
+			pages.docs
+				?.filter((doc) => doc.slug !== "home")
+				.map(({ slug }) => ({ slug })) || []
+		);
+	} catch {
+		// If DB/tables don't exist at build-time, skip prebuilding
+		return [];
+	}
 }
 
 type Args = {
@@ -91,20 +94,18 @@ export async function generateMetadata({
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
 	const { isEnabled: draft } = await draftMode();
 
-	const payload = await getPayload({ config: configPromise });
-
-	const result = await payload.find({
-		collection: "pages",
-		draft,
-		limit: 1,
-		pagination: false,
-		overrideAccess: draft,
-		where: {
-			slug: {
-				equals: slug,
-			},
-		},
-	});
-
-	return result.docs?.[0] || null;
+	try {
+		const payload = await getPayload({ config: configPromise });
+		const result = await payload.find({
+			collection: "pages",
+			draft,
+			limit: 1,
+			pagination: false,
+			overrideAccess: draft,
+			where: { slug: { equals: slug } },
+		});
+		return result.docs?.[0] || null;
+	} catch {
+		return null;
+	}
 });
