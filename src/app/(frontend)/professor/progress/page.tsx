@@ -45,7 +45,7 @@ interface CourseInstance {
 		titleVariant: string;
 		course: {
 			code: string;
-			name: string;
+			title: string;
 		};
 	};
 	professors: Array<{
@@ -368,12 +368,19 @@ export default function ProfessorProgressPage() {
 			F: 0,
 		};
 
-		gradeAggregates.forEach((grade) => {
-			const letter = grade.finalLetter.charAt(0);
-			if (letter === "A") distribution.A++;
-			else if (letter === "B") distribution.B++;
-			else if (letter === "C") distribution.C++;
-			else if (letter === "D") distribution.D++;
+		// Calculate current grades for all students
+		enrollments.forEach((enrollment) => {
+			const studentId =
+				typeof enrollment.student === "string"
+					? enrollment.student
+					: enrollment.student.id;
+			const avgScore = calculateAverageScore(studentId);
+
+			// Convert numeric score to letter grade
+			if (avgScore >= 80) distribution.A++;
+			else if (avgScore >= 70) distribution.B++;
+			else if (avgScore >= 60) distribution.C++;
+			else if (avgScore >= 50) distribution.D++;
 			else distribution.F++;
 		});
 
@@ -404,10 +411,17 @@ export default function ProfessorProgressPage() {
 			const averageScore =
 				assessmentScores.length > 0
 					? Math.round(
-							assessmentScores.reduce(
-								(sum, score) => sum + score.percentage,
-								0,
-							) / assessmentScores.length,
+							assessmentScores.reduce((sum, score) => {
+								const maxScore =
+									assessment.assessmentTemplate.maxScore ||
+									score.maxValue ||
+									100;
+								const scorePercentage =
+									maxScore > 0
+										? (score.value / maxScore) * 100
+										: 0;
+								return sum + scorePercentage;
+							}, 0) / assessmentScores.length,
 						)
 					: 0;
 
@@ -506,7 +520,7 @@ export default function ProfessorProgressPage() {
 														{
 															courseInstance
 																.courseVariation
-																.course.name
+																.course.title
 														}
 													</h3>
 													<p className="text-gray-300 text-sm">
@@ -548,7 +562,8 @@ export default function ProfessorProgressPage() {
 											-{" "}
 											{
 												selectedCourseInstance
-													.courseVariation.course.name
+													.courseVariation.course
+													.title
 											}
 										</CardTitle>
 										<p className="text-gray-300">
@@ -661,14 +676,31 @@ export default function ProfessorProgressPage() {
 												Pass Rate
 											</p>
 											<p className="text-2xl font-bold text-white">
-												{gradeAggregates.length > 0
+												{enrollments.length > 0
 													? Math.round(
-															(gradeAggregates.filter(
-																(grade) =>
-																	grade.passFail ===
-																	"pass",
+															(enrollments.filter(
+																(
+																	enrollment,
+																) => {
+																	const studentId =
+																		typeof enrollment.student ===
+																		"string"
+																			? enrollment.student
+																			: enrollment
+																					.student
+																					.id;
+																	const avgScore =
+																		calculateAverageScore(
+																			studentId,
+																		);
+																	// Pass threshold is typically 50%
+																	return (
+																		avgScore >=
+																		50
+																	);
+																},
 															).length /
-																gradeAggregates.length) *
+																enrollments.length) *
 																100,
 														)
 													: 0}
@@ -916,9 +948,25 @@ export default function ProfessorProgressPage() {
 																	(
 																		sum,
 																		score,
-																	) =>
-																		sum +
-																		score.percentage,
+																	) => {
+																		const maxScore =
+																			assessment
+																				.assessmentTemplate
+																				.maxScore ||
+																			score.maxValue ||
+																			100;
+																		const scorePercentage =
+																			maxScore >
+																			0
+																				? (score.value /
+																						maxScore) *
+																					100
+																				: 0;
+																		return (
+																			sum +
+																			scorePercentage
+																		);
+																	},
 																	0,
 																) /
 																	assessmentScores.length,

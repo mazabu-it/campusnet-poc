@@ -51,6 +51,7 @@ interface Assessment {
 		id: string;
 		name: string;
 		weightPercent: number;
+		maxScore: number;
 		assessmentType: string;
 	};
 }
@@ -350,7 +351,9 @@ export default function ProfessorDashboard() {
 									value: scoreData.value,
 									percentage: Math.round(
 										(scoreData.value /
-											selectedAssessmentData.maxScore) *
+											(selectedAssessmentData
+												.assessmentTemplate?.maxScore ||
+												100)) *
 											100,
 									),
 									finalValue: scoreData.value,
@@ -376,10 +379,13 @@ export default function ProfessorDashboard() {
 							student: Number(studentId),
 							scoreTitle: `${students.find((s) => s.id === studentId)?.name} - ${selectedAssessmentData.title}`,
 							value: scoreData.value,
-							maxValue: selectedAssessmentData.maxScore,
+							maxValue:
+								selectedAssessmentData.assessmentTemplate
+									?.maxScore || 100,
 							percentage: Math.round(
 								(scoreData.value /
-									selectedAssessmentData.maxScore) *
+									(selectedAssessmentData.assessmentTemplate
+										?.maxScore || 100)) *
 									100,
 							),
 							finalValue: scoreData.value,
@@ -603,9 +609,11 @@ export default function ProfessorDashboard() {
 																		className="w-4 h-4 inline mr-1"
 																	/>
 																	Due:{" "}
-																	{new Date(
-																		assessment.dueDate,
-																	).toLocaleDateString()}
+																	{assessment.dueDate
+																		? new Date(
+																				assessment.dueDate,
+																			).toLocaleDateString()
+																		: "N/A"}
 																</span>
 																<span>
 																	<Icon
@@ -613,9 +621,10 @@ export default function ProfessorDashboard() {
 																		className="w-4 h-4 inline mr-1"
 																	/>
 																	Max Score:{" "}
-																	{
-																		assessment.maxScore
-																	}
+																	{assessment
+																		.assessmentTemplate
+																		?.maxScore ||
+																		"N/A"}
 																</span>
 																<span>
 																	<Icon
@@ -696,7 +705,9 @@ export default function ProfessorDashboard() {
 															}{" "}
 															(Max:{" "}
 															{
-																selectedAssessmentData?.maxScore
+																selectedAssessmentData
+																	?.assessmentTemplate
+																	?.maxScore
 															}{" "}
 															points • Weight:{" "}
 															{
@@ -843,6 +854,7 @@ export default function ProfessorDashboard() {
 																			a.id ===
 																			selectedAssessment,
 																	)
+																		?.assessmentTemplate
 																		?.maxScore ||
 																	100
 																}
@@ -874,7 +886,9 @@ export default function ProfessorDashboard() {
 																	(a) =>
 																		a.id ===
 																		selectedAssessment,
-																)?.maxScore ||
+																)
+																	?.assessmentTemplate
+																	?.maxScore ||
 																	100)) *
 																100,
 														)}
