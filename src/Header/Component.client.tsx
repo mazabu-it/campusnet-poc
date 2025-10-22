@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import type { Header } from "@/payload-types";
 import { useHeaderTheme } from "@/providers/HeaderTheme";
+import { useAppStore } from "@/stores/app-store";
 import { cn } from "@/utilities/ui";
 
 interface HeaderClientProps {
@@ -24,6 +25,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const { headerTheme, setHeaderTheme } = useHeaderTheme();
 	const pathname = usePathname();
+	const { user } = useAppStore();
 
 	useEffect(() => {
 		setHeaderTheme(null);
@@ -41,13 +43,29 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
+	// Role-aware dashboard link
+	const getDashboardHref = () => {
+		if (!user.user) return "/login";
+		if (
+			user.user.role === "professor" ||
+			user.user.role === "faculty-staff"
+		) {
+			return "/professor";
+		}
+		return "/dashboard";
+	};
+
 	const navigationItems = [
 		{ label: "Home", href: "/", icon: "lucide:home" },
 		{ label: "University", href: "/university", icon: "lucide:building" },
 		{ label: "Programs", href: "/programs", icon: "lucide:graduation-cap" },
 		{ label: "Faculty", href: "/faculty", icon: "lucide:users" },
 		{ label: "News", href: "/news", icon: "lucide:newspaper" },
-		{ label: "Dashboard", href: "/dashboard", icon: "lucide:bar-chart-3" },
+		{
+			label: "Dashboard",
+			href: getDashboardHref(),
+			icon: "lucide:bar-chart-3",
+		},
 	];
 
 	return (

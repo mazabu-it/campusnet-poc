@@ -181,10 +181,17 @@ export default function ProfessorDashboard() {
 	}, [selectedAssessment, fetchStudentsAndScores]);
 
 	// Check if user is professor or faculty-staff
+	if (!userStore.user) {
+		return (
+			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
+				<div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+			</div>
+		);
+	}
+
 	if (
-		!userStore.user ||
-		(userStore.user.role !== "professor" &&
-			userStore.user.role !== "faculty-staff")
+		userStore.user.role !== "professor" &&
+		userStore.user.role !== "faculty-staff"
 	) {
 		return (
 			<div className="min-h-screen bg-gray-900 flex items-center justify-center">

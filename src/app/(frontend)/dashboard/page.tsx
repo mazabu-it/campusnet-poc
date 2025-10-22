@@ -48,7 +48,46 @@ export default function StudentDashboard() {
 		);
 	}
 
-	if (!userStore.user || userStore.user.role !== "student") {
+	if (!userStore.user) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<Card className="w-full max-w-md">
+					<CardContent className="text-center p-8">
+						<Icon
+							icon="lucide:lock"
+							className="text-4xl text-gray-400 mx-auto mb-4"
+						/>
+						<h2 className="text-xl font-bold text-gray-900 mb-2">
+							Access Denied
+						</h2>
+						<p className="text-gray-600">
+							You need to be logged in to access this dashboard.
+						</p>
+						<Button
+							className="mt-4"
+							onClick={() => {
+								window.location.href = "/login";
+							}}
+						>
+							Go to Login
+						</Button>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
+
+	// Redirect professors to their dashboard
+	if (
+		userStore.user.role === "professor" ||
+		userStore.user.role === "faculty-staff"
+	) {
+		window.location.href = "/professor";
+		return null;
+	}
+
+	// Only allow students to access this dashboard
+	if (userStore.user.role !== "student") {
 		return (
 			<div className="flex items-center justify-center min-h-screen">
 				<Card className="w-full max-w-md">
