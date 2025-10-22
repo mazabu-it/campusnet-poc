@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function LoginPage() {
 	const emailId = useId();
@@ -26,7 +27,6 @@ export default function LoginPage() {
 		setError("");
 
 		const requestData = { email, password };
-		console.log("Sending login request:", requestData);
 
 		try {
 			const response = await fetch("/api/users/login", {
@@ -39,15 +39,12 @@ export default function LoginPage() {
 
 			if (response.ok) {
 				await response.json();
-				// Redirect to dashboard or home page
 				router.push("/dashboard");
 			} else {
-				// Try to parse error response as JSON
 				try {
 					const errorData = await response.json();
 					setError(errorData.message || "Login failed");
 				} catch (_jsonError) {
-					// If JSON parsing fails, use status text
 					setError(
 						`Login failed: ${response.status} ${response.statusText}`,
 					);
@@ -60,50 +57,44 @@ export default function LoginPage() {
 		}
 	};
 
+	const fillDemoCredentials = (role: "student" | "professor" | "admin") => {
+		const credentials = {
+			student: { email: "student@test.com", password: "test123" },
+			professor: { email: "professor@test.com", password: "test123" },
+			admin: { email: "admin@demouniversity.edu", password: "password123" },
+		};
+		setEmail(credentials[role].email);
+		setPassword(credentials[role].password);
+	};
+
 	return (
-		<div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-			<div className="max-w-md w-full space-y-8">
-				{/* Header */}
+		<div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+			<div className="w-full max-w-md space-y-8">
+				{/* Logo and Title */}
 				<div className="text-center">
 					<Link
 						href="/"
-						className="flex items-center justify-center mb-6"
+						className="inline-flex items-center space-x-2 mb-8"
 					>
-						<div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-							<Icon
-								icon="lucide:graduation-cap"
-								className="w-6 h-6 text-white"
-							/>
-						</div>
-						<div>
-							<h1 className="text-2xl font-bold text-gray-900">
-								Demo University
-							</h1>
-							<p className="text-gray-600 text-sm">
-								Excellence in Education
-							</p>
-						</div>
+						<Icon icon="lucide:graduation-cap" className="h-8 w-8" />
+						<span className="text-xl font-semibold">Campusnet</span>
 					</Link>
-					<h2 className="text-3xl font-bold text-gray-900">
-						Sign in to your account
+					<h2 className="text-3xl font-semibold tracking-tight">
+						Welcome back
 					</h2>
-					<p className="mt-2 text-sm text-gray-600">
-						Or{" "}
-						<Link
-							href="/admin"
-							className="font-medium text-blue-600 hover:text-blue-500"
-						>
-							access admin panel
-						</Link>
+					<p className="mt-2 text-sm text-muted-foreground">
+						Sign in to your account to continue
 					</p>
 				</div>
 
 				{/* Login Form */}
 				<Card>
-					<CardHeader>
-						<CardTitle className="text-center">Login</CardTitle>
+					<CardHeader className="space-y-1">
+						<CardTitle className="text-2xl font-semibold tracking-tight">
+							Sign in
+						</CardTitle>
 					</CardHeader>
-					<CardContent>
+					<CardContent className="space-y-4">
 						<form onSubmit={handleSubmit} className="space-y-4">
 							{error && (
 								<Alert variant="destructive">
@@ -116,28 +107,38 @@ export default function LoginPage() {
 							)}
 
 							<div className="space-y-2">
-								<Label htmlFor={emailId}>Email address</Label>
+								<Label htmlFor={emailId}>Email</Label>
 								<Input
 									id={emailId}
 									type="email"
-									placeholder="Enter your email"
+									placeholder="name@example.com"
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
 									required
+									autoComplete="email"
 								/>
 							</div>
 
 							<div className="space-y-2">
-								<Label htmlFor={passwordId}>Password</Label>
+								<div className="flex items-center justify-between">
+									<Label htmlFor={passwordId}>Password</Label>
+									<Link
+										href="/forgot-password"
+										className="text-sm text-muted-foreground hover:text-foreground"
+									>
+										Forgot password?
+									</Link>
+								</div>
 								<Input
 									id={passwordId}
 									type="password"
-									placeholder="Enter your password"
+									placeholder="••••••••"
 									value={password}
 									onChange={(e) =>
 										setPassword(e.target.value)
 									}
 									required
+									autoComplete="current-password"
 								/>
 							</div>
 
@@ -150,91 +151,95 @@ export default function LoginPage() {
 									<>
 										<Icon
 											icon="lucide:loader-2"
-											className="w-4 h-4 mr-2 animate-spin"
+											className="mr-2 h-4 w-4 animate-spin"
 										/>
 										Signing in...
 									</>
 								) : (
-									<>
-										<Icon
-											icon="lucide:log-in"
-											className="w-4 h-4 mr-2"
-										/>
-										Sign in
-									</>
+									"Sign in"
 								)}
 							</Button>
 						</form>
 
-						<div className="mt-6 text-center">
-							<p className="text-sm text-gray-600">
-								Don&apos;t have an account?{" "}
-								<Link
-									href="/register"
-									className="font-medium text-blue-600 hover:text-blue-500"
-								>
-									Sign up here
-								</Link>
-							</p>
+						<div className="relative">
+							<div className="absolute inset-0 flex items-center">
+								<span className="w-full border-t" />
+							</div>
+							<div className="relative flex justify-center text-xs uppercase">
+								<span className="bg-card px-2 text-muted-foreground">
+									Or continue with
+								</span>
+							</div>
 						</div>
+
+						<Tabs defaultValue="student" className="w-full">
+							<TabsList className="grid w-full grid-cols-3">
+								<TabsTrigger value="student">Student</TabsTrigger>
+								<TabsTrigger value="professor">Professor</TabsTrigger>
+								<TabsTrigger value="admin">Admin</TabsTrigger>
+							</TabsList>
+							<TabsContent value="student" className="space-y-2 pt-4">
+								<Button
+									variant="outline"
+									className="w-full"
+									onClick={() => fillDemoCredentials("student")}
+								>
+									<Icon icon="lucide:graduation-cap" className="mr-2 h-4 w-4" />
+									Use Student Demo
+								</Button>
+								<p className="text-xs text-center text-muted-foreground">
+									student@test.com / test123
+								</p>
+							</TabsContent>
+							<TabsContent value="professor" className="space-y-2 pt-4">
+								<Button
+									variant="outline"
+									className="w-full"
+									onClick={() => fillDemoCredentials("professor")}
+								>
+									<Icon icon="lucide:user-check" className="mr-2 h-4 w-4" />
+									Use Professor Demo
+								</Button>
+								<p className="text-xs text-center text-muted-foreground">
+									professor@test.com / test123
+								</p>
+							</TabsContent>
+							<TabsContent value="admin" className="space-y-2 pt-4">
+								<Button
+									variant="outline"
+									className="w-full"
+									onClick={() => fillDemoCredentials("admin")}
+								>
+									<Icon icon="lucide:shield" className="mr-2 h-4 w-4" />
+									Use Admin Demo
+								</Button>
+								<p className="text-xs text-center text-muted-foreground">
+									admin@demouniversity.edu / password123
+								</p>
+							</TabsContent>
+						</Tabs>
 					</CardContent>
 				</Card>
 
-				{/* Demo Credentials */}
-				<Card className="bg-blue-50 border-blue-200">
-					<CardHeader>
-						<CardTitle className="text-blue-800 text-sm">
-							Demo Credentials
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="text-sm text-blue-700">
-						<p className="mb-3">
-							For testing purposes, you can use:
-						</p>
-						<div className="space-y-3">
-							<div className="p-2 bg-white rounded border">
-								<p className="font-semibold text-green-700 mb-1">
-									👨‍🎓 Student
-								</p>
-								<p>
-									<strong>Email:</strong> student@test.com
-								</p>
-								<p>
-									<strong>Password:</strong> test123
-								</p>
-							</div>
-							<div className="p-2 bg-white rounded border">
-								<p className="font-semibold text-blue-700 mb-1">
-									👨‍🏫 Professor
-								</p>
-								<p>
-									<strong>Email:</strong> professor@test.com
-								</p>
-								<p>
-									<strong>Password:</strong> test123
-								</p>
-							</div>
-							<div className="p-2 bg-white rounded border">
-								<p className="font-semibold text-purple-700 mb-1">
-									👨‍💼 Admin
-								</p>
-								<p>
-									<strong>Email:</strong>{" "}
-									admin@demouniversity.edu
-								</p>
-								<p>
-									<strong>Password:</strong> password123
-								</p>
-							</div>
-						</div>
-						<p className="mt-3 text-xs text-blue-600">
-							Or access the admin panel at{" "}
-							<Link href="/admin" className="underline">
-								/admin
-							</Link>
-						</p>
-					</CardContent>
-				</Card>
+				<p className="text-center text-sm text-muted-foreground">
+					Don't have an account?{" "}
+					<Link
+						href="/register"
+						className="font-medium underline underline-offset-4 hover:text-foreground"
+					>
+						Sign up
+					</Link>
+				</p>
+
+				<p className="text-center text-xs text-muted-foreground">
+					Or access the{" "}
+					<Link
+						href="/admin"
+						className="underline underline-offset-4 hover:text-foreground"
+					>
+						admin panel
+					</Link>
+				</p>
 			</div>
 		</div>
 	);

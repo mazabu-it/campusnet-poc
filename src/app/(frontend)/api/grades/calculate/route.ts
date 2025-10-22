@@ -44,11 +44,13 @@ export async function POST(request: Request) {
 
 		for (const enrollment of enrollments) {
 			try {
-				// Get all assessments for this course instance
-				const courseInstanceId =
-					typeof enrollment.courseInstance === "string"
+			// Get all assessments for this course instance
+			const courseInstanceId =
+				typeof enrollment.courseInstance === "string"
+					? enrollment.courseInstance
+					: typeof enrollment.courseInstance === "number"
 						? enrollment.courseInstance
-						: enrollment.courseInstance.id;
+						: enrollment.courseInstance?.id;
 
 				// Extract student ID correctly
 				const studentId =

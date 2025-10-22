@@ -248,13 +248,13 @@ export default function ProfessorGradingPage() {
 							gradedAt: new Date().toISOString(),
 							feedback: scoreData.feedback,
 							notes: scoreData.notes ?? "",
-							isLate: Boolean(scoreData.isLate),
-							latePenaltyApplied: Number(
-								scoreData.latePenaltyApplied || 0,
-							),
-							isExcused: Boolean(
-								(scoreData as any).isExcused || false,
-							),
+						isLate: Boolean(scoreData.isLate),
+						latePenaltyApplied: Number(
+							(scoreData as { latePenaltyApplied?: number }).latePenaltyApplied || 0,
+						),
+						isExcused: Boolean(
+							(scoreData as { isExcused?: boolean }).isExcused || false,
+						),
 						}),
 					});
 					if (!response.ok)

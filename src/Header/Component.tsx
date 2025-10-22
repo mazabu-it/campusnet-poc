@@ -1,9 +1,6 @@
-import type { Header } from "@/payload-types";
-import { getCachedGlobal } from "@/utilities/getGlobals";
 import { HeaderClient } from "./Component.client";
 
 export async function HeaderComponent() {
-	const headerData: Header = await getCachedGlobal("header", 1)();
-
-	return <HeaderClient data={headerData} />;
+	// The new header doesn't use CMS data - it's hardcoded for better performance
+	return <HeaderClient data={{ navItems: [] }} />;
 }

@@ -5,6 +5,7 @@ import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { ContentBlock } from "@/blocks/Content/Component";
 import { DashboardStatsComponent } from "@/blocks/DashboardStats/Component";
 import { FacultyShowcaseComponent } from "@/blocks/FacultyShowcase/Component";
+import { FeaturesComponent } from "@/blocks/Features/Component";
 import { FormBlock } from "@/blocks/Form/Component";
 import { MediaBlock } from "@/blocks/MediaBlock/Component";
 import { NewsEventsComponent } from "@/blocks/NewsEvents/Component";
@@ -25,6 +26,7 @@ const blockComponents = {
 	"dashboard-stats": DashboardStatsComponent,
 	"news-events": NewsEventsComponent,
 	"faculty-showcase": FacultyShowcaseComponent,
+	features: FeaturesComponent,
 };
 
 export const RenderBlocks: React.FC<{
