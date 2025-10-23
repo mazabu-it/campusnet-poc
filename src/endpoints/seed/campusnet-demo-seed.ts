@@ -1287,10 +1287,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// Introduction to Programming Assessments
 		for (const template of introProgrammingTemplates.docs) {
-			// Mark exam and project assessments as completed
-			const isCompleted =
-				template.assessmentType === "exam" ||
-				template.assessmentType === "project";
+			// Mark all assessments as completed except final exams
+			const isCompleted = !template.name.toLowerCase().includes("final");
 
 			const assessment = await payload.create({
 				collection: "assessments",
@@ -1339,10 +1337,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// Data Structures Assessments
 		for (const template of dataStructuresTemplates.docs) {
-			// Mark exam and project assessments as completed
-			const isCompleted =
-				template.assessmentType === "exam" ||
-				template.assessmentType === "project";
+			// Mark all assessments as completed except final exams
+			const isCompleted = !template.name.toLowerCase().includes("final");
 
 			const assessment = await payload.create({
 				collection: "assessments",
@@ -1391,10 +1387,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 		// Software Engineering Assessments
 		for (const template of softwareEngineeringTemplates.docs) {
-			// Mark exam and project assessments as completed
-			const isCompleted =
-				template.assessmentType === "exam" ||
-				template.assessmentType === "project";
+			// Mark all assessments as completed except final exams
+			const isCompleted = !template.name.toLowerCase().includes("final");
 
 			const assessment = await payload.create({
 				collection: "assessments",
@@ -1463,12 +1457,14 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					let scoreValue: number;
 					let feedback: string;
 
+					const maxScore = assessment.template.maxScore || 100;
+
 					switch (assessment.template.assessmentType) {
 						case "exam":
 							// Exams tend to have more varied scores
 							scoreValue = faker.number.int({
-								min: 45,
-								max: 100,
+								min: Math.round(maxScore * 0.45),
+								max: maxScore,
 							});
 							feedback = faker.helpers.arrayElement([
 								"Good understanding of concepts",
@@ -1482,8 +1478,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						case "project":
 							// Projects tend to have higher scores
 							scoreValue = faker.number.int({
-								min: 70,
-								max: 100,
+								min: Math.round(maxScore * 0.7),
+								max: maxScore,
 							});
 							feedback = faker.helpers.arrayElement([
 								"Excellent implementation and documentation",
@@ -1497,8 +1493,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 						case "assignment":
 							// Assignments have moderate scores
 							scoreValue = faker.number.int({
-								min: 60,
-								max: 100,
+								min: Math.round(maxScore * 0.6),
+								max: maxScore,
 							});
 							feedback = faker.helpers.arrayElement([
 								"Good understanding of the material",
@@ -1511,8 +1507,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							break;
 						default:
 							scoreValue = faker.number.int({
-								min: 50,
-								max: 100,
+								min: Math.round(maxScore * 0.5),
+								max: maxScore,
 							});
 							feedback = "Good work overall";
 					}
@@ -1585,6 +1581,9 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 								probability: 0.02,
 							}),
 						},
+						req: {
+							user: testProfessor || professors[0],
+						} as any,
 					});
 					scoreCount++;
 				}
@@ -1613,24 +1612,38 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					let scoreValue: number;
 					let feedback: string;
 
+					const maxScore = assessment.template.maxScore || 100;
+
 					switch (assessment.template.assessmentType) {
 						case "exam":
-							scoreValue = faker.number.int({ min: 75, max: 95 });
+							scoreValue = faker.number.int({
+								min: Math.round(maxScore * 0.75),
+								max: Math.round(maxScore * 0.95),
+							});
 							feedback =
 								"Excellent understanding of concepts. Shows strong analytical skills.";
 							break;
 						case "project":
-							scoreValue = faker.number.int({ min: 80, max: 98 });
+							scoreValue = faker.number.int({
+								min: Math.round(maxScore * 0.8),
+								max: Math.round(maxScore * 0.98),
+							});
 							feedback =
 								"Outstanding project implementation. Excellent code quality and documentation.";
 							break;
 						case "assignment":
-							scoreValue = faker.number.int({ min: 70, max: 90 });
+							scoreValue = faker.number.int({
+								min: Math.round(maxScore * 0.7),
+								max: Math.round(maxScore * 0.9),
+							});
 							feedback =
 								"Good work with clear explanations. Minor improvements possible.";
 							break;
 						default:
-							scoreValue = faker.number.int({ min: 75, max: 90 });
+							scoreValue = faker.number.int({
+								min: Math.round(maxScore * 0.75),
+								max: Math.round(maxScore * 0.9),
+							});
 							feedback = "Good performance overall.";
 					}
 
@@ -1660,6 +1673,9 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							latePenaltyApplied: 0,
 							isExcused: false,
 						},
+						req: {
+							user: testProfessor || professors[0],
+						} as any,
 					});
 					scoreCount++;
 				}
@@ -2275,29 +2291,62 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		// 8. Create comprehensive score data for all assessments
 		console.log("Creating comprehensive score data for all assessments...");
 
-		// Get all assessments
+		// Get all assessments with their templates
 		const allAssessmentsData = await payload.find({
 			collection: "assessments",
 			limit: 1000,
+			depth: 3, // Include assessment template data with course instance
 		});
 
-		// Get all enrollments
+		// Get all enrollments with course instance data
 		const allEnrollmentsData = await payload.find({
 			collection: "enrollments",
 			limit: 1000,
+			depth: 2, // Include course instance data
 		});
 
 		console.log(`Found ${allAssessmentsData.docs.length} assessments`);
 		console.log(`Found ${allEnrollmentsData.docs.length} enrollments`);
 
+		// Debug: Log first assessment to see its structure
+		if (allAssessmentsData.docs.length > 0) {
+			console.log(
+				"First assessment structure:",
+				JSON.stringify(allAssessmentsData.docs[0], null, 2),
+			);
+		}
+
+		// Debug: Log first enrollment to see its structure
+		if (allEnrollmentsData.docs.length > 0) {
+			console.log(
+				"First enrollment structure:",
+				JSON.stringify(allEnrollmentsData.docs[0], null, 2),
+			);
+		}
+
 		let comprehensiveScoreCount = 0;
 
 		// Create scores for each assessment and each enrolled student
 		for (const assessment of allAssessmentsData.docs) {
+			console.log(
+				`Processing assessment: ${assessment.title} (ID: ${assessment.id})`,
+			);
+			console.log(`Assessment template:`, assessment.assessmentTemplate);
+
 			const assessmentTemplate = assessment.assessmentTemplate as any;
+			if (!assessmentTemplate) {
+				console.log(
+					`Skipping assessment ${assessment.title} - no template found`,
+				);
+				continue;
+			}
 
 			// Find all students enrolled in this course instance
 			const courseInstanceId = assessmentTemplate.courseInstance;
+			console.log(
+				`Assessment template course instance:`,
+				courseInstanceId,
+			);
 			console.log(
 				`Assessment ${assessment.title} - Course Instance ID: ${courseInstanceId} (type: ${typeof courseInstanceId})`,
 			);
@@ -2305,7 +2354,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			const enrolledStudents = allEnrollmentsData.docs.filter(
 				(enrollment: any) => {
 					const enrollmentCourseInstanceId =
-						enrollment.courseInstance.id;
+						enrollment.courseInstance?.id ||
+						enrollment.courseInstance;
 					console.log(
 						`  Checking enrollment ${enrollment.id} - Course Instance: ${enrollmentCourseInstanceId} (type: ${typeof enrollmentCourseInstanceId})`,
 					);
@@ -2334,10 +2384,14 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				// Generate realistic score based on assessment type and student performance
 				let scoreValue: number;
 				let feedback: string;
+				const maxScore = assessmentTemplate.maxScore || 100;
 
 				// Test student gets excellent scores
 				if (student.email === "student@test.com") {
-					scoreValue = faker.number.int({ min: 85, max: 98 });
+					scoreValue = faker.number.int({
+						min: Math.round(maxScore * 0.85),
+						max: Math.round(maxScore * 0.98),
+					});
 					feedback = faker.helpers.arrayElement([
 						"Excellent work! Shows strong understanding of the concepts.",
 						"Outstanding performance. Keep up the great work!",
@@ -2349,7 +2403,10 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					// Other students get varied scores
 					const assessmentType = assessmentTemplate.assessmentType;
 					if (assessmentType === "exam") {
-						scoreValue = faker.number.int({ min: 45, max: 95 });
+						scoreValue = faker.number.int({
+							min: Math.round(maxScore * 0.45),
+							max: Math.round(maxScore * 0.95),
+						});
 						feedback = faker.helpers.arrayElement([
 							"Good understanding of the material.",
 							"Shows improvement in key areas.",
@@ -2358,7 +2415,10 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							"Good effort, continue practicing.",
 						]);
 					} else if (assessmentType === "project") {
-						scoreValue = faker.number.int({ min: 50, max: 92 });
+						scoreValue = faker.number.int({
+							min: Math.round(maxScore * 0.5),
+							max: Math.round(maxScore * 0.92),
+						});
 						feedback = faker.helpers.arrayElement([
 							"Creative approach to the problem.",
 							"Well-structured project with good documentation.",
@@ -2367,7 +2427,10 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							"Solid project work with clear objectives.",
 						]);
 					} else {
-						scoreValue = faker.number.int({ min: 40, max: 90 });
+						scoreValue = faker.number.int({
+							min: Math.round(maxScore * 0.4),
+							max: Math.round(maxScore * 0.9),
+						});
 						feedback = faker.helpers.arrayElement([
 							"Good attempt at the assignment.",
 							"Shows understanding of the requirements.",
@@ -2380,7 +2443,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 				// Create the score using the same logic as the professor page
 				try {
-					const maxScore = assessmentTemplate.maxScore || 100;
 					const percentage = Math.round(
 						(scoreValue / maxScore) * 100,
 					);
@@ -2413,6 +2475,9 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					await payload.create({
 						collection: "scores",
 						data: scoreData,
+						req: {
+							user: testProfessor || professors[0],
+						} as any,
 					});
 
 					console.log(
@@ -2433,6 +2498,113 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		console.log(
 			`✅ Created ${comprehensiveScoreCount} comprehensive scores for all assessments`,
 		);
+
+		// If no scores were created, try a simpler approach
+		if (comprehensiveScoreCount === 0) {
+			console.log("⚠️ No scores were created, trying simpler approach...");
+
+			// Get the first course instance
+			const courseInstances = await payload.find({
+				collection: "course-instances",
+				limit: 1,
+			});
+
+			if (courseInstances.docs.length > 0) {
+				const courseInstance = courseInstances.docs[0];
+				console.log(
+					`Using course instance: ${courseInstance.instanceTitle} (ID: ${courseInstance.id})`,
+				);
+
+				// Get assessments for this course instance
+				const assessments = await payload.find({
+					collection: "assessments",
+					where: {
+						"assessmentTemplate.courseInstance": {
+							equals: courseInstance.id,
+						},
+					},
+					limit: 3,
+				});
+
+				// Get enrollments for this course instance
+				const enrollments = await payload.find({
+					collection: "enrollments",
+					where: {
+						courseInstance: {
+							equals: courseInstance.id,
+						},
+					},
+					limit: 5,
+				});
+
+				console.log(
+					`Found ${assessments.docs.length} assessments and ${enrollments.docs.length} enrollments`,
+				);
+
+				// Create a few test scores
+				for (let i = 0; i < Math.min(3, assessments.docs.length); i++) {
+					const assessment = assessments.docs[i];
+					for (
+						let j = 0;
+						j < Math.min(3, enrollments.docs.length);
+						j++
+					) {
+						const enrollment = enrollments.docs[j];
+						const student = enrollment.student as any;
+
+						const scoreData = {
+							assessment: Number(assessment.id),
+							student: Number(student.id),
+							scoreTitle: `${student.name} - ${assessment.title}`,
+							value: faker.number.int({
+								min: Math.round(100 * 0.6),
+								max: Math.round(100 * 0.95),
+							}),
+							maxValue: 100,
+							percentage: faker.number.int({
+								min: Math.round(100 * 0.6),
+								max: Math.round(100 * 0.95),
+							}),
+							finalValue: faker.number.int({
+								min: Math.round(100 * 0.6),
+								max: Math.round(100 * 0.95),
+							}),
+							gradedBy: Number(
+								testProfessor?.id || professors[0].id,
+							),
+							gradedAt: faker.date
+								.past({ years: 1 })
+								.toISOString(),
+							feedback: "Test score for demo purposes",
+							notes: "",
+							isLate: false,
+							latePenaltyApplied: 0,
+							isExcused: false,
+						};
+
+						try {
+							// Create score with authenticated context
+							await payload.create({
+								collection: "scores",
+								data: scoreData,
+								req: {
+									user: testProfessor || professors[0],
+								} as any,
+							});
+							console.log(
+								`✅ Created test score for ${student.email} in ${assessment.title}`,
+							);
+							comprehensiveScoreCount++;
+						} catch (error) {
+							console.error(
+								`❌ Error creating test score:`,
+								error,
+							);
+						}
+					}
+				}
+			}
+		}
 
 		// 9. Recalculate grade aggregates for all enrollments
 		console.log("Recalculating grade aggregates for all enrollments...");
