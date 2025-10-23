@@ -318,7 +318,9 @@ export async function up({
      "id" serial PRIMARY KEY NOT NULL,
      "name" varchar NOT NULL,
      "description" text,
-     "university_id" integer NOT NULL,
+     "scale_type" varchar NOT NULL,
+     "pass_threshold" numeric NOT NULL,
+     "is_active" boolean DEFAULT true NOT NULL,
      "created_at" timestamp(3) DEFAULT now() NOT NULL,
      "updated_at" timestamp(3) DEFAULT now() NOT NULL
    );
@@ -328,10 +330,11 @@ export async function up({
 	await db.execute(sql`
    CREATE TABLE IF NOT EXISTS "grading_scales_grade_mappings" (
      "id" serial PRIMARY KEY NOT NULL,
-     "letter_grade" varchar NOT NULL,
-     "min_percentage" numeric NOT NULL,
-     "max_percentage" numeric NOT NULL,
-     "gpa_points" numeric NOT NULL,
+     "min_score" numeric NOT NULL,
+     "max_score" numeric NOT NULL,
+     "letter_grade" varchar,
+     "numeric_grade" numeric,
+     "is_passing" boolean DEFAULT true NOT NULL,
      "description" text,
      "_parent_id" integer NOT NULL,
      "created_at" timestamp(3) DEFAULT now() NOT NULL,
@@ -470,13 +473,7 @@ export async function up({
 
 	// Skipping FK to users: created later by Payload's users collection
 
-	await db.execute(sql`
-   DO $$ BEGIN
-     ALTER TABLE "grading_scales" ADD CONSTRAINT "grading_scales_university_id_fk" FOREIGN KEY ("university_id") REFERENCES "public"."universities"("id") ON DELETE cascade ON UPDATE no action;
-   EXCEPTION
-     WHEN duplicate_object THEN null;
-   END $$;
-  `);
+	// Removed grading_scales university_id foreign key constraint since university_id field was removed
 }
 
 export async function down({

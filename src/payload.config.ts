@@ -38,8 +38,7 @@ import {
 	generateFacultySummaryEndpoint,
 	generateStudentReportEndpoint,
 } from "./endpoints/reports";
-import { seedCampusnetEndpoint } from "./endpoints/seed";
-import { resetAndSeedEndpoint } from "./endpoints/seed/reset-and-seed";
+import { resetAndSeedEndpoint } from "./endpoints/seed";
 import { Footer } from "./Footer/config";
 import { Header } from "./Header/config";
 import { plugins } from "./plugins";
@@ -138,7 +137,6 @@ export default buildConfig({
 		calculateStudentGPAEndpoint,
 		enrollStudentEndpoint,
 		submitScoreEndpoint,
-		seedCampusnetEndpoint,
 		resetAndSeedEndpoint,
 		generateStudentReportEndpoint,
 		generateFacultySummaryEndpoint,
