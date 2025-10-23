@@ -21,6 +21,11 @@ export async function GET(request: NextRequest) {
 		const assessmentId = searchParams.get("where[assessment][equals]");
 		const courseInstanceId = searchParams.get("courseInstanceId");
 
+		console.log("Scores API - Query params:", {
+			assessmentId,
+			courseInstanceId,
+		});
+
 		let whereClause = {};
 		if (assessmentId) {
 			whereClause = {
@@ -29,6 +34,10 @@ export async function GET(request: NextRequest) {
 				},
 			};
 		} else if (courseInstanceId) {
+			console.log(
+				"Fetching assessments for course instance:",
+				courseInstanceId,
+			);
 			// Get assessments for this course instance first
 			const assessmentsResponse = await payload.find({
 				collection: "assessments",
@@ -40,9 +49,13 @@ export async function GET(request: NextRequest) {
 				limit: 1000,
 			});
 
+			console.log("Found assessments:", assessmentsResponse.docs.length);
+
 			const assessmentIds = assessmentsResponse.docs.map(
 				(assessment: any) => assessment.id,
 			);
+
+			console.log("Assessment IDs:", assessmentIds);
 
 			if (assessmentIds.length > 0) {
 				whereClause = {
@@ -53,11 +66,15 @@ export async function GET(request: NextRequest) {
 			}
 		}
 
+		console.log("Scores API - Where clause:", whereClause);
+
 		const result = await payload.find({
 			collection: "scores",
 			where: whereClause,
 			depth: 2, // Include student and assessment details
 		});
+
+		console.log("Scores API - Found scores:", result.docs.length);
 
 		return NextResponse.json(result);
 	} catch (error) {
@@ -85,14 +102,31 @@ export async function POST(request: NextRequest) {
 
 		const body = await request.json();
 
+		// Validate required fields
+		if (!body.value && body.value !== 0) {
+			return NextResponse.json(
+				{ message: "Score value is required" },
+				{ status: 400 },
+			);
+		}
+
+		if (typeof body.value !== "number" || Number.isNaN(body.value)) {
+			return NextResponse.json(
+				{ message: "Score value must be a valid number" },
+				{ status: 400 },
+			);
+		}
+
 		// Log the incoming data for debugging
 		console.log("POST /api/scores - Incoming data:", {
 			assessment: body.assessment,
 			student: body.student,
 			gradedBy: user.user.id,
+			value: body.value,
 			assessmentType: typeof body.assessment,
 			studentType: typeof body.student,
 			gradedByType: typeof user.user.id,
+			valueType: typeof body.value,
 		});
 
 		// Verify the assessment exists

@@ -140,13 +140,14 @@ export default function ProfessorProgressPage() {
 	const fetchEnrollments = useCallback(async (courseInstanceId: string) => {
 		try {
 			const response = await fetch(
-				`/api/enrollments?courseInstanceId=${courseInstanceId}`,
+				`/api/enrollments?where[courseInstance][equals]=${courseInstanceId}`,
 				{
 					credentials: "include",
 				},
 			);
 			if (!response.ok) throw new Error("Failed to fetch enrollments");
 			const data = await response.json();
+			console.log("Enrollments data:", data.docs);
 			setEnrollments(data.docs || []);
 		} catch (err) {
 			console.error("Error fetching enrollments:", err);
@@ -158,13 +159,14 @@ export default function ProfessorProgressPage() {
 	const fetchAssessments = useCallback(async (courseInstanceId: string) => {
 		try {
 			const response = await fetch(
-				`/api/assessments?courseInstanceId=${courseInstanceId}`,
+				`/api/assessments?where[assessmentTemplate.courseInstance][equals]=${courseInstanceId}`,
 				{
 					credentials: "include",
 				},
 			);
 			if (!response.ok) throw new Error("Failed to fetch assessments");
 			const data = await response.json();
+			console.log("Assessments data:", data.docs);
 			setAssessments(data.docs || []);
 		} catch (err) {
 			console.error("Error fetching assessments:", err);
@@ -184,6 +186,7 @@ export default function ProfessorProgressPage() {
 			if (!response.ok) throw new Error("Failed to fetch scores");
 			const data = await response.json();
 			console.log(`Fetched ${data.docs?.length || 0} scores:`, data.docs);
+			console.log("Course instance ID used:", courseInstanceId);
 			setScores(data.docs || []);
 		} catch (err) {
 			console.error("Error fetching scores:", err);
@@ -847,6 +850,62 @@ export default function ProfessorProgressPage() {
 														studentId,
 													);
 
+												// Get course info - try multiple ways to access the data
+												console.log(
+													"Enrollment data:",
+													enrollment,
+												);
+
+												// Try different ways to access course information
+												let courseInfo =
+													enrollment.courseInstance
+														?.courseVariation
+														?.course;
+
+												// If that doesn't work, try accessing it directly from courseInstance
+												if (
+													!courseInfo &&
+													enrollment.courseInstance
+												) {
+													console.log(
+														"Course instance:",
+														enrollment.courseInstance,
+													);
+													// Check if courseInstance has course data directly
+													if (
+														enrollment
+															.courseInstance
+															.course
+													) {
+														courseInfo =
+															enrollment
+																.courseInstance
+																.course;
+													}
+													// Or if it has courseVariation with course
+													else if (
+														enrollment
+															.courseInstance
+															.courseVariation
+															?.course
+													) {
+														courseInfo =
+															enrollment
+																.courseInstance
+																.courseVariation
+																.course;
+													}
+												}
+
+												console.log(
+													"Course info:",
+													courseInfo,
+												);
+
+												const courseName = courseInfo
+													? `${courseInfo.code} - ${courseInfo.title}`
+													: `Course Instance: ${enrollment.courseInstance?.instanceTitle || "Unknown"}`;
+
 												return (
 													<Card
 														key={enrollment.id}
@@ -873,6 +932,12 @@ export default function ProfessorProgressPage() {
 																			enrollment
 																				.student
 																				.email
+																		}
+																	</p>
+																	<p className="text-muted-foreground text-sm font-medium">
+																		📚{" "}
+																		{
+																			courseName
 																		}
 																	</p>
 																	<p className="text-gray-400 text-sm">

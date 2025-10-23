@@ -4,13 +4,14 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type React from "react";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAppStore } from "@/stores/app-store";
 
 export default function LoginPage() {
 	const emailId = useId();
@@ -20,6 +21,27 @@ export default function LoginPage() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const router = useRouter();
+	const { user: userStore } = useAppStore();
+
+	// Redirect already authenticated users
+	useEffect(() => {
+		if (userStore.user) {
+			console.log(
+				"User already authenticated, redirecting...",
+				userStore.user.role,
+			);
+			if (
+				userStore.user.role === "professor" ||
+				userStore.user.role === "faculty-staff"
+			) {
+				router.push("/professor");
+			} else if (userStore.user.role === "admin") {
+				router.push("/admin");
+			} else {
+				router.push("/dashboard");
+			}
+		}
+	}, [userStore.user, router]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -38,8 +60,23 @@ export default function LoginPage() {
 			});
 
 			if (response.ok) {
-				await response.json();
-				router.push("/dashboard");
+				const data = await response.json();
+				console.log("Login successful, user data:", data.user);
+
+				// Store user data in the store
+				userStore.login(data.user);
+
+				// Redirect based on user role
+				if (
+					data.user.role === "professor" ||
+					data.user.role === "faculty-staff"
+				) {
+					router.push("/professor");
+				} else if (data.user.role === "admin") {
+					router.push("/admin");
+				} else {
+					router.push("/dashboard");
+				}
 			} else {
 				try {
 					const errorData = await response.json();
@@ -61,7 +98,10 @@ export default function LoginPage() {
 		const credentials = {
 			student: { email: "student@test.com", password: "test123" },
 			professor: { email: "professor@test.com", password: "test123" },
-			admin: { email: "admin@demouniversity.edu", password: "password123" },
+			admin: {
+				email: "admin@demouniversity.edu",
+				password: "password123",
+			},
 		};
 		setEmail(credentials[role].email);
 		setPassword(credentials[role].password);
@@ -76,7 +116,10 @@ export default function LoginPage() {
 						href="/"
 						className="inline-flex items-center space-x-2 mb-8"
 					>
-						<Icon icon="lucide:graduation-cap" className="h-8 w-8" />
+						<Icon
+							icon="lucide:graduation-cap"
+							className="h-8 w-8"
+						/>
 						<span className="text-xl font-semibold">Campusnet</span>
 					</Link>
 					<h2 className="text-3xl font-semibold tracking-tight">
@@ -174,43 +217,69 @@ export default function LoginPage() {
 
 						<Tabs defaultValue="student" className="w-full">
 							<TabsList className="grid w-full grid-cols-3">
-								<TabsTrigger value="student">Student</TabsTrigger>
-								<TabsTrigger value="professor">Professor</TabsTrigger>
+								<TabsTrigger value="student">
+									Student
+								</TabsTrigger>
+								<TabsTrigger value="professor">
+									Professor
+								</TabsTrigger>
 								<TabsTrigger value="admin">Admin</TabsTrigger>
 							</TabsList>
-							<TabsContent value="student" className="space-y-2 pt-4">
+							<TabsContent
+								value="student"
+								className="space-y-2 pt-4"
+							>
 								<Button
 									variant="outline"
 									className="w-full"
-									onClick={() => fillDemoCredentials("student")}
+									onClick={() =>
+										fillDemoCredentials("student")
+									}
 								>
-									<Icon icon="lucide:graduation-cap" className="mr-2 h-4 w-4" />
+									<Icon
+										icon="lucide:graduation-cap"
+										className="mr-2 h-4 w-4"
+									/>
 									Use Student Demo
 								</Button>
 								<p className="text-xs text-center text-muted-foreground">
 									student@test.com / test123
 								</p>
 							</TabsContent>
-							<TabsContent value="professor" className="space-y-2 pt-4">
+							<TabsContent
+								value="professor"
+								className="space-y-2 pt-4"
+							>
 								<Button
 									variant="outline"
 									className="w-full"
-									onClick={() => fillDemoCredentials("professor")}
+									onClick={() =>
+										fillDemoCredentials("professor")
+									}
 								>
-									<Icon icon="lucide:user-check" className="mr-2 h-4 w-4" />
+									<Icon
+										icon="lucide:user-check"
+										className="mr-2 h-4 w-4"
+									/>
 									Use Professor Demo
 								</Button>
 								<p className="text-xs text-center text-muted-foreground">
 									professor@test.com / test123
 								</p>
 							</TabsContent>
-							<TabsContent value="admin" className="space-y-2 pt-4">
+							<TabsContent
+								value="admin"
+								className="space-y-2 pt-4"
+							>
 								<Button
 									variant="outline"
 									className="w-full"
 									onClick={() => fillDemoCredentials("admin")}
 								>
-									<Icon icon="lucide:shield" className="mr-2 h-4 w-4" />
+									<Icon
+										icon="lucide:shield"
+										className="mr-2 h-4 w-4"
+									/>
 									Use Admin Demo
 								</Button>
 								<p className="text-xs text-center text-muted-foreground">

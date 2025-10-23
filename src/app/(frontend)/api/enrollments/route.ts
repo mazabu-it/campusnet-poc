@@ -34,8 +34,16 @@ export async function GET(request: NextRequest) {
 		const result = await payload.find({
 			collection: "enrollments",
 			where: whereClause,
-			depth: 2, // Include student and course instance details
+			depth: 3, // Include student and course instance details with nested course info
 		});
+
+		console.log("Enrollments API - Found enrollments:", result.docs.length);
+		if (result.docs.length > 0) {
+			console.log(
+				"First enrollment structure:",
+				JSON.stringify(result.docs[0], null, 2),
+			);
+		}
 
 		return NextResponse.json(result);
 	} catch (error) {

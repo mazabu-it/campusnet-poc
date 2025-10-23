@@ -93,19 +93,35 @@ export default function ProfessorDashboard() {
 
 	const fetchCourseInstances = useCallback(async () => {
 		try {
+			console.log(
+				"Fetching course instances for user:",
+				userStore.user?.email,
+			);
 			const response = await fetch("/api/course-instances", {
 				credentials: "include",
 			});
+			console.log(
+				"Course instances response:",
+				response.status,
+				response.statusText,
+			);
 			if (response.ok) {
 				const data = await response.json();
 				setCourseInstances(data.docs || []);
+			} else {
+				console.error(
+					"Failed to fetch course instances:",
+					response.status,
+				);
+				const errorText = await response.text();
+				console.error("Error details:", errorText);
 			}
 		} catch (error) {
 			console.error("Error fetching course instances:", error);
 		} finally {
 			setLoading(false);
 		}
-	}, []);
+	}, [userStore.user]);
 
 	const fetchAssessments = useCallback(async () => {
 		if (!selectedCourse) return;
@@ -119,6 +135,10 @@ export default function ProfessorDashboard() {
 			if (response.ok) {
 				const data = await response.json();
 				setAssessments(data.docs || []);
+			} else {
+				console.error("Failed to fetch assessments:", response.status);
+				const errorText = await response.text();
+				console.error("Error details:", errorText);
 			}
 		} catch (error) {
 			console.error("Error fetching assessments:", error);
@@ -148,8 +168,36 @@ export default function ProfessorDashboard() {
 			);
 			if (enrollmentsResponse.ok) {
 				const enrollmentsData = await enrollmentsResponse.json();
-				const studentIds =
-					enrollmentsData.docs?.map((enrollment: unknown) => {
+				console.log("Raw enrollments data:", enrollmentsData.docs);
+
+				// First, deduplicate enrollments by student ID to avoid duplicate enrollments
+				const uniqueEnrollments =
+					enrollmentsData.docs?.filter(
+						(enrollment: any, index: number, self: any[]) => {
+							const studentId =
+								typeof enrollment.student === "string"
+									? enrollment.student
+									: enrollment.student?.id;
+							return (
+								index ===
+								self.findIndex((e) => {
+									const otherStudentId =
+										typeof e.student === "string"
+											? e.student
+											: e.student?.id;
+									return otherStudentId === studentId;
+								})
+							);
+						},
+					) || [];
+
+				console.log(
+					"Unique enrollments after deduplication:",
+					uniqueEnrollments,
+				);
+
+				const studentIds = uniqueEnrollments.map(
+					(enrollment: unknown) => {
 						const student = (
 							enrollment as { student: string | { id: string } }
 						).student;
@@ -157,10 +205,20 @@ export default function ProfessorDashboard() {
 						return typeof student === "string"
 							? student
 							: student.id;
-					}) || [];
+					},
+				);
 
-				// Remove duplicate student IDs
-				const uniqueStudentIds = Array.from(new Set(studentIds));
+				console.log("Student IDs before deduplication:", studentIds);
+
+				// Remove duplicate student IDs and ensure they're strings
+				const uniqueStudentIds = Array.from(
+					new Set(studentIds.map((id) => String(id))),
+				);
+
+				console.log(
+					"Unique student IDs after deduplication:",
+					uniqueStudentIds,
+				);
 
 				if (uniqueStudentIds.length > 0) {
 					const studentsResponse = await fetch(
@@ -171,13 +229,21 @@ export default function ProfessorDashboard() {
 					);
 					if (studentsResponse.ok) {
 						const studentsData = await studentsResponse.json();
-						// Ensure students are unique by ID
-						const uniqueStudents = (studentsData.docs || []).filter(
-							(student: any, index: number, self: any[]) =>
-								index ===
-								self.findIndex((s: any) => s.id === student.id),
-						);
-						console.log("Unique students:", uniqueStudents);
+
+						// Ensure students are unique by ID and sort by name for consistent display
+						const uniqueStudents = (studentsData.docs || [])
+							.filter(
+								(student: any, index: number, self: any[]) =>
+									index ===
+									self.findIndex(
+										(s: any) => s.id === student.id,
+									),
+							)
+							.sort((a: any, b: any) =>
+								a.name.localeCompare(b.name),
+							);
+
+						console.log("Final unique students:", uniqueStudents);
 						setStudents(uniqueStudents);
 					}
 				}
@@ -201,8 +267,26 @@ export default function ProfessorDashboard() {
 	}, [selectedAssessment, selectedCourse]);
 
 	useEffect(() => {
-		fetchCourseInstances();
-	}, [fetchCourseInstances]);
+		console.log("Professor page mounted, user:", userStore.user);
+		if (userStore.user) {
+			if (
+				userStore.user.role === "professor" ||
+				userStore.user.role === "faculty-staff"
+			) {
+				fetchCourseInstances();
+			} else {
+				console.log(
+					"User does not have professor role:",
+					userStore.user.role,
+				);
+				toast.error("Access denied. Professor role required.");
+				// Let the login page handle the redirect
+			}
+		} else {
+			console.log("No user found, redirecting to login");
+			// Let the login page handle the redirect
+		}
+	}, [fetchCourseInstances, userStore.user]);
 
 	useEffect(() => {
 		if (selectedCourse) {
@@ -254,11 +338,14 @@ export default function ProfessorDashboard() {
 	}
 
 	const handleScoreChange = (studentId: string, value: number) => {
+		// Ensure value is a valid number
+		const numericValue = Number.isNaN(value) ? 0 : value;
+
 		setNewScores((prev) => ({
 			...prev,
 			[studentId]: {
 				...prev[studentId],
-				value,
+				value: numericValue,
 			},
 		}));
 	};
@@ -326,6 +413,7 @@ export default function ProfessorDashboard() {
 			console.log("Selected course:", selectedCourse);
 			console.log("Selected assessment:", selectedAssessment);
 
+			// Process all entries in newScores
 			const promises = Object.entries(newScores).map(
 				async ([studentId, scoreData]) => {
 					const existingScore = scores.find(
@@ -340,7 +428,7 @@ export default function ProfessorDashboard() {
 					});
 
 					if (existingScore) {
-						// Update existing score
+						// Update existing score - allow updating feedback even without changing value
 						const response = await fetch(
 							`/api/scores?id=${Number(existingScore.id)}`,
 							{
@@ -373,7 +461,20 @@ export default function ProfessorDashboard() {
 
 						return response.json();
 					} else {
-						// Create new score
+						// Create new score - only if value is provided and valid
+						if (
+							!scoreData ||
+							typeof scoreData.value !== "number" ||
+							Number.isNaN(scoreData.value) ||
+							scoreData.value < 0
+						) {
+							// Skip creating new score if value is invalid
+							console.log(
+								`Skipping student ${studentId} - no valid score value`,
+							);
+							return null;
+						}
+
 						const payload = {
 							assessment: Number(selectedAssessment),
 							student: Number(studentId),

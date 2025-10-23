@@ -1559,8 +1559,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					await payload.create({
 						collection: "scores",
 						data: {
-							assessment: assessment.id,
-							student: student.id,
+							assessment: Number(assessment.id),
+							student: Number(student.id),
 							scoreTitle: `${student.name} - ${assessment.title}`,
 							value: scoreValue,
 							maxValue: assessment.template.maxScore,
@@ -1568,12 +1568,14 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 								(scoreValue / assessment.template.maxScore) *
 									100,
 							),
+							finalValue: scoreValue,
 							isLate: faker.datatype.boolean({
 								probability: 0.1,
 							}),
 							latePenaltyApplied: 0,
-							finalValue: scoreValue,
-							gradedBy: professors[0]?.id || testProfessor?.id,
+							gradedBy: Number(
+								professors[0]?.id || testProfessor?.id,
+							),
 							gradedAt: faker.date
 								.past({ years: 1 })
 								.toISOString(),
@@ -1639,14 +1641,16 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					await payload.create({
 						collection: "scores",
 						data: {
-							assessment: assessment.id,
-							student: testStudent.id,
+							assessment: Number(assessment.id),
+							student: Number(testStudent.id),
 							scoreTitle: `${testStudent.name} - ${assessment.title}`,
 							value: scoreValue,
 							maxValue: assessment.template.maxScore,
 							percentage: percentage,
 							finalValue: scoreValue,
-							gradedBy: testProfessor?.id || professors[0].id,
+							gradedBy: Number(
+								testProfessor?.id || professors[0].id,
+							),
 							gradedAt: faker.date
 								.past({ years: 1 })
 								.toISOString(),
@@ -2294,9 +2298,23 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 			// Find all students enrolled in this course instance
 			const courseInstanceId = assessmentTemplate.courseInstance;
+			console.log(
+				`Assessment ${assessment.title} - Course Instance ID: ${courseInstanceId} (type: ${typeof courseInstanceId})`,
+			);
+
 			const enrolledStudents = allEnrollmentsData.docs.filter(
-				(enrollment: any) =>
-					enrollment.courseInstance.id === courseInstanceId,
+				(enrollment: any) => {
+					const enrollmentCourseInstanceId =
+						enrollment.courseInstance.id;
+					console.log(
+						`  Checking enrollment ${enrollment.id} - Course Instance: ${enrollmentCourseInstanceId} (type: ${typeof enrollmentCourseInstanceId})`,
+					);
+					// Convert both to strings for comparison to handle type mismatches
+					return (
+						String(enrollmentCourseInstanceId) ===
+						String(courseInstanceId)
+					);
+				},
 			);
 
 			console.log(`Creating scores for assessment: ${assessment.title}`);
@@ -2360,17 +2378,22 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					}
 				}
 
-				// Create the score
+				// Create the score using the same logic as the professor page
 				try {
+					const maxScore = assessmentTemplate.maxScore || 100;
+					const percentage = Math.round(
+						(scoreValue / maxScore) * 100,
+					);
+
 					const scoreData = {
-						student: student.id,
-						assessment: assessment.id,
+						assessment: Number(assessment.id),
+						student: Number(student.id),
+						scoreTitle: `${student.name} - ${assessment.title}`,
 						value: scoreValue,
-						maxValue: assessmentTemplate.maxScore,
-						percentage: Math.round(
-							(scoreValue / assessmentTemplate.maxScore) * 100,
-						),
-						gradedBy: testProfessor?.id || professors[0].id,
+						maxValue: maxScore,
+						percentage: percentage,
+						finalValue: scoreValue,
+						gradedBy: Number(testProfessor?.id || professors[0].id),
 						gradedAt: faker.date.past({ years: 1 }).toISOString(),
 						feedback: feedback,
 						notes: faker.helpers.maybe(
@@ -2378,6 +2401,8 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							{ probability: 0.3 },
 						),
 						isLate: faker.datatype.boolean({ probability: 0.1 }),
+						latePenaltyApplied: 0,
+						isExcused: false,
 					};
 
 					console.log(
