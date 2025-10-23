@@ -1460,12 +1460,21 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					const maxScore = assessment.template.maxScore || 100;
 
 					switch (assessment.template.assessmentType) {
-						case "exam":
+						case "exam": {
 							// Exams tend to have more varied scores
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.45),
-								max: maxScore,
-							});
+							const examMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.45),
+							);
+							const examMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.95),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(examMaxScore - examMinScore + 1),
+								) + examMinScore;
 							feedback = faker.helpers.arrayElement([
 								"Good understanding of concepts",
 								"Shows improvement in problem-solving",
@@ -1475,12 +1484,22 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 								"Good effort, review key concepts",
 							]);
 							break;
-						case "project":
+						}
+						case "project": {
 							// Projects tend to have higher scores
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.7),
-								max: maxScore,
-							});
+							const projectMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.7),
+							);
+							const projectMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.95),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(projectMaxScore - projectMinScore + 1),
+								) + projectMinScore;
 							feedback = faker.helpers.arrayElement([
 								"Excellent implementation and documentation",
 								"Good project structure and code quality",
@@ -1490,12 +1509,24 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 								"Solid implementation with room for enhancement",
 							]);
 							break;
-						case "assignment":
+						}
+						case "assignment": {
 							// Assignments have moderate scores
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.6),
-								max: maxScore,
-							});
+							const assignmentMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.6),
+							);
+							const assignmentMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.9),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(assignmentMaxScore -
+											assignmentMinScore +
+											1),
+								) + assignmentMinScore;
 							feedback = faker.helpers.arrayElement([
 								"Good understanding of the material",
 								"Correct approach, minor errors",
@@ -1505,12 +1536,23 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 								"Good progress, continue practicing",
 							]);
 							break;
-						default:
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.5),
-								max: maxScore,
-							});
+						}
+						default: {
+							const defaultMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.5),
+							);
+							const defaultMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.85),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(defaultMaxScore - defaultMinScore + 1),
+								) + defaultMinScore;
 							feedback = "Good work overall";
+						}
 					}
 
 					// Add some variation based on student performance
@@ -1615,36 +1657,78 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					const maxScore = assessment.template.maxScore || 100;
 
 					switch (assessment.template.assessmentType) {
-						case "exam":
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.75),
-								max: Math.round(maxScore * 0.95),
-							});
+						case "exam": {
+							const examMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.75),
+							);
+							const examMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.95),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(examMaxScore - examMinScore + 1),
+								) + examMinScore;
 							feedback =
 								"Excellent understanding of concepts. Shows strong analytical skills.";
 							break;
-						case "project":
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.8),
-								max: Math.round(maxScore * 0.98),
-							});
+						}
+						case "project": {
+							const projectMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.8),
+							);
+							const projectMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.98),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(projectMaxScore - projectMinScore + 1),
+								) + projectMinScore;
 							feedback =
 								"Outstanding project implementation. Excellent code quality and documentation.";
 							break;
-						case "assignment":
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.7),
-								max: Math.round(maxScore * 0.9),
-							});
+						}
+						case "assignment": {
+							const assignmentMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.7),
+							);
+							const assignmentMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.9),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(assignmentMaxScore -
+											assignmentMinScore +
+											1),
+								) + assignmentMinScore;
 							feedback =
 								"Good work with clear explanations. Minor improvements possible.";
 							break;
-						default:
-							scoreValue = faker.number.int({
-								min: Math.round(maxScore * 0.75),
-								max: Math.round(maxScore * 0.9),
-							});
+						}
+						default: {
+							const defaultMinScore = Math.max(
+								1,
+								Math.round(maxScore * 0.75),
+							);
+							const defaultMaxScore = Math.min(
+								maxScore,
+								Math.round(maxScore * 0.9),
+							);
+							scoreValue =
+								Math.floor(
+									Math.random() *
+										(defaultMaxScore - defaultMinScore + 1),
+								) + defaultMinScore;
 							feedback = "Good performance overall.";
+						}
 					}
 
 					const percentage = Math.round(
@@ -2308,6 +2392,25 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 		console.log(`Found ${allAssessmentsData.docs.length} assessments`);
 		console.log(`Found ${allEnrollmentsData.docs.length} enrollments`);
 
+		// Debug: Check if assessments have proper templates
+		for (const assessment of allAssessmentsData.docs.slice(0, 3)) {
+			console.log(`Assessment: ${assessment.title}`);
+			console.log(`  Template:`, assessment.assessmentTemplate);
+			if (
+				assessment.assessmentTemplate &&
+				typeof assessment.assessmentTemplate === "object"
+			) {
+				console.log(
+					`  Max Score:`,
+					assessment.assessmentTemplate.maxScore,
+				);
+				console.log(
+					`  Course Instance:`,
+					assessment.assessmentTemplate.courseInstance,
+				);
+			}
+		}
+
 		// Debug: Log first assessment to see its structure
 		if (allAssessmentsData.docs.length > 0) {
 			console.log(
@@ -2341,24 +2444,25 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				continue;
 			}
 
+			// Skip final exams - only create scores for midterms, projects, assignments, etc.
+			if (assessmentTemplate.name?.toLowerCase().includes("final")) {
+				console.log(`Skipping final exam: ${assessment.title}`);
+				continue;
+			}
+
+			console.log(
+				`Creating scores for assessment: ${assessment.title} (${assessmentTemplate.name})`,
+			);
+
 			// Find all students enrolled in this course instance
 			const courseInstanceId = assessmentTemplate.courseInstance;
-			console.log(
-				`Assessment template course instance:`,
-				courseInstanceId,
-			);
-			console.log(
-				`Assessment ${assessment.title} - Course Instance ID: ${courseInstanceId} (type: ${typeof courseInstanceId})`,
-			);
+			console.log(`  Course Instance ID: ${courseInstanceId}`);
 
 			const enrolledStudents = allEnrollmentsData.docs.filter(
 				(enrollment: any) => {
 					const enrollmentCourseInstanceId =
 						enrollment.courseInstance?.id ||
 						enrollment.courseInstance;
-					console.log(
-						`  Checking enrollment ${enrollment.id} - Course Instance: ${enrollmentCourseInstanceId} (type: ${typeof enrollmentCourseInstanceId})`,
-					);
 					// Convert both to strings for comparison to handle type mismatches
 					return (
 						String(enrollmentCourseInstanceId) ===
@@ -2367,8 +2471,6 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 				},
 			);
 
-			console.log(`Creating scores for assessment: ${assessment.title}`);
-			console.log(`  Course Instance: ${courseInstanceId}`);
 			console.log(`  Enrolled Students: ${enrolledStudents.length}`);
 
 			if (enrolledStudents.length === 0) {
@@ -2381,17 +2483,35 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 			for (const enrollment of enrolledStudents) {
 				const student = enrollment.student as any;
 
+				console.log(`  Creating score for student: ${student.email}`);
+
 				// Generate realistic score based on assessment type and student performance
 				let scoreValue: number;
 				let feedback: string;
 				const maxScore = assessmentTemplate.maxScore || 100;
 
+				console.log(
+					`  Generating score for ${student.email} in ${assessment.title}`,
+				);
+				console.log(
+					`  Assessment template maxScore: ${assessmentTemplate.maxScore}`,
+				);
+				console.log(`  Using maxScore: ${maxScore}`);
+
 				// Test student gets excellent scores
 				if (student.email === "student@test.com") {
-					scoreValue = faker.number.int({
-						min: Math.round(maxScore * 0.85),
-						max: Math.round(maxScore * 0.98),
-					});
+					const minScore = Math.max(1, Math.round(maxScore * 0.85));
+					const maxScoreLimit = Math.min(
+						maxScore,
+						Math.round(maxScore * 0.98),
+					);
+					scoreValue =
+						Math.floor(
+							Math.random() * (maxScoreLimit - minScore + 1),
+						) + minScore;
+					console.log(
+						`    Test student score: ${scoreValue}/${maxScore} (${Math.round((scoreValue / maxScore) * 100)}%)`,
+					);
 					feedback = faker.helpers.arrayElement([
 						"Excellent work! Shows strong understanding of the concepts.",
 						"Outstanding performance. Keep up the great work!",
@@ -2403,10 +2523,21 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 					// Other students get varied scores
 					const assessmentType = assessmentTemplate.assessmentType;
 					if (assessmentType === "exam") {
-						scoreValue = faker.number.int({
-							min: Math.round(maxScore * 0.45),
-							max: Math.round(maxScore * 0.95),
-						});
+						const minScore = Math.max(
+							1,
+							Math.round(maxScore * 0.45),
+						);
+						const maxScoreLimit = Math.min(
+							maxScore,
+							Math.round(maxScore * 0.95),
+						);
+						scoreValue =
+							Math.floor(
+								Math.random() * (maxScoreLimit - minScore + 1),
+							) + minScore;
+						console.log(
+							`    Exam score: ${scoreValue}/${maxScore} (${Math.round((scoreValue / maxScore) * 100)}%)`,
+						);
 						feedback = faker.helpers.arrayElement([
 							"Good understanding of the material.",
 							"Shows improvement in key areas.",
@@ -2415,10 +2546,18 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							"Good effort, continue practicing.",
 						]);
 					} else if (assessmentType === "project") {
-						scoreValue = faker.number.int({
-							min: Math.round(maxScore * 0.5),
-							max: Math.round(maxScore * 0.92),
-						});
+						const minScore = Math.max(
+							1,
+							Math.round(maxScore * 0.5),
+						);
+						const maxScoreLimit = Math.min(
+							maxScore,
+							Math.round(maxScore * 0.92),
+						);
+						scoreValue =
+							Math.floor(
+								Math.random() * (maxScoreLimit - minScore + 1),
+							) + minScore;
 						feedback = faker.helpers.arrayElement([
 							"Creative approach to the problem.",
 							"Well-structured project with good documentation.",
@@ -2427,10 +2566,18 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 							"Solid project work with clear objectives.",
 						]);
 					} else {
-						scoreValue = faker.number.int({
-							min: Math.round(maxScore * 0.4),
-							max: Math.round(maxScore * 0.9),
-						});
+						const minScore = Math.max(
+							1,
+							Math.round(maxScore * 0.4),
+						);
+						const maxScoreLimit = Math.min(
+							maxScore,
+							Math.round(maxScore * 0.9),
+						);
+						scoreValue =
+							Math.floor(
+								Math.random() * (maxScoreLimit - minScore + 1),
+							) + minScore;
 						feedback = faker.helpers.arrayElement([
 							"Good attempt at the assignment.",
 							"Shows understanding of the requirements.",
@@ -2493,11 +2640,27 @@ export async function seedCampusnetDemoData(payload: Payload): Promise<void> {
 
 				comprehensiveScoreCount++;
 			}
+
+			console.log(
+				`  ✅ Created scores for ${enrolledStudents.length} students in ${assessment.title}`,
+			);
 		}
 
 		console.log(
 			`✅ Created ${comprehensiveScoreCount} comprehensive scores for all assessments`,
 		);
+
+		// Debug: Check if we actually created scores
+		if (comprehensiveScoreCount === 0) {
+			console.log("⚠️ WARNING: No comprehensive scores were created!");
+			console.log(
+				"This means the comprehensive score creation logic failed.",
+			);
+		} else {
+			console.log(
+				`✅ Successfully created ${comprehensiveScoreCount} comprehensive scores`,
+			);
+		}
 
 		// If no scores were created, try a simpler approach
 		if (comprehensiveScoreCount === 0) {
