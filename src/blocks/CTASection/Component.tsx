@@ -14,11 +14,11 @@ export const CTASectionComponent: React.FC = () => {
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true }}
 					transition={{ duration: 0.6 }}
-					className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 p-12 md:p-16 lg:p-20"
+					className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 dark:bg-none dark:bg-neutral-950 p-12 md:p-16 lg:p-20 dark:border-2 dark:border-white/10"
 				>
 					{/* Decorative elements */}
-					<div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-					<div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+					<div className="absolute top-0 right-0 w-96 h-96 bg-white/10 dark:bg-black/30 rounded-full blur-3xl" />
+					<div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 dark:bg-black/30 rounded-full blur-3xl" />
 
 					<div className="relative z-10 text-center text-white">
 						<motion.h2
@@ -52,7 +52,7 @@ export const CTASectionComponent: React.FC = () => {
 							<Button
 								asChild
 								size="lg"
-								className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6 h-auto"
+								className="bg-white text-blue-600 hover:bg-gray-100 dark:bg-transparent dark:text-white dark:border-2 dark:border-white/90 dark:hover:bg-white/10 text-lg px-8 py-6 h-auto"
 							>
 								<Link href="/programs">
 									<Icon
@@ -66,7 +66,7 @@ export const CTASectionComponent: React.FC = () => {
 								asChild
 								size="lg"
 								variant="outline"
-								className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 h-auto"
+								className="bg-transparent border-2 border-white/90 text-white hover:bg-white/10 text-lg px-8 py-6 h-auto"
 							>
 								<Link href="/login">
 									<Icon

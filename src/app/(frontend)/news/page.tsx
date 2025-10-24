@@ -16,7 +16,7 @@ export default function NewsPage() {
 				"The university announces the opening of a state-of-the-art AI research facility with cutting-edge equipment and world-class researchers.",
 			date: "2024-01-15",
 			category: "Research",
-			image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=250&fit=crop",
+			image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80",
 			author: "Dr. Sarah Johnson",
 			readTime: "5 min read",
 		},
@@ -27,7 +27,7 @@ export default function NewsPage() {
 				"Over 200 students participated in the annual hackathon, creating innovative solutions for real-world problems in healthcare and sustainability.",
 			date: "2024-01-12",
 			category: "Events",
-			image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400&h=250&fit=crop",
+			image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1200&q=80",
 			author: "Tech Team",
 			readTime: "3 min read",
 		},
@@ -38,7 +38,7 @@ export default function NewsPage() {
 				"Campusnet University announces strategic partnerships with major tech companies to provide students with internship and job opportunities.",
 			date: "2024-01-10",
 			category: "Partnerships",
-			image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=400&h=250&fit=crop",
+			image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=80",
 			author: "Partnership Office",
 			readTime: "4 min read",
 		},
@@ -49,7 +49,7 @@ export default function NewsPage() {
 				"The university launches a comprehensive scholarship program aimed at increasing diversity in STEM fields and supporting underrepresented students.",
 			date: "2024-01-08",
 			category: "Scholarships",
-			image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=250&fit=crop",
+			image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80",
 			author: "Financial Aid Office",
 			readTime: "6 min read",
 		},
@@ -60,7 +60,7 @@ export default function NewsPage() {
 				"Several faculty members have had their research published in prestigious academic journals, contributing to the university's growing reputation.",
 			date: "2024-01-05",
 			category: "Research",
-			image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop",
+			image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80",
 			author: "Research Office",
 			readTime: "7 min read",
 		},
@@ -71,7 +71,7 @@ export default function NewsPage() {
 				"The university's sustainability program has achieved carbon neutrality, making it one of the greenest campuses in the region.",
 			date: "2024-01-03",
 			category: "Sustainability",
-			image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=250&fit=crop",
+			image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80",
 			author: "Sustainability Team",
 			readTime: "5 min read",
 		},
@@ -272,8 +272,9 @@ export default function NewsPage() {
 									<Image
 										src={item.image}
 										alt={item.title}
-										width={400}
-										height={250}
+										width={1200}
+										height={800}
+										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 										className="w-full h-48 object-cover"
 									/>
 									<div className="absolute top-4 left-4">

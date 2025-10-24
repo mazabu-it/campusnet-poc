@@ -300,7 +300,8 @@ export default function ProgramsPage() {
 					<div className="flex flex-col sm:flex-row gap-4 justify-center">
 						<Button
 							size="lg"
-							className="bg-blue-600 hover:bg-blue-700 text-white"
+							variant="outline"
+							className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-white dark:text-white dark:hover:bg-white/10"
 						>
 							<Icon icon="lucide:calendar" className="mr-2" />
 							Schedule a Visit

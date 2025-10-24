@@ -55,25 +55,80 @@ PAYLOAD_SECRET - used by Payload to sign secrets like JWT tokens
 
 PREVIEW_SECRET - used by Payload for secured live previews of your content
 
-## Quick Start - local setup
+## Quick Start - Local setup (Bun)
 
-To spin up this template locally, follow these steps:
+Run the project locally using Bun (recommended):
 
-### Clone
+### 1) Clone and env
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+```bash
+git clone <your-repo-url>
+cd campusnet-poc
+cp .env.example .env
+```
 
-### Development
+Fill in the required env vars in `.env`:
+- `POSTGRES_URL` (Neon or local Postgres)
+- `BLOB_READ_WRITE_TOKEN` (if using Vercel Blob locally)
+- `PAYLOAD_SECRET` (random string)
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` from your Vercel project to your `.env` if you want to use Vercel Blob and the Neon database that was created for you.
+> Note: If `POSTGRES_URL` contains `localhost`/`127.0.0.1`, the adapter will use a normal Postgres client instead of Vercel Postgres.
 
-   > _NOTE: If the connection string value includes `localhost` or `127.0.0.1`, the code will automatically use a normal postgres adapter instead of Vercel._. You can override this functionality by setting `forceUseVercelPostgres: true` if desired.
+### 2) Install Bun
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+Install Bun v1+: https://bun.sh
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+Verify:
+```bash
+bun --version
+```
+
+### 3) Install dependencies
+
+```bash
+bun install
+```
+
+### 4) Start the dev server
+
+```bash
+bun run dev
+```
+
+Open `http://localhost:3000` and create the first admin user in `/admin`.
+
+### Common scripts (Bun)
+
+```bash
+# Build Next.js and generate sitemap
+bun run build
+
+# Start a production build locally
+bun run start
+
+# Generate Payload types and importmap
+bun run generate:types
+bun run generate:importmap
+
+# Run migrations (when schema changes)
+bun run payload migrate
+```
+
+### Optional: Docker Postgres
+
+If you prefer Docker for Postgres, set `POSTGRES_URL` to
+
+```
+postgres://postgres@localhost:54320/<dbname>
+```
+
+Match `<dbname>` in `docker-compose.yml` and run:
+
+```bash
+docker-compose up -d
+```
+
+That's it! Changes in `./src` will hot-reload. When ready, see [Production](#production) and [Deployment](#deployment).
 
 #### Docker (Optional)
 
@@ -272,4 +327,3 @@ The seed script will also create a demo user for demonstration purposes only:
 ## Questions
 
 If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
-# Database reset and migration applied - Tue Oct 21 14:09:52 CEST 2025

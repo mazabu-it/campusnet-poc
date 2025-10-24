@@ -93,7 +93,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 					{user.user ? (
 						<>
 							<span className="text-sm text-muted-foreground">
-								{user.user.email}
+								{user.user.name || user.user.email}
 							</span>
 							<Button
 								size="sm"
@@ -101,14 +101,20 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 								onClick={handleLogout}
 								className="text-sm"
 							>
-								<Icon icon="lucide:log-out" className="w-4 h-4 mr-2" />
+								<Icon
+									icon="lucide:log-out"
+									className="w-4 h-4 mr-2"
+								/>
 								Sign out
 							</Button>
 						</>
 					) : (
 						<Button size="sm" asChild>
 							<Link href="/login">
-								<Icon icon="lucide:log-in" className="w-4 h-4 mr-2" />
+								<Icon
+									icon="lucide:log-in"
+									className="w-4 h-4 mr-2"
+								/>
 								Sign in
 							</Link>
 						</Button>
@@ -153,7 +159,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 							{user.user ? (
 								<>
 									<div className="text-sm text-muted-foreground mb-2">
-										{user.user.email}
+										{user.user.name || user.user.email}
 									</div>
 									<Button
 										size="sm"
@@ -161,7 +167,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 										onClick={handleLogout}
 										className="w-full justify-start"
 									>
-										<Icon icon="lucide:log-out" className="w-4 h-4 mr-2" />
+										<Icon
+											icon="lucide:log-out"
+											className="w-4 h-4 mr-2"
+										/>
 										Sign out
 									</Button>
 								</>
@@ -173,7 +182,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 									onClick={() => setIsMobileMenuOpen(false)}
 								>
 									<Link href="/login">
-										<Icon icon="lucide:log-in" className="w-4 h-4 mr-2" />
+										<Icon
+											icon="lucide:log-in"
+											className="w-4 h-4 mr-2"
+										/>
 										Sign in
 									</Link>
 								</Button>
