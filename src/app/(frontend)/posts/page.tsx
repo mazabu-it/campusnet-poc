@@ -6,24 +6,50 @@ import { PageRange } from "@/components/PageRange";
 import { Pagination } from "@/components/Pagination";
 import PageClient from "./page.client";
 
-export const dynamic = "force-static";
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+type PostsResult = {
+	docs: any[];
+	totalDocs: number;
+	totalPages: number;
+	page: number;
+};
 
 export default async function Page() {
-	const payload = await getPayload({ config: configPromise });
+	let posts: PostsResult = {
+		docs: [],
+		totalDocs: 0,
+		totalPages: 0,
+		page: 1,
+	};
 
-	const posts = await payload.find({
-		collection: "posts",
-		depth: 1,
-		limit: 12,
-		overrideAccess: false,
-		select: {
-			title: true,
-			slug: true,
-			categories: true,
-			meta: true,
-		},
-	});
+	try {
+		const payload = await getPayload({ config: configPromise });
+		const result = await payload.find({
+			collection: "posts",
+			depth: 1,
+			limit: 12,
+			overrideAccess: false,
+			select: {
+				title: true,
+				slug: true,
+				categories: true,
+				meta: true,
+			},
+		});
+		posts = {
+			docs: result.docs ?? [],
+			totalDocs: result.totalDocs ?? 0,
+			totalPages: result.totalPages ?? 0,
+			page: result.page ?? 1,
+		};
+	} catch (error) {
+		console.error(
+			"Posts page build: posts collection not available yet. Rendering empty list.",
+			error,
+		);
+	}
 
 	return (
 		<div className="pt-24 pb-24">
