@@ -16,9 +16,13 @@ export async function GET(request: NextRequest) {
 	try {
 		const payloadInstance = await getPayloadInstance();
 		const { searchParams } = new URL(request.url);
-		const courseInstanceId = searchParams.get(
-			"where[assessment.assessmentTemplate.courseInstance][equals]",
-		);
+		// Support both explicit 'courseInstanceId' (used by progress page)
+		// and Payload-style where filter from the grading page
+		const courseInstanceId =
+			searchParams.get("courseInstanceId") ||
+			searchParams.get(
+				"where[assessment.assessmentTemplate.courseInstance][equals]",
+			);
 		const assessmentId = searchParams.get("where[assessment][equals]");
 
 		const query: any = {

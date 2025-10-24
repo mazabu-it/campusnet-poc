@@ -42,10 +42,13 @@ export async function GET(request: NextRequest) {
 			};
 		}
 
+		// Ensure we return all requested users (not just the first page)
+		const limit = userIds ? userIds.split(",").length : 1000;
 		const result = await payload.find({
 			collection: "users",
 			where: whereClause,
 			depth: 1,
+			limit,
 		});
 
 		return NextResponse.json(result);
