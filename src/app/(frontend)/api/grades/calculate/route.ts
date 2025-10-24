@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import type { PayloadRequest } from "payload";
 import { getPayload } from "payload";
 import config from "@/payload.config";
@@ -44,13 +47,13 @@ export async function POST(request: Request) {
 
 		for (const enrollment of enrollments) {
 			try {
-			// Get all assessments for this course instance
-			const courseInstanceId =
-				typeof enrollment.courseInstance === "string"
-					? enrollment.courseInstance
-					: typeof enrollment.courseInstance === "number"
+				// Get all assessments for this course instance
+				const courseInstanceId =
+					typeof enrollment.courseInstance === "string"
 						? enrollment.courseInstance
-						: enrollment.courseInstance?.id;
+						: typeof enrollment.courseInstance === "number"
+							? enrollment.courseInstance
+							: enrollment.courseInstance?.id;
 
 				// Extract student ID correctly
 				const studentId =

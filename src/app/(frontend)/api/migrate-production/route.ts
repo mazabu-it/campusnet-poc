@@ -1,8 +1,11 @@
 import configPromise from "@payload-config";
 import { type NextRequest, NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { getPayload } from "payload";
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
 	try {
 		const payload = await getPayload({ config: configPromise });
 

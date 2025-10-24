@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import config from "@payload-config";
 import { unstable_cache } from "next/cache";
 import { getServerSideSitemap } from "next-sitemap";

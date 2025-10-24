@@ -1,5 +1,8 @@
 import config from "@payload-config";
 import { type NextRequest, NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { getPayload } from "payload";
 
 export async function GET(request: NextRequest) {
