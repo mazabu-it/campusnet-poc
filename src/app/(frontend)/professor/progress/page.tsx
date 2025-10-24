@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppStore } from "@/stores/app-store";
+import { GradingScaleUtils } from "@/utilities/gradingScale";
 
 interface Student {
 	id: string;
@@ -979,6 +980,51 @@ export default function ProfessorProgressPage() {
 														0,
 													);
 
+												// Current weighted percentage based only on completed weight
+												const currentWeightedPct =
+													(() => {
+														if (
+															completedWeight ===
+															0
+														)
+															return 0;
+														const subtotal =
+															perAssessment.reduce(
+																(sum, a) => {
+																	if (
+																		a.percent ==
+																		null
+																	)
+																		return sum;
+																	return (
+																		sum +
+																		(a.percent *
+																			(a.weight ||
+																				0)) /
+																			100
+																	);
+																},
+																0,
+															);
+														return Math.round(
+															(subtotal /
+																completedWeight) *
+																100,
+														);
+													})();
+
+												// Map to 20-scale and notes
+												const gradeMap =
+													GradingScaleUtils.getGradeByPercentage(
+														currentWeightedPct,
+													) || null;
+												const on20 = Math.round(
+													(currentWeightedPct / 100) *
+														(ci?.courseVariation
+															?.course
+															?.maxScore || 20),
+												);
+
 												return (
 													<Card
 														key={enrollment.id}
@@ -1058,7 +1104,16 @@ export default function ProfessorProgressPage() {
 																	{
 																		completedWeight
 																	}
-																	%
+																	% • Current
+																	weighted:{" "}
+																	{
+																		currentWeightedPct
+																	}
+																	% ({on20}
+																	/20)
+																	{gradeMap && (
+																		<span>{` • ${gradeMap.englishRecognition} (${gradeMap.latinRecognition})`}</span>
+																	)}
 																</p>
 																{perAssessment.map(
 																	(pa) => (
