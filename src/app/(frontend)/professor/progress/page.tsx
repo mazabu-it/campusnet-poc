@@ -897,54 +897,87 @@ export default function ProfessorProgressPage() {
 													enrollment,
 												);
 
-												// Try different ways to access course information
-												let courseInfo =
-													enrollment.courseInstance
-														?.courseVariation
-														?.course;
+												// Robust course name resolution with multiple fallbacks
+												const ci: any =
+													enrollment.courseInstance;
+												const courseCode =
+													ci?.courseVariation?.course
+														?.code ??
+													ci?.course?.code ??
+													ci?.courseVariation
+														?.codeVariant ??
+													undefined;
+												const courseTitle =
+													ci?.courseVariation?.course
+														?.title ??
+													ci?.course?.title ??
+													ci?.courseVariation
+														?.titleVariant ??
+													undefined;
+												const courseName =
+													courseCode && courseTitle
+														? `${courseCode} - ${courseTitle}`
+														: `Course Instance: ${ci?.instanceTitle || "Unknown"}`;
 
-												// If that doesn't work, try accessing it directly from courseInstance
-												if (
-													!courseInfo &&
-													enrollment.courseInstance
-												) {
-													console.log(
-														"Course instance:",
-														enrollment.courseInstance,
+												// Build per-assessment view for this student (completed only)
+												const perAssessment =
+													assessments
+														.filter(
+															(a) =>
+																a.isCompleted,
+														)
+														.map((assessment) => {
+															const s =
+																scores.find(
+																	(score) =>
+																		getScoreAssessmentId(
+																			score,
+																		) ===
+																			assessment.id &&
+																		getScoreStudentId(
+																			score,
+																		) ===
+																			String(
+																				studentId,
+																			),
+																);
+															const maxScore =
+																assessment
+																	.assessmentTemplate
+																	.maxScore ||
+																(s?.maxValue ??
+																	100);
+															const percent =
+																s &&
+																maxScore > 0
+																	? Math.round(
+																			(s.value /
+																				maxScore) *
+																				100,
+																		)
+																	: null;
+															return {
+																name: assessment
+																	.assessmentTemplate
+																	.name,
+																weight:
+																	assessment
+																		.assessmentTemplate
+																		.weightPercent ||
+																	0,
+																value: s?.value,
+																percent,
+																feedback:
+																	s?.feedback,
+															};
+														});
+												const completedWeight =
+													perAssessment.reduce(
+														(sum, a) =>
+															sum +
+															(a.weight || 0),
+														0,
 													);
-													// Check if courseInstance has course data directly
-													if (
-														(
-															enrollment.courseInstance as any
-														).course
-													) {
-														courseInfo = (
-															enrollment.courseInstance as any
-														).course;
-													}
-													// Or if it has courseVariation with course
-													else if (
-														enrollment
-															.courseInstance
-															.courseVariation
-															?.course
-													) {
-														courseInfo =
-															enrollment
-																.courseInstance
-																.courseVariation
-																.course;
-													}
-												}
-
-												console.log(
-													"Course info:",
-													courseInfo,
-												);
-
-												const courseName = courseInfo
-													? `${courseInfo.code} - ${courseInfo.title}`
-													: `Course Instance: ${enrollment.courseInstance?.instanceTitle || "Unknown"}`;
 
 												return (
 													<Card
@@ -1016,6 +1049,48 @@ export default function ProfessorProgressPage() {
 																		</Badge>
 																	)}
 																</div>
+															</div>
+															{/* Per-assessment breakdown (stacked) */}
+															<div className="mt-3 space-y-1">
+																<p className="text-xs text-muted-foreground">
+																	Completed
+																	weight:{" "}
+																	{
+																		completedWeight
+																	}
+																	%
+																</p>
+																{perAssessment.map(
+																	(pa) => (
+																		<div
+																			key={
+																				pa.name
+																			}
+																			className="text-sm text-muted-foreground"
+																		>
+																			<span className="font-medium text-card-foreground">
+																				{
+																					pa.name
+																				}
+																			</span>
+																			{
+																				": "
+																			}
+																			<span className="text-card-foreground">
+																				{pa.value ??
+																					"-"}
+																			</span>
+																			{pa.percent !==
+																				null && (
+																				<span>{` (${pa.percent}%)`}</span>
+																			)}
+																			<span>{` • Weight: ${pa.weight}%`}</span>
+																			{pa.feedback && (
+																				<span>{` • ${pa.feedback}`}</span>
+																			)}
+																		</div>
+																	),
+																)}
 															</div>
 														</CardContent>
 													</Card>
