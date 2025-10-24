@@ -9,7 +9,7 @@ export async function POST(_req: NextRequest) {
 
 		// Call the reset and seed endpoint handler directly
 		const resetAndSeedEndpoint = await import(
-			"@/endpoints/seed/reset-and-seed"
+			"@/endpoints/seed/index"
 		);
 
 		// Create a mock request object for the endpoint

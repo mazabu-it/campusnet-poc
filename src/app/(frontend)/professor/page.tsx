@@ -86,6 +86,7 @@ export default function ProfessorDashboard() {
 	const [selectedAssessment, setSelectedAssessment] = useState<string>("");
 	const [loading, setLoading] = useState(true);
 	const [gradingMode, setGradingMode] = useState(false);
+	const [isSaving, setIsSaving] = useState(false);
 	// Unified view - no tabs
 	const [newScores, setNewScores] = useState<
 		Record<string, { value: number; feedback: string }>
@@ -107,6 +108,7 @@ export default function ProfessorDashboard() {
 			);
 			if (response.ok) {
 				const data = await response.json();
+				console.log("Course instances data:", data);
 				setCourseInstances(data.docs || []);
 			} else {
 				console.error(
@@ -124,29 +126,77 @@ export default function ProfessorDashboard() {
 	}, [userStore.user]);
 
 	const fetchAssessments = useCallback(async () => {
-		if (!selectedCourse) return;
+		if (courseInstances.length === 0) {
+			setAssessments([]);
+			return;
+		}
+
 		try {
-			const response = await fetch(
-				`/api/assessments?where[assessmentTemplate.courseInstance][equals]=${selectedCourse}`,
-				{
-					credentials: "include",
-				},
+			// Fetch assessments for ALL course instances, not just the selected one
+			const allAssessments: Assessment[] = [];
+
+			for (const courseInstance of courseInstances) {
+				const response = await fetch(
+					`/api/assessments?where[assessmentTemplate.courseInstance][equals]=${courseInstance.id}`,
+					{
+						credentials: "include",
+					},
+				);
+				if (response.ok) {
+					const data = await response.json();
+					allAssessments.push(...(data.docs || []));
+				} else {
+					console.error(
+						`Failed to fetch assessments for course ${courseInstance.id}:`,
+						response.status,
+					);
+				}
+			}
+
+			console.log(
+				`Fetched ${allAssessments.length} assessments across all courses`,
 			);
-			if (response.ok) {
-				const data = await response.json();
-				setAssessments(data.docs || []);
-			} else {
-				console.error("Failed to fetch assessments:", response.status);
-				const errorText = await response.text();
-				console.error("Error details:", errorText);
+
+			// Filter assessments by the currently selected course before setting state
+			const filteredAssessments = allAssessments.filter((assessment) => {
+				const assessmentCourseInstanceId = (
+					assessment.assessmentTemplate as any
+				)?.courseInstance
+					? typeof (assessment.assessmentTemplate as any)
+							.courseInstance === "object"
+						? (assessment.assessmentTemplate as any).courseInstance
+								.id
+						: (assessment.assessmentTemplate as any).courseInstance
+					: null;
+				return (
+					String(assessmentCourseInstanceId) ===
+					String(selectedCourse)
+				);
+			});
+
+			setAssessments(filteredAssessments);
+			console.log(
+				`Filtered to ${filteredAssessments.length} assessments for selected course ${selectedCourse}`,
+			);
+
+			// If no assessment is selected, or the selected assessment is no longer in the filtered list, select the first one
+			if (
+				!selectedAssessment ||
+				!filteredAssessments.some((a) => a.id === selectedAssessment)
+			) {
+				setSelectedAssessment(
+					filteredAssessments.length > 0
+						? String(filteredAssessments[0].id)
+						: "",
+				);
 			}
 		} catch (error) {
 			console.error("Error fetching assessments:", error);
 		}
-	}, [selectedCourse]);
+	}, [courseInstances, selectedCourse, selectedAssessment]);
 
-	// Helper function to extract student ID from score
-	const getStudentIdFromScore = (score: any): string | number => {
+	// Helper function to extract student ID from score (stable for deps)
+	const getStudentIdFromScore = useCallback((score: any): string | number => {
 		if (
 			typeof score.student === "string" ||
 			typeof score.student === "number"
@@ -154,14 +204,60 @@ export default function ProfessorDashboard() {
 			return score.student;
 		}
 		return score.student?.id;
-	};
+	}, []);
 
 	const fetchStudentsAndScores = useCallback(async () => {
 		if (!selectedAssessment) return;
+
+		setLoading(true);
 		try {
-			// Fetch students enrolled in the course
+			// First, get the assessment to find its course instance
+			const selectedAssessmentData = assessments.find(
+				(a) => a.id === selectedAssessment,
+			);
+
+			if (!selectedAssessmentData) {
+				console.log("Assessment not found:", selectedAssessment);
+				setStudents([]);
+				setScores([]);
+				return;
+			}
+
+			// Get the course instance ID from the assessment template
+			const assessmentCourseInstanceId = (
+				selectedAssessmentData.assessmentTemplate as any
+			)?.courseInstance
+				? typeof (selectedAssessmentData.assessmentTemplate as any)
+						.courseInstance === "object"
+					? (selectedAssessmentData.assessmentTemplate as any)
+							.courseInstance.id
+					: (selectedAssessmentData.assessmentTemplate as any)
+							.courseInstance
+				: null;
+
+			if (!assessmentCourseInstanceId) {
+				console.log(
+					"No course instance found for assessment:",
+					selectedAssessmentData.title,
+				);
+				setStudents([]);
+				setScores([]);
+				return;
+			}
+
+			console.log("Assessment data:", selectedAssessmentData);
+			console.log(
+				"Assessment template:",
+				selectedAssessmentData.assessmentTemplate,
+			);
+			console.log(
+				"Fetching students for course instance:",
+				assessmentCourseInstanceId,
+			);
+
+			// Fetch students enrolled in the assessment's course instance (not the selected course)
 			const enrollmentsResponse = await fetch(
-				`/api/enrollments?where[courseInstance][equals]=${selectedCourse}`,
+				`/api/enrollments?where[courseInstance][equals]=${assessmentCourseInstanceId}`,
 				{
 					credentials: "include",
 				},
@@ -212,7 +308,9 @@ export default function ProfessorDashboard() {
 
 				// Remove duplicate student IDs and ensure they're strings
 				const uniqueStudentIds = Array.from(
-					new Set(studentIds.map((id) => String(id))),
+					new Set(
+						studentIds.map((id: string | number) => String(id)),
+					),
 				);
 
 				console.log(
@@ -221,14 +319,23 @@ export default function ProfessorDashboard() {
 				);
 
 				if (uniqueStudentIds.length > 0) {
+					console.log(
+						"Fetching students with IDs:",
+						uniqueStudentIds,
+					);
 					const studentsResponse = await fetch(
 						`/api/users?where[id][in]=${uniqueStudentIds.join(",")}`,
 						{
 							credentials: "include",
 						},
 					);
+					console.log(
+						"Students response status:",
+						studentsResponse.status,
+					);
 					if (studentsResponse.ok) {
 						const studentsData = await studentsResponse.json();
+						console.log("Students data received:", studentsData);
 
 						// Ensure students are unique by ID and sort by name for consistent display
 						const uniqueStudents = (studentsData.docs || [])
@@ -245,6 +352,13 @@ export default function ProfessorDashboard() {
 
 						console.log("Final unique students:", uniqueStudents);
 						setStudents(uniqueStudents);
+					} else {
+						const errorText = await studentsResponse.text();
+						console.error(
+							"Failed to fetch students:",
+							studentsResponse.status,
+							errorText,
+						);
 					}
 				}
 			}
@@ -258,13 +372,57 @@ export default function ProfessorDashboard() {
 			);
 			if (scoresResponse.ok) {
 				const scoresData = await scoresResponse.json();
-				console.log("Fetched scores:", scoresData.docs);
-				setScores(scoresData.docs || []);
+				const rawScores: any[] = scoresData.docs || [];
+				console.log("Fetched scores:", rawScores);
+
+				// Helper to extract assessment id from score
+				const getScoreAssessmentId = (score: any): string => {
+					if (
+						typeof score.assessment === "string" ||
+						typeof score.assessment === "number"
+					) {
+						return String(score.assessment);
+					}
+					return String(score.assessment?.id);
+				};
+
+				// Strictly filter by selected assessment (defensive) and deduplicate by student, preferring latest update
+				const filteredForAssessment = rawScores.filter(
+					(s) =>
+						String(getScoreAssessmentId(s)) ===
+						String(selectedAssessment),
+				);
+				const latestByStudent = new Map<string, any>();
+				for (const s of filteredForAssessment) {
+					const sid = String(getStudentIdFromScore(s));
+					const existing = latestByStudent.get(sid);
+					if (!existing) {
+						latestByStudent.set(sid, s);
+						continue;
+					}
+					const existingUpdated = new Date(
+						existing.updatedAt || existing.createdAt || 0,
+					).getTime();
+					const currentUpdated = new Date(
+						s.updatedAt || s.createdAt || 0,
+					).getTime();
+					if (currentUpdated >= existingUpdated) {
+						latestByStudent.set(sid, s);
+					}
+				}
+				const dedupedScores = Array.from(latestByStudent.values());
+				console.log(
+					"Scores after assessment-filter + dedupe:",
+					dedupedScores,
+				);
+				setScores(dedupedScores);
 			}
 		} catch (error) {
 			console.error("Error fetching students and scores:", error);
+		} finally {
+			setLoading(false);
 		}
-	}, [selectedAssessment, selectedCourse]);
+	}, [selectedAssessment, assessments, getStudentIdFromScore]);
 
 	useEffect(() => {
 		console.log("Professor page mounted, user:", userStore.user);
@@ -288,11 +446,36 @@ export default function ProfessorDashboard() {
 		}
 	}, [fetchCourseInstances, userStore.user]);
 
+	// Add a useEffect to verify authentication status
 	useEffect(() => {
-		if (selectedCourse) {
+		const verifyAuth = async () => {
+			try {
+				const response = await fetch("/api/users/me", {
+					credentials: "include",
+				});
+				console.log("Auth verification response:", response.status);
+				if (!response.ok) {
+					console.log("Authentication failed, redirecting to login");
+					// Redirect to login if authentication fails
+					window.location.href = "/login";
+				}
+			} catch (error) {
+				console.error("Auth verification error:", error);
+				window.location.href = "/login";
+			}
+		};
+
+		// Only verify if we have a user in the store
+		if (userStore.user) {
+			verifyAuth();
+		}
+	}, [userStore.user]);
+
+	useEffect(() => {
+		if (courseInstances.length > 0) {
 			fetchAssessments();
 		}
-	}, [selectedCourse, fetchAssessments]);
+	}, [courseInstances, fetchAssessments]);
 
 	useEffect(() => {
 		if (selectedAssessment) {
@@ -395,6 +578,9 @@ export default function ProfessorDashboard() {
 	};
 
 	const saveScores = async () => {
+		if (isSaving) return; // Prevent multiple simultaneous saves
+
+		setIsSaving(true);
 		try {
 			const selectedAssessmentData = assessments.find(
 				(a) => a.id === selectedAssessment,
@@ -429,26 +615,36 @@ export default function ProfessorDashboard() {
 
 					if (existingScore) {
 						// Update existing score - allow updating feedback even without changing value
+						const updateData: any = {
+							feedback: scoreData.feedback,
+							gradedBy: Number(userStore.user?.id),
+							gradedAt: new Date().toISOString(),
+						};
+
+						// Only update value-related fields if a valid value is provided
+						if (
+							scoreData &&
+							typeof scoreData.value === "number" &&
+							!Number.isNaN(scoreData.value) &&
+							scoreData.value >= 0
+						) {
+							updateData.value = scoreData.value;
+							updateData.percentage = Math.round(
+								(scoreData.value /
+									(selectedAssessmentData.assessmentTemplate
+										?.maxScore || 100)) *
+									100,
+							);
+							updateData.finalValue = scoreData.value;
+						}
+
 						const response = await fetch(
 							`/api/scores?id=${Number(existingScore.id)}`,
 							{
 								method: "PATCH",
 								headers: { "Content-Type": "application/json" },
 								credentials: "include",
-								body: JSON.stringify({
-									value: scoreData.value,
-									percentage: Math.round(
-										(scoreData.value /
-											(selectedAssessmentData
-												.assessmentTemplate?.maxScore ||
-												100)) *
-											100,
-									),
-									finalValue: scoreData.value,
-									feedback: scoreData.feedback,
-									gradedBy: Number(userStore.user?.id),
-									gradedAt: new Date().toISOString(),
-								}),
+								body: JSON.stringify(updateData),
 							},
 						);
 
@@ -462,34 +658,41 @@ export default function ProfessorDashboard() {
 						return response.json();
 					} else {
 						// Create new score - only if value is provided and valid
-						if (
-							!scoreData ||
-							typeof scoreData.value !== "number" ||
-							Number.isNaN(scoreData.value) ||
-							scoreData.value < 0
-						) {
-							// Skip creating new score if value is invalid
+						// Allow creating a score even if only feedback is provided.
+						// If value is not provided, default to 0 so the record can be created.
+						const hasValidValue =
+							scoreData &&
+							typeof scoreData.value === "number" &&
+							!Number.isNaN(scoreData.value) &&
+							scoreData.value >= 0;
+						const hasFeedback = Boolean(
+							scoreData?.feedback &&
+								scoreData.feedback.trim().length > 0,
+						);
+						if (!hasValidValue && !hasFeedback) {
 							console.log(
-								`Skipping student ${studentId} - no valid score value`,
+								`Skipping student ${studentId} - neither valid value nor feedback provided`,
 							);
 							return null;
 						}
+
+						const valueToSave = hasValidValue ? scoreData.value : 0;
 
 						const payload = {
 							assessment: Number(selectedAssessment),
 							student: Number(studentId),
 							scoreTitle: `${students.find((s) => s.id === studentId)?.name} - ${selectedAssessmentData.title}`,
-							value: scoreData.value,
+							value: valueToSave,
 							maxValue:
 								selectedAssessmentData.assessmentTemplate
 									?.maxScore || 100,
 							percentage: Math.round(
-								(scoreData.value /
+								(valueToSave /
 									(selectedAssessmentData.assessmentTemplate
 										?.maxScore || 100)) *
 									100,
 							),
-							finalValue: scoreData.value,
+							finalValue: valueToSave,
 							gradedBy: Number(userStore.user?.id),
 							gradedAt: new Date().toISOString(),
 							feedback: scoreData.feedback,
@@ -523,6 +726,17 @@ export default function ProfessorDashboard() {
 			const results = await Promise.all(promises);
 			console.log("Save results:", results);
 
+			// Optimistically merge returned scores into local state so feedback/value appear immediately
+			setScores((prev) => {
+				const byId = new Map<string | number, any>();
+				for (const s of prev) byId.set(s.id, s);
+				for (const r of results) {
+					if (!r) continue;
+					byId.set(r.id, r);
+				}
+				return Array.from(byId.values());
+			});
+
 			// Trigger automatic grade calculation
 			try {
 				const selectedCourseData = courseInstances.find(
@@ -554,14 +768,23 @@ export default function ProfessorDashboard() {
 			}
 
 			toast.success("Scores saved and grades calculated successfully!");
+
+			// Refresh data immediately BEFORE clearing UI state
+			await fetchStudentsAndScores();
+
+			// Also refresh assessments to update completion status
+			await fetchAssessments();
+
+			// Clear UI state AFTER data is refreshed and rendered
 			setGradingMode(false);
 			setNewScores({});
-			fetchStudentsAndScores(); // Refresh data
 		} catch (error) {
 			console.error("Error saving scores:", error);
 			toast.error(
 				`Failed to save scores: ${error instanceof Error ? error.message : "Unknown error"}`,
 			);
+		} finally {
+			setIsSaving(false);
 		}
 	};
 
@@ -875,13 +1098,20 @@ export default function ProfessorDashboard() {
 												</Button>
 												<Button
 													onClick={saveScores}
-													className="bg-green-600 hover:bg-green-700"
+													disabled={isSaving}
+													className="bg-green-600 hover:bg-green-700 disabled:opacity-50"
 												>
 													<Icon
-														icon="lucide:save"
-														className="w-4 h-4 mr-2"
+														icon={
+															isSaving
+																? "lucide:loader-2"
+																: "lucide:save"
+														}
+														className={`w-4 h-4 mr-2 ${isSaving ? "animate-spin" : ""}`}
 													/>
-													Save All Scores
+													{isSaving
+														? "Saving..."
+														: "Save All Scores"}
 												</Button>
 											</>
 										)}

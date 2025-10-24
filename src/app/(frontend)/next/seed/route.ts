@@ -1,7 +1,7 @@
 import config from "@payload-config";
 import { headers } from "next/headers";
 import { createLocalReq, getPayload } from "payload";
-import { seedCampusnetData } from "@/endpoints/seed/campusnet-seed";
+import { seedCampusnetUnifiedData } from "@/endpoints/seed/unified-seed";
 
 export const maxDuration = 60; // This function can run for a maximum of 60 seconds
 
@@ -21,7 +21,7 @@ export async function POST(): Promise<Response> {
 		// At this point you should pass in a user, locale, and any other context you need for the Local API
 		const payloadReq = await createLocalReq({ user }, payload);
 
-		await seedCampusnetData(payloadReq);
+		await seedCampusnetUnifiedData(payloadReq);
 
 		return Response.json({ success: true });
 	} catch (e) {

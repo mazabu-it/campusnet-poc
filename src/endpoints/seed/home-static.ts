@@ -88,15 +88,15 @@ export const homeStatic: RequiredDataFromCollectionSlug<"pages"> = {
 	layout: [
 		{
 			blockName: "Features Grid",
-			blockType: "featuresGrid",
+			blockType: "featuresGrid" as any,
 		},
 		{
 			blockName: "Testimonials",
-			blockType: "testimonials",
+			blockType: "testimonials" as any,
 		},
 		{
 			blockName: "CTA Section",
-			blockType: "ctaSection",
+			blockType: "ctaSection" as any,
 		},
 	],
 };

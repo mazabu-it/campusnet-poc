@@ -8,7 +8,7 @@
         "@neondatabase/serverless": "^1.0.2",
         "@payloadcms/admin-bar": "3.59.1",
         "@payloadcms/db-vercel-postgres": "3.59.1",
-        "@payloadcms/email-nodemailer": "^3.59.1",
+        "@payloadcms/email-nodemailer": "3.59.1",
         "@payloadcms/live-preview-react": "3.59.1",
         "@payloadcms/next": "3.59.1",
         "@payloadcms/payload-cloud": "3.59.1",
@@ -531,7 +531,7 @@
 
     "@payloadcms/drizzle": ["@payloadcms/drizzle@3.59.1", "", { "dependencies": { "console-table-printer": "2.12.1", "dequal": "2.0.3", "drizzle-orm": "0.44.2", "prompts": "2.4.2", "to-snake-case": "1.0.0", "uuid": "9.0.0" }, "peerDependencies": { "payload": "3.59.1" } }, "sha512-2n25PQfbFJ7uIlQxLilf8lrdbIGJ9p56ZNtViHl57DCq8SYGcB7Rz+5MSNdGwMnK28oYMAObJ4bBI5JG9DhR/g=="],
 
-    "@payloadcms/email-nodemailer": ["@payloadcms/email-nodemailer@3.60.0", "", { "dependencies": { "nodemailer": "7.0.9" }, "peerDependencies": { "payload": "3.60.0" } }, "sha512-9yU2oU4eYTbrMYUNO9P3o7RQgTgt2fpfpuYVSynlOokR/vRnNBRN3k/W6oEmPjfQylybtbY/gnda1I/4KL8NYg=="],
+    "@payloadcms/email-nodemailer": ["@payloadcms/email-nodemailer@3.59.1", "", { "dependencies": { "nodemailer": "6.9.16" }, "peerDependencies": { "payload": "3.59.1" } }, "sha512-VhyHUANd8+/CmdEH+Zr9tnjg0Vlr5SyzeokPB4UYPD5in2xhyX3d3vtFmsdkfAx06Uixv96o7M/EiBs3pX5bJA=="],
 
     "@payloadcms/graphql": ["@payloadcms/graphql@3.59.1", "", { "dependencies": { "graphql-scalars": "1.22.2", "pluralize": "8.0.0", "ts-essentials": "10.0.3", "tsx": "4.19.2" }, "peerDependencies": { "graphql": "^16.8.1", "payload": "3.59.1" }, "bin": { "payload-graphql": "bin.js" } }, "sha512-NOv7er1U/2fARDWiX1ztT39oifEiapHYp9q9u0qSU+BgNy3lx78awOiI359phcRulm1KK8rFcCwKR773/Y5ucQ=="],
 
@@ -2215,9 +2215,9 @@
 
     "@payloadcms/drizzle/uuid": ["uuid@9.0.0", "", { "bin": { "uuid": "dist/bin/uuid" } }, "sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg=="],
 
-    "@payloadcms/graphql/tsx": ["tsx@4.19.2", "", { "dependencies": { "esbuild": "~0.23.0", "get-tsconfig": "^4.7.5" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "bin": { "tsx": "dist/cli.mjs" } }, "sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g=="],
+    "@payloadcms/email-nodemailer/nodemailer": ["nodemailer@6.9.16", "", {}, "sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ=="],
 
-    "@payloadcms/payload-cloud/@payloadcms/email-nodemailer": ["@payloadcms/email-nodemailer@3.59.1", "", { "dependencies": { "nodemailer": "6.9.16" }, "peerDependencies": { "payload": "3.59.1" } }, "sha512-VhyHUANd8+/CmdEH+Zr9tnjg0Vlr5SyzeokPB4UYPD5in2xhyX3d3vtFmsdkfAx06Uixv96o7M/EiBs3pX5bJA=="],
+    "@payloadcms/graphql/tsx": ["tsx@4.19.2", "", { "dependencies": { "esbuild": "~0.23.0", "get-tsconfig": "^4.7.5" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "bin": { "tsx": "dist/cli.mjs" } }, "sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g=="],
 
     "@payloadcms/payload-cloud/nodemailer": ["nodemailer@6.9.16", "", {}, "sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ=="],
 

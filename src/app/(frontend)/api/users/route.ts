@@ -16,6 +16,18 @@ export async function GET(request: NextRequest) {
 			);
 		}
 
+		// Allow professors and faculty-staff to fetch student data
+		if (
+			user.user.role !== "professor" &&
+			user.user.role !== "faculty-staff" &&
+			user.user.role !== "student"
+		) {
+			return NextResponse.json(
+				{ message: "Access denied" },
+				{ status: 403 },
+			);
+		}
+
 		// Get query parameters
 		const { searchParams } = new URL(request.url);
 		const userIds = searchParams.get("where[id][in]");

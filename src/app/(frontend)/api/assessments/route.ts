@@ -1,49 +1,49 @@
-import config from "@payload-config";
 import { type NextRequest, NextResponse } from "next/server";
 import { getPayload } from "payload";
+import config from "../../../../payload.config";
 
+// Initialize Payload with Local API
+let payload: any = null;
+const getPayloadInstance = async () => {
+	if (!payload) {
+		payload = await getPayload({ config });
+	}
+	return payload;
+};
+
+// Optimized API route for assessments using Local API
 export async function GET(request: NextRequest) {
 	try {
-		const payload = await getPayload({ config });
-
-		// Get the current user from the token
-		const user = await payload.auth({ headers: request.headers });
-
-		if (!user.user) {
-			return NextResponse.json(
-				{ message: "Not authenticated" },
-				{ status: 401 },
-			);
-		}
-
-		// Get query parameters
+		const payloadInstance = await getPayloadInstance();
 		const { searchParams } = new URL(request.url);
-		const courseInstanceId =
-			searchParams.get("courseInstanceId") ||
-			searchParams.get(
-				"where[assessmentTemplate.courseInstance][equals]",
-			);
+		const courseInstanceId = searchParams.get(
+			"where[assessmentTemplate.courseInstance][equals]",
+		);
 
-		let whereClause = {};
+		const query: any = {
+			collection: "assessments",
+			limit: 1000,
+			depth: 2, // Include related data
+		};
+
 		if (courseInstanceId) {
-			whereClause = {
+			query.where = {
 				"assessmentTemplate.courseInstance": {
 					equals: courseInstanceId,
 				},
 			};
 		}
 
-		const result = await payload.find({
-			collection: "assessments",
-			where: whereClause,
-			depth: 2, // Include assessment template details
-		});
+		const assessments = await payloadInstance.find(query);
 
-		return NextResponse.json(result);
+		return NextResponse.json({
+			docs: assessments.docs,
+			totalDocs: assessments.totalDocs,
+		});
 	} catch (error) {
-		console.error("Get assessments error:", error);
+		console.error("Error fetching assessments:", error);
 		return NextResponse.json(
-			{ message: "Failed to fetch assessments" },
+			{ error: "Failed to fetch assessments" },
 			{ status: 500 },
 		);
 	}

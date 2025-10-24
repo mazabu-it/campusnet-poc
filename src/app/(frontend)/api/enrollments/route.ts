@@ -1,55 +1,49 @@
-import config from "@payload-config";
 import { type NextRequest, NextResponse } from "next/server";
 import { getPayload } from "payload";
+import config from "../../../../payload.config";
 
+// Initialize Payload with Local API
+let payload: any = null;
+const getPayloadInstance = async () => {
+	if (!payload) {
+		payload = await getPayload({ config });
+	}
+	return payload;
+};
+
+// Optimized API route for enrollments using Local API
 export async function GET(request: NextRequest) {
 	try {
-		const payload = await getPayload({ config });
-
-		// Get the current user from the token
-		const user = await payload.auth({ headers: request.headers });
-
-		if (!user.user) {
-			return NextResponse.json(
-				{ message: "Not authenticated" },
-				{ status: 401 },
-			);
-		}
-
-		// Get query parameters
+		const payloadInstance = await getPayloadInstance();
 		const { searchParams } = new URL(request.url);
 		const courseInstanceId = searchParams.get(
 			"where[courseInstance][equals]",
 		);
 
-		let whereClause = {};
+		const query: any = {
+			collection: "enrollments",
+			limit: 1000,
+			depth: 2, // Include related data
+		};
+
 		if (courseInstanceId) {
-			whereClause = {
+			query.where = {
 				courseInstance: {
 					equals: courseInstanceId,
 				},
 			};
 		}
 
-		const result = await payload.find({
-			collection: "enrollments",
-			where: whereClause,
-			depth: 3, // Include student and course instance details with nested course info
+		const enrollments = await payloadInstance.find(query);
+
+		return NextResponse.json({
+			docs: enrollments.docs,
+			totalDocs: enrollments.totalDocs,
 		});
-
-		console.log("Enrollments API - Found enrollments:", result.docs.length);
-		if (result.docs.length > 0) {
-			console.log(
-				"First enrollment structure:",
-				JSON.stringify(result.docs[0], null, 2),
-			);
-		}
-
-		return NextResponse.json(result);
 	} catch (error) {
-		console.error("Get enrollments error:", error);
+		console.error("Error fetching enrollments:", error);
 		return NextResponse.json(
-			{ message: "Failed to fetch enrollments" },
+			{ error: "Failed to fetch enrollments" },
 			{ status: 500 },
 		);
 	}

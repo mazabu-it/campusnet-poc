@@ -299,14 +299,23 @@ export default function ProfessorProgressPage() {
 	// Calculate weighted score for a student based on completed assessments
 	const calculateAverageScore = (studentId: string): number => {
 		const studentScores = getStudentScores(studentId);
-		if (studentScores.length === 0) return 0;
+		if (studentScores.length === 0) {
+			console.log(`Student ${studentId}: No scores found`);
+			return 0;
+		}
 
 		// Get only scores for completed assessments
 		const completedScores = studentScores.filter((score) => {
+			const assessmentId = getScoreAssessmentId(score);
 			const assessment = assessments.find(
-				(a) => a.id === getScoreAssessmentId(score),
+				(a) => String(a.id) === String(assessmentId),
 			);
-			return assessment?.isCompleted === true;
+			const isCompleted = assessment?.isCompleted === true;
+
+			console.log(
+				`  Score ${score.id}: assessment ${assessmentId}, found: ${!!assessment}, completed: ${isCompleted}`,
+			);
+			return isCompleted;
 		});
 
 		console.log(`Student ${studentId}:`, {
@@ -314,20 +323,26 @@ export default function ProfessorProgressPage() {
 			completedScores: completedScores.length,
 			assessments: assessments.map((a) => ({
 				id: a.id,
+				title: a.title,
 				isCompleted: a.isCompleted,
 			})),
 		});
 
-		if (completedScores.length === 0) return 0;
+		if (completedScores.length === 0) {
+			console.log(`Student ${studentId}: No completed assessments`);
+			return 0;
+		}
 
 		// Calculate weighted score
 		let totalWeightedScore = 0;
 		let totalWeight = 0;
 
 		completedScores.forEach((score) => {
+			const assessmentId = getScoreAssessmentId(score);
 			const assessment = assessments.find(
-				(a) => a.id === getScoreAssessmentId(score),
+				(a) => String(a.id) === String(assessmentId),
 			);
+
 			if (assessment?.assessmentTemplate?.weightPercent) {
 				const weight = assessment.assessmentTemplate.weightPercent;
 				const maxScore =
@@ -335,28 +350,39 @@ export default function ProfessorProgressPage() {
 					score.maxValue ||
 					100;
 				const scoreValue = score.value || 0;
+
 				// Calculate percentage from value and max score
 				const scorePercentage =
 					maxScore > 0 ? (scoreValue / maxScore) * 100 : 0;
-				totalWeightedScore += (scorePercentage * weight) / 100;
+				const contribution = (scorePercentage * weight) / 100;
+
+				totalWeightedScore += contribution;
 				totalWeight += weight;
-				console.log(`  Score (raw):`, score);
-				console.log(`  Score (calculated):`, {
+
+				console.log(`  Score calculation:`, {
 					assessment: assessment.title,
 					scoreValue,
 					maxScore,
 					scorePercentage: Math.round(scorePercentage * 10) / 10,
 					weight,
-					contribution: (scorePercentage * weight) / 100,
+					contribution: Math.round(contribution * 10) / 10,
 				});
+			} else {
+				console.log(
+					`  Score ${score.id}: No assessment template or weight found`,
+				);
 			}
 		});
 
 		// Return weighted score as a percentage of total completed weight
-		if (totalWeight === 0) return 0;
+		if (totalWeight === 0) {
+			console.log(`Student ${studentId}: No valid weights found`);
+			return 0;
+		}
+
 		const finalScore = Math.round((totalWeightedScore / totalWeight) * 100);
 		console.log(
-			`  Final: ${totalWeightedScore}/${totalWeight} = ${finalScore}%`,
+			`Student ${studentId} final: ${totalWeightedScore}/${totalWeight} = ${finalScore}%`,
 		);
 		return finalScore;
 	};
@@ -401,6 +427,9 @@ export default function ProfessorProgressPage() {
 	const getScoreAssessmentId = (score: Score): string => {
 		if (typeof score.assessment === "string") {
 			return score.assessment;
+		}
+		if (typeof score.assessment === "number") {
+			return String(score.assessment);
 		}
 		return (score.assessment as any)?.id || "";
 	};
@@ -626,10 +655,14 @@ export default function ProfessorProgressPage() {
 										<BookOpen className="h-8 w-8 text-green-500" />
 										<div className="ml-4">
 											<p className="text-sm font-medium text-muted-foreground">
-												Assessments
+												Completed Assessments
 											</p>
 											<p className="text-2xl font-bold text-card-foreground">
-												{assessments.length}
+												{
+													assessments.filter(
+														(a) => a.isCompleted,
+													).length
+												}
 											</p>
 										</div>
 									</div>
@@ -651,13 +684,21 @@ export default function ProfessorProgressPage() {
 																(
 																	sum,
 																	enrollment,
-																) =>
-																	sum +
-																	calculateAverageScore(
-																		enrollment
-																			.student
-																			.id,
-																	),
+																) => {
+																	const studentId =
+																		typeof enrollment.student ===
+																		"string"
+																			? enrollment.student
+																			: enrollment
+																					.student
+																					.id;
+																	return (
+																		sum +
+																		calculateAverageScore(
+																			studentId,
+																		)
+																	);
+																},
 																0,
 															) /
 																enrollments.length,
@@ -873,14 +914,13 @@ export default function ProfessorProgressPage() {
 													);
 													// Check if courseInstance has course data directly
 													if (
-														enrollment
-															.courseInstance
-															.course
+														(
+															enrollment.courseInstance as any
+														).course
 													) {
-														courseInfo =
-															enrollment
-																.courseInstance
-																.course;
+														courseInfo = (
+															enrollment.courseInstance as any
+														).course;
 													}
 													// Or if it has courseVariation with course
 													else if (

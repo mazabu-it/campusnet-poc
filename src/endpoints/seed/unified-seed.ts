@@ -260,6 +260,7 @@ export async function seedCampusnetUnifiedData(payload: any) {
 				role: "student",
 				firstName: "Marie",
 				lastName: "Étudiante",
+				studentId: "STU001",
 				isActive: true,
 			},
 		});
@@ -294,6 +295,7 @@ export async function seedCampusnetUnifiedData(payload: any) {
 					role: "student",
 					firstName: faker.person.firstName(),
 					lastName: faker.person.lastName(),
+					studentId: `STU${String(i + 2).padStart(3, "0")}`,
 					isActive: true,
 				},
 			});
@@ -492,6 +494,10 @@ export async function seedCampusnetUnifiedData(payload: any) {
 		console.log("🎯 Creating scores...");
 
 		let totalScoresCreated = 0;
+
+		// Group assessments by course instance to avoid creating scores for wrong courses
+		const assessmentsByCourseInstance = new Map();
+
 		for (const assessment of assessments) {
 			// Skip final exams
 			if (assessment.title.toLowerCase().includes("final")) {
@@ -499,31 +505,54 @@ export async function seedCampusnetUnifiedData(payload: any) {
 				continue;
 			}
 
-			console.log(`Creating scores for: ${assessment.title}`);
+			// Only create scores for completed assessments
+			if (!assessment.isCompleted) {
+				console.log(
+					`Skipping incomplete assessment: ${assessment.title}`,
+				);
+				continue;
+			}
 
-			// Find students enrolled in this course instance
+			// Find the course instance for this assessment
 			const assessmentTemplate = assessmentTemplates.find((at) => {
-				// Extract assessment template ID (might be object or ID)
 				const assessmentTemplateId =
 					typeof assessment.assessmentTemplate === "object"
 						? assessment.assessmentTemplate.id
 						: assessment.assessmentTemplate;
-
 				return String(at.id) === String(assessmentTemplateId);
 			});
 
-			// Extract course instance ID (might be object or ID)
 			const courseInstanceId = assessmentTemplate?.courseInstance
 				? typeof assessmentTemplate.courseInstance === "object"
 					? assessmentTemplate.courseInstance.id
 					: assessmentTemplate.courseInstance
 				: null;
 
-			console.log(`  Assessment template found: ${!!assessmentTemplate}`);
-			console.log(`  Course instance ID: ${courseInstanceId}`);
+			if (!courseInstanceId) {
+				console.log(
+					`  ⚠️ No course instance found for assessment: ${assessment.title}`,
+				);
+				continue;
+			}
 
+			// Group by course instance
+			if (!assessmentsByCourseInstance.has(courseInstanceId)) {
+				assessmentsByCourseInstance.set(courseInstanceId, []);
+			}
+			assessmentsByCourseInstance.get(courseInstanceId).push(assessment);
+		}
+
+		// Create scores for each course instance separately
+		for (const [
+			courseInstanceId,
+			courseAssessments,
+		] of assessmentsByCourseInstance) {
+			console.log(
+				`Creating scores for course instance ${courseInstanceId} with ${courseAssessments.length} assessments`,
+			);
+
+			// Find students enrolled in this specific course instance
 			const enrolledStudents = enrollments.filter((enrollment) => {
-				// Extract course instance ID from enrollment (might be object or ID)
 				const enrollmentCourseInstanceId =
 					typeof enrollment.courseInstance === "object"
 						? enrollment.courseInstance.id
@@ -535,7 +564,9 @@ export async function seedCampusnetUnifiedData(payload: any) {
 				);
 			});
 
-			console.log(`  Found ${enrolledStudents.length} enrolled students`);
+			console.log(
+				`  Found ${enrolledStudents.length} enrolled students for course instance ${courseInstanceId}`,
+			);
 
 			if (enrolledStudents.length === 0) {
 				console.log(
@@ -544,105 +575,130 @@ export async function seedCampusnetUnifiedData(payload: any) {
 				continue;
 			}
 
-			// Create scores for each enrolled student using the same structure as professor endpoint
-			for (const enrollment of enrolledStudents) {
-				// Extract student ID (might be object or ID)
-				const enrollmentStudentId =
-					typeof enrollment.student === "object"
-						? enrollment.student.id
-						: enrollment.student;
+			// Create scores for each assessment in this course instance
+			for (const assessment of courseAssessments) {
+				console.log(`Creating scores for: ${assessment.title}`);
 
-				const student = students.find(
-					(s) => String(s.id) === String(enrollmentStudentId),
+				const assessmentTemplate = assessmentTemplates.find((at) => {
+					const assessmentTemplateId =
+						typeof assessment.assessmentTemplate === "object"
+							? assessment.assessmentTemplate.id
+							: assessment.assessmentTemplate;
+					return String(at.id) === String(assessmentTemplateId);
+				});
+
+				console.log(
+					`  Assessment template found: ${!!assessmentTemplate}`,
 				);
 
-				if (!student) {
-					console.log(
-						`  ⚠️ Student not found for enrollment ${enrollment.id}`,
+				// Create scores for each enrolled student using the same structure as professor endpoint
+				for (const enrollment of enrolledStudents) {
+					// Extract student ID (might be object or ID)
+					const enrollmentStudentId =
+						typeof enrollment.student === "object"
+							? enrollment.student.id
+							: enrollment.student;
+
+					const student = students.find(
+						(s) => String(s.id) === String(enrollmentStudentId),
 					);
-					continue;
-				}
 
-				const maxScore = assessmentTemplate?.maxScore || 20;
+					if (!student) {
+						console.log(
+							`  ⚠️ Student not found for enrollment ${enrollment.id}`,
+						);
+						continue;
+					}
 
-				// Generate realistic score
-				let scoreValue: number;
-				let feedback: string;
+					const maxScore = assessmentTemplate?.maxScore || 20;
 
-				if (student?.email === "student@test.com") {
-					// Test student gets excellent scores (85-98% of maxScore)
-					const minScore = Math.max(1, Math.round(maxScore * 0.85));
-					const maxScoreLimit = Math.min(
-						maxScore,
-						Math.round(maxScore * 0.98),
-					);
-					scoreValue =
-						Math.floor(
-							Math.random() * (maxScoreLimit - minScore + 1),
-						) + minScore;
-					feedback = faker.helpers.arrayElement([
-						"Excellent travail! Montre une compréhension solide des concepts.",
-						"Performance exceptionnelle. Continuez comme ça!",
-						"Très bien fait. Démontre une maîtrise du matériel.",
-					]);
-				} else {
-					// Other students get varied scores (45-95% of maxScore)
-					const minScore = Math.max(1, Math.round(maxScore * 0.45));
-					const maxScoreLimit = Math.min(
-						maxScore,
-						Math.round(maxScore * 0.95),
-					);
-					scoreValue =
-						Math.floor(
-							Math.random() * (maxScoreLimit - minScore + 1),
-						) + minScore;
-					feedback = faker.helpers.arrayElement([
-						"Bonne compréhension du matériel.",
-						"Montre des améliorations dans les domaines clés.",
-						"Performance solide avec de la place pour la croissance.",
-					]);
-				}
+					// Generate realistic score
+					let scoreValue: number;
+					let feedback: string;
 
-				try {
-					// Create the score using the same structure as the professor endpoint
-					const scoreData = {
-						assessment: Number(assessment.id),
-						student: Number(student.id),
-						scoreTitle: `${student.name} - ${assessment.title}`,
-						value: scoreValue,
-						maxValue: maxScore,
-						percentage: Math.round((scoreValue / maxScore) * 100),
-						finalValue: scoreValue,
-						gradedBy: Number(professors[0].id),
-						gradedAt: "2024-10-20T10:00:00.000Z",
-						feedback: feedback,
-						notes: "",
-						isLate: false,
-						latePenaltyApplied: 0,
-						isExcused: false,
-					};
+					if (student?.email === "student@test.com") {
+						// Test student gets excellent scores (85-98% of maxScore)
+						const minScore = Math.max(
+							1,
+							Math.round(maxScore * 0.85),
+						);
+						const maxScoreLimit = Math.min(
+							maxScore,
+							Math.round(maxScore * 0.98),
+						);
+						scoreValue =
+							Math.floor(
+								Math.random() * (maxScoreLimit - minScore + 1),
+							) + minScore;
+						feedback = faker.helpers.arrayElement([
+							"Excellent travail! Montre une compréhension solide des concepts.",
+							"Performance exceptionnelle. Continuez comme ça!",
+							"Très bien fait. Démontre une maîtrise du matériel.",
+						]);
+					} else {
+						// Other students get varied scores (45-95% of maxScore)
+						const minScore = Math.max(
+							1,
+							Math.round(maxScore * 0.45),
+						);
+						const maxScoreLimit = Math.min(
+							maxScore,
+							Math.round(maxScore * 0.95),
+						);
+						scoreValue =
+							Math.floor(
+								Math.random() * (maxScoreLimit - minScore + 1),
+							) + minScore;
+						feedback = faker.helpers.arrayElement([
+							"Bonne compréhension du matériel.",
+							"Montre des améliorations dans les domaines clés.",
+							"Performance solide avec de la place pour la croissance.",
+						]);
+					}
 
-					console.log(`Creating score with data:`, {
-						assessment: scoreData.assessment,
-						student: scoreData.student,
-						value: scoreData.value,
-						maxValue: scoreData.maxValue,
-					});
+					try {
+						// Create the score using the same structure as the professor endpoint
+						const scoreData = {
+							assessment: Number(assessment.id),
+							student: Number(student.id),
+							scoreTitle: `${student.name} - ${assessment.title}`,
+							value: scoreValue,
+							maxValue: maxScore,
+							percentage: Math.round(
+								(scoreValue / maxScore) * 100,
+							),
+							finalValue: scoreValue,
+							gradedBy: Number(professors[0].id),
+							gradedAt: "2024-10-20T10:00:00.000Z",
+							feedback: feedback,
+							notes: "",
+							isLate: false,
+							latePenaltyApplied: 0,
+							isExcused: false,
+						};
 
-					await payload.create({
-						collection: "scores",
-						data: scoreData,
-					});
+						console.log(`Creating score with data:`, {
+							assessment: scoreData.assessment,
+							student: scoreData.student,
+							value: scoreData.value,
+							maxValue: scoreData.maxValue,
+						});
 
-					totalScoresCreated++;
-					console.log(
-						`    ✅ Score: ${scoreValue}/${maxScore} (${Math.round((scoreValue / maxScore) * 100)}%) for ${student.name}`,
-					);
-				} catch (error) {
-					console.error(
-						`    ❌ Failed to create score for ${student.name}:`,
-						error,
-					);
+						await payload.create({
+							collection: "scores",
+							data: scoreData,
+						});
+
+						totalScoresCreated++;
+						console.log(
+							`    ✅ Score: ${scoreValue}/${maxScore} (${Math.round((scoreValue / maxScore) * 100)}%) for ${student.name}`,
+						);
+					} catch (error) {
+						console.error(
+							`    ❌ Failed to create score for ${student.name}:`,
+							error,
+						);
+					}
 				}
 			}
 		}
