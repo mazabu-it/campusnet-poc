@@ -51,11 +51,13 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 
 	// Navigation items - clean and minimal
 	const navItems = [
-		{ href: "/", label: "Home" },
-		{ href: "/programs", label: "Programs" },
-		{ href: "/faculty", label: "Faculty" },
-		{ href: "/news", label: "News" },
-		...(user.user ? [{ href: "/dashboard", label: "Dashboard" }] : []),
+		{ href: "/", label: "Accueil" },
+		{ href: "/programs", label: "Programmes" },
+		{ href: "/faculty", label: "Enseignants" },
+		{ href: "/news", label: "Actualités" },
+		...(user.user
+			? [{ href: "/dashboard", label: "Tableau de bord" }]
+			: []),
 	];
 
 	return (
@@ -105,7 +107,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 									icon="lucide:log-out"
 									className="w-4 h-4 mr-2"
 								/>
-								Sign out
+								Se déconnecter
 							</Button>
 						</>
 					) : (
@@ -115,7 +117,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 									icon="lucide:log-in"
 									className="w-4 h-4 mr-2"
 								/>
-								Sign in
+								Se connecter
 							</Link>
 						</Button>
 					)}
@@ -171,7 +173,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 											icon="lucide:log-out"
 											className="w-4 h-4 mr-2"
 										/>
-										Sign out
+										Se déconnecter
 									</Button>
 								</>
 							) : (
@@ -186,7 +188,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 											icon="lucide:log-in"
 											className="w-4 h-4 mr-2"
 										/>
-										Sign in
+										Se connecter
 									</Link>
 								</Button>
 							)}

@@ -10,67 +10,67 @@ export default function ProgramsPage() {
 	const programs = [
 		{
 			id: 1,
-			name: "Bachelor of Science in Software Engineering",
-			code: "BSE",
-			duration: "4 years",
+			name: "Licence en Génie Logiciel",
+			code: "LGL",
+			duration: "4 ans",
 			credits: 120,
 			description:
-				"Comprehensive software engineering program covering modern development practices, algorithms, and system design.",
+				"Programme complet de génie logiciel couvrant les pratiques modernes de développement, les algorithmes et la conception de systèmes.",
 			features: [
-				"Full-stack Development",
-				"Mobile App Development",
-				"Cloud Computing",
-				"AI/ML Integration",
+				"Développement full‑stack",
+				"Développement mobile",
+				"Informatique en nuage",
+				"Intégration IA/ML",
 			],
 			careerPaths: [
-				"Software Engineer",
-				"Full-stack Developer",
-				"DevOps Engineer",
-				"Tech Lead",
+				"Ingénieur logiciel",
+				"Développeur full‑stack",
+				"Ingénieur DevOps",
+				"Chef d’équipe technique",
 			],
 			color: "blue",
 		},
 		{
 			id: 2,
-			name: "Master of Science in Computer Science",
-			code: "MSCS",
-			duration: "2 years",
+			name: "Master en Informatique",
+			code: "MINF",
+			duration: "2 ans",
 			credits: 60,
 			description:
-				"Advanced computer science program focusing on research, algorithms, and cutting-edge technologies.",
+				"Programme avancé en informatique axé sur la recherche, les algorithmes et les technologies de pointe.",
 			features: [
-				"Advanced Algorithms",
-				"Machine Learning",
-				"Distributed Systems",
-				"Research Methods",
+				"Algorithmes avancés",
+				"Apprentissage automatique",
+				"Systèmes distribués",
+				"Méthodes de recherche",
 			],
 			careerPaths: [
-				"Research Scientist",
-				"Senior Software Engineer",
-				"Data Scientist",
-				"Technical Architect",
+				"Chercheur",
+				"Ingénieur logiciel senior",
+				"Data scientist",
+				"Architecte technique",
 			],
 			color: "purple",
 		},
 		{
 			id: 3,
-			name: "Bachelor of Science in Data Science",
-			code: "BSDS",
-			duration: "4 years",
+			name: "Licence en Science des Données",
+			code: "LSD",
+			duration: "4 ans",
 			credits: 120,
 			description:
-				"Interdisciplinary program combining statistics, computer science, and domain expertise for data-driven decision making.",
+				"Programme interdisciplinaire combinant statistiques, informatique et expertise métier pour la prise de décision basée sur les données.",
 			features: [
-				"Statistical Analysis",
-				"Big Data Processing",
-				"Machine Learning",
-				"Data Visualization",
+				"Analyse statistique",
+				"Traitement Big Data",
+				"Apprentissage automatique",
+				"Visualisation des données",
 			],
 			careerPaths: [
-				"Data Scientist",
-				"Data Analyst",
-				"Business Intelligence",
-				"Data Engineer",
+				"Data scientist",
+				"Analyste de données",
+				"Business intelligence",
+				"Ingénieur données",
 			],
 			color: "green",
 		},
@@ -112,7 +112,7 @@ export default function ProgramsPage() {
 								icon="lucide:graduation-cap"
 								className="mr-2 h-4 w-4"
 							/>
-							Explore Our Programs
+							Découvrez nos programmes
 						</Badge>
 					</motion.div>
 
@@ -122,9 +122,9 @@ export default function ProgramsPage() {
 						transition={{ delay: 0.3, duration: 0.6 }}
 						className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
 					>
-						Shape Your
+						Construisez votre
 						<span className="block mt-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-							Future Career
+							avenir professionnel
 						</span>
 					</motion.h1>
 
@@ -134,8 +134,8 @@ export default function ProgramsPage() {
 						transition={{ delay: 0.4, duration: 0.6 }}
 						className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
 					>
-						World-class programs designed to transform your passion
-						into expertise
+						Des programmes de haut niveau conçus pour transformer
+						votre passion en expertise
 					</motion.p>
 
 					{/* Quick stats */}
@@ -148,17 +148,17 @@ export default function ProgramsPage() {
 						{[
 							{
 								icon: "lucide:users",
-								label: "10K+ Students",
-								value: "10,000+",
+								label: "10K+ Étudiants",
+								value: "10 000+",
 							},
 							{
 								icon: "lucide:award",
-								label: "50+ Programs",
+								label: "50+ Programmes",
 								value: "50+",
 							},
 							{
 								icon: "lucide:briefcase",
-								label: "95% Employment",
+								label: "95% d’emploi",
 								value: "95%",
 							},
 						].map((stat) => (
@@ -223,7 +223,7 @@ export default function ProgramsPage() {
 												icon="lucide:star"
 												className="mr-2"
 											/>
-											Key Features
+											Caractéristiques clés
 										</h4>
 										<div className="grid grid-cols-2 gap-2">
 											{program.features.map((feature) => (
@@ -247,7 +247,7 @@ export default function ProgramsPage() {
 												icon="lucide:briefcase"
 												className="mr-2"
 											/>
-											Career Paths
+											Débouchés
 										</h4>
 										<div className="flex flex-wrap gap-2">
 											{program.careerPaths.map(
@@ -272,7 +272,7 @@ export default function ProgramsPage() {
 											icon="lucide:arrow-right"
 											className="mr-2"
 										/>
-										Learn More
+										En savoir plus
 									</Button>
 								</CardContent>
 							</Card>
@@ -291,11 +291,11 @@ export default function ProgramsPage() {
 			>
 				<div className="container mx-auto px-4 text-center">
 					<h2 className="text-4xl font-bold mb-6">
-						Ready to Start Your Journey?
+						Prêt à commencer ce parcours ?
 					</h2>
 					<p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-						Join thousands of students who have transformed their
-						careers with our programs
+						Rejoignez des milliers d’étudiants qui ont transformé
+						leur carrière grâce à nos programmes
 					</p>
 					<div className="flex flex-col sm:flex-row gap-4 justify-center">
 						<Button
@@ -304,11 +304,11 @@ export default function ProgramsPage() {
 							className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-white dark:text-white dark:hover:bg-white/10"
 						>
 							<Icon icon="lucide:calendar" className="mr-2" />
-							Schedule a Visit
+							Planifier une visite
 						</Button>
 						<Button size="lg" variant="outline">
 							<Icon icon="lucide:download" className="mr-2" />
-							Download Brochure
+							Télécharger la brochure
 						</Button>
 					</div>
 				</div>

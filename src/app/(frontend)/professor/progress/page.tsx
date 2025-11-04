@@ -640,7 +640,7 @@ export default function ProfessorProgressPage() {
 										<Users className="h-8 w-8 text-blue-500" />
 										<div className="ml-4">
 											<p className="text-sm font-medium text-muted-foreground">
-												Total Students
+												Total d'étudiants
 											</p>
 											<p className="text-2xl font-bold text-card-foreground">
 												{enrollments.length}
@@ -760,7 +760,7 @@ export default function ProfessorProgressPage() {
 						<Tabs defaultValue="overview" className="space-y-6">
 							<TabsList className="grid w-full grid-cols-3">
 								<TabsTrigger value="overview">
-									Overview
+									Vue d'ensemble
 								</TabsTrigger>
 								<TabsTrigger value="students">
 									Student Details
@@ -776,7 +776,7 @@ export default function ProfessorProgressPage() {
 									<Card className="bg-card border-border">
 										<CardHeader>
 											<CardTitle className="text-card-foreground">
-												Grade Distribution
+												Distribution des notes
 											</CardTitle>
 										</CardHeader>
 										<CardContent>
@@ -824,7 +824,7 @@ export default function ProfessorProgressPage() {
 									<Card className="bg-card border-border">
 										<CardHeader>
 											<CardTitle className="text-card-foreground">
-												Assessment Performance
+												Performance des évaluations
 											</CardTitle>
 										</CardHeader>
 										<CardContent>
@@ -868,7 +868,7 @@ export default function ProfessorProgressPage() {
 								<Card className="bg-card border-border">
 									<CardHeader>
 										<CardTitle className="text-card-foreground">
-											Student Performance
+											Performance des étudiants
 										</CardTitle>
 									</CardHeader>
 									<CardContent>
@@ -1099,13 +1099,13 @@ export default function ProfessorProgressPage() {
 															{/* Per-assessment breakdown (stacked) */}
 															<div className="mt-3 space-y-1">
 																<p className="text-xs text-muted-foreground">
-																	Completed
-																	weight:{" "}
+																	Pondération
+																	complétée :{" "}
 																	{
 																		completedWeight
 																	}
-																	% • Current
-																	weighted:{" "}
+																	% • 																	Pondéré
+																	actuel :{" "}
 																	{
 																		currentWeightedPct
 																	}
@@ -1139,7 +1139,7 @@ export default function ProfessorProgressPage() {
 																				null && (
 																				<span>{` (${pa.percent}%)`}</span>
 																			)}
-																			<span>{` • Weight: ${pa.weight}%`}</span>
+																			<span>{` • Pondération : ${pa.weight}%`}</span>
 																			{pa.feedback && (
 																				<span>{` • ${pa.feedback}`}</span>
 																			)}
@@ -1229,7 +1229,7 @@ export default function ProfessorProgressPage() {
 																		}
 																	</p>
 																	<p className="text-gray-400 text-sm">
-																		Weight:{" "}
+																		Pondération :{" "}
 																		{
 																			assessment
 																				.assessmentTemplate

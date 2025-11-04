@@ -8,24 +8,24 @@ import { Card, CardContent } from "@/components/ui/card";
 export const TestimonialsComponent: React.FC = () => {
 	const testimonials = [
 		{
-			name: "Sarah Johnson",
-			role: "Software Engineer at Google",
-			avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-			quote: "Campusnet transformed my career. The hands-on projects and expert mentorship prepared me perfectly for the tech industry.",
+			name: "Christelle Mbemba",
+			role: "Ingénieure logicielle chez Google",
+			avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face&auto=format&q=80",
+			quote: "Campusnet a transformé ma carrière. Les projets pratiques et le mentorat d'experts m'ont parfaitement préparée pour l'industrie technologique.",
 			rating: 5,
 		},
 		{
-			name: "Michael Chen",
-			role: "Data Scientist at Meta",
-			avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-			quote: "The curriculum is cutting-edge and the faculty are world-class. I landed my dream job within 3 months of graduating.",
+			name: "Moïse Ilunga",
+			role: "Data Scientist chez Meta",
+			avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face&auto=format&q=80",
+			quote: "Le programme est à la pointe de la technologie et les enseignants sont de classe mondiale. J'ai décroché mon emploi de rêve dans les 3 mois suivant ma graduation.",
 			rating: 5,
 		},
 		{
-			name: "Emily Rodriguez",
-			role: "UX Designer at Apple",
-			avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-			quote: "The collaborative environment and modern facilities made learning enjoyable. Best decision of my life!",
+			name: "Merveille Kasongo",
+			role: "Designer UX chez Apple",
+			avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face&auto=format&q=80",
+			quote: "L'environnement collaboratif et les installations modernes ont rendu l'apprentissage agréable. La meilleure décision de ma vie !",
 			rating: 5,
 		},
 	];
@@ -41,14 +41,14 @@ export const TestimonialsComponent: React.FC = () => {
 					className="text-center mb-16"
 				>
 					<h2 className="text-4xl md:text-5xl font-bold mb-6">
-						Loved By{" "}
+						Aimé par des{" "}
 						<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-							Thousands
+							milliers
 						</span>
 					</h2>
 					<p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-						Hear what our students and alumni have to say about
-						their experience
+						Découvrez ce que nos étudiants et anciens élèves pensent de
+						leur expérience
 					</p>
 				</motion.div>
 

@@ -80,15 +80,15 @@ export default function LoginPage() {
 			} else {
 				try {
 					const errorData = await response.json();
-					setError(errorData.message || "Login failed");
+					setError(errorData.message || "Échec de la connexion");
 				} catch (_jsonError) {
 					setError(
-						`Login failed: ${response.status} ${response.statusText}`,
+						`Échec de la connexion : ${response.status} ${response.statusText}`,
 					);
 				}
 			}
 		} catch (_err) {
-			setError("An error occurred during login");
+			setError("Une erreur s'est produite lors de la connexion");
 		} finally {
 			setLoading(false);
 		}
@@ -123,10 +123,10 @@ export default function LoginPage() {
 						<span className="text-xl font-semibold">Campusnet</span>
 					</Link>
 					<h2 className="text-3xl font-semibold tracking-tight">
-						Welcome back
+						Bon retour
 					</h2>
 					<p className="mt-2 text-sm text-muted-foreground">
-						Sign in to your account to continue
+						Connectez-vous à votre compte pour continuer
 					</p>
 				</div>
 
@@ -134,7 +134,7 @@ export default function LoginPage() {
 				<Card>
 					<CardHeader className="space-y-1">
 						<CardTitle className="text-2xl font-semibold tracking-tight">
-							Sign in
+							Se connecter
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-4">
@@ -150,7 +150,7 @@ export default function LoginPage() {
 							)}
 
 							<div className="space-y-2">
-								<Label htmlFor={emailId}>Email</Label>
+								<Label htmlFor={emailId}>Courriel</Label>
 								<Input
 									id={emailId}
 									type="email"
@@ -164,12 +164,12 @@ export default function LoginPage() {
 
 							<div className="space-y-2">
 								<div className="flex items-center justify-between">
-									<Label htmlFor={passwordId}>Password</Label>
+									<Label htmlFor={passwordId}>Mot de passe</Label>
 									<Link
 										href="/forgot-password"
 										className="text-sm text-muted-foreground hover:text-foreground"
 									>
-										Forgot password?
+										Mot de passe oublié ?
 									</Link>
 								</div>
 								<Input
@@ -196,10 +196,10 @@ export default function LoginPage() {
 											icon="lucide:loader-2"
 											className="mr-2 h-4 w-4 animate-spin"
 										/>
-										Signing in...
+										Connexion en cours...
 									</>
 								) : (
-									"Sign in"
+									"Se connecter"
 								)}
 							</Button>
 						</form>
@@ -210,7 +210,7 @@ export default function LoginPage() {
 							</div>
 							<div className="relative flex justify-center text-xs uppercase">
 								<span className="bg-card px-2 text-muted-foreground">
-									Or continue with
+									Ou continuer avec
 								</span>
 							</div>
 						</div>
@@ -218,10 +218,10 @@ export default function LoginPage() {
 						<Tabs defaultValue="student" className="w-full">
 							<TabsList className="grid w-full grid-cols-3">
 								<TabsTrigger value="student">
-									Student
+									Étudiant
 								</TabsTrigger>
 								<TabsTrigger value="professor">
-									Professor
+									Professeur
 								</TabsTrigger>
 								<TabsTrigger value="admin">Admin</TabsTrigger>
 							</TabsList>
@@ -240,7 +240,7 @@ export default function LoginPage() {
 										icon="lucide:graduation-cap"
 										className="mr-2 h-4 w-4"
 									/>
-									Use Student Demo
+									Utiliser la démo étudiant
 								</Button>
 								<p className="text-xs text-center text-muted-foreground">
 									student@test.com / test123
@@ -261,7 +261,7 @@ export default function LoginPage() {
 										icon="lucide:user-check"
 										className="mr-2 h-4 w-4"
 									/>
-									Use Professor Demo
+									Utiliser la démo professeur
 								</Button>
 								<p className="text-xs text-center text-muted-foreground">
 									professor@test.com / test123
@@ -280,7 +280,7 @@ export default function LoginPage() {
 										icon="lucide:shield"
 										className="mr-2 h-4 w-4"
 									/>
-									Use Admin Demo
+									Utiliser la démo admin
 								</Button>
 								<p className="text-xs text-center text-muted-foreground">
 									admin@demouniversity.edu / password123
@@ -291,22 +291,22 @@ export default function LoginPage() {
 				</Card>
 
 				<p className="text-center text-sm text-muted-foreground">
-					Don't have an account?{" "}
+					Vous n'avez pas de compte ?{" "}
 					<Link
 						href="/register"
 						className="font-medium underline underline-offset-4 hover:text-foreground"
 					>
-						Sign up
+						S'inscrire
 					</Link>
 				</p>
 
 				<p className="text-center text-xs text-muted-foreground">
-					Or access the{" "}
+					Ou accéder au{" "}
 					<Link
 						href="/admin"
 						className="underline underline-offset-4 hover:text-foreground"
 					>
-						admin panel
+						panneau d'administration
 					</Link>
 				</p>
 			</div>

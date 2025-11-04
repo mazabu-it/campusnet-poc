@@ -39,13 +39,13 @@ export default function StudentDashboard() {
 							className="h-12 w-12 mx-auto mb-4 text-muted-foreground"
 						/>
 						<h2 className="text-xl font-semibold mb-2">
-							Access Denied
+							Accès refusé
 						</h2>
 						<p className="text-sm text-muted-foreground mb-4">
-							You need to be logged in to access this dashboard.
+							Vous devez être connecté pour accéder à ce tableau de bord.
 						</p>
 						<Button asChild>
-							<Link href="/login">Go to Login</Link>
+							<Link href="/login">Aller à la connexion</Link>
 						</Button>
 					</CardContent>
 				</Card>
@@ -73,10 +73,10 @@ export default function StudentDashboard() {
 							className="h-12 w-12 mx-auto mb-4 text-muted-foreground"
 						/>
 						<h2 className="text-xl font-semibold mb-2">
-							Access Denied
+							Accès refusé
 						</h2>
 						<p className="text-sm text-muted-foreground">
-							You don't have permission to access this dashboard.
+							Vous n'avez pas la permission d'accéder à ce tableau de bord.
 						</p>
 					</CardContent>
 				</Card>
@@ -119,12 +119,12 @@ export default function StudentDashboard() {
 				{/* Header */}
 				<div className="mb-8">
 					<h1 className="text-3xl font-semibold tracking-tight mb-2">
-						Welcome back,{" "}
+						Bon retour,{" "}
 						{(userStore.user as { firstName?: string }).firstName ||
-							"Student"}
+							"Étudiant"}
 					</h1>
 					<p className="text-muted-foreground">
-						Here's an overview of your academic progress
+						Voici un aperçu de votre progression académique
 					</p>
 				</div>
 
@@ -133,7 +133,7 @@ export default function StudentDashboard() {
 					<Card className="bg-card">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 							<CardTitle className="text-sm font-medium text-card-foreground">
-								Total Courses
+								Total de cours
 							</CardTitle>
 							<Icon
 								icon="lucide:book-open"
@@ -145,7 +145,7 @@ export default function StudentDashboard() {
 								{totalCourses}
 							</div>
 							<p className="text-xs text-muted-foreground mt-1">
-								Active enrollments
+								Inscriptions actives
 							</p>
 						</CardContent>
 					</Card>
@@ -153,7 +153,7 @@ export default function StudentDashboard() {
 					<Card className="bg-card">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 							<CardTitle className="text-sm font-medium text-card-foreground">
-								Average Grade
+								Note moyenne
 							</CardTitle>
 							<Icon
 								icon="lucide:trending-up"
@@ -165,7 +165,7 @@ export default function StudentDashboard() {
 								{averageGrade.toFixed(1)}%
 							</div>
 							<p className="text-xs text-muted-foreground mt-1">
-								Across all courses
+								Tous cours confondus
 							</p>
 						</CardContent>
 					</Card>
@@ -173,7 +173,7 @@ export default function StudentDashboard() {
 					<Card className="bg-card">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 							<CardTitle className="text-sm font-medium text-card-foreground">
-								Passed Courses
+								Cours réussis
 							</CardTitle>
 							<Icon
 								icon="lucide:check-circle"
@@ -185,7 +185,7 @@ export default function StudentDashboard() {
 								{passedCourses}/{totalCourses}
 							</div>
 							<p className="text-xs text-muted-foreground mt-1">
-								Success rate:{" "}
+								Taux de réussite :{" "}
 								{totalCourses > 0
 									? (
 											(passedCourses / totalCourses) *
@@ -202,7 +202,7 @@ export default function StudentDashboard() {
 				<Card className="mb-8 bg-card">
 					<CardHeader>
 						<CardTitle className="text-card-foreground">
-							Enrolled Courses
+							Cours inscrits
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -297,7 +297,7 @@ export default function StudentDashboard() {
 															className="h-3 w-3"
 														/>
 														{course.credits || 0}{" "}
-														credits
+														crédits
 													</span>
 												</div>
 											</div>
@@ -318,7 +318,7 @@ export default function StudentDashboard() {
 													</>
 												) : (
 													<div className="text-sm text-muted-foreground">
-														No grade yet
+														Pas encore de note
 													</div>
 												)}
 											</div>
@@ -332,7 +332,7 @@ export default function StudentDashboard() {
 									icon="lucide:book-x"
 									className="h-12 w-12 mx-auto mb-2 opacity-50"
 								/>
-								<p>No courses enrolled yet</p>
+								<p>Aucun cours inscrit pour le moment</p>
 							</div>
 						)}
 					</CardContent>
@@ -343,7 +343,7 @@ export default function StudentDashboard() {
 					<Card className="bg-card">
 						<CardHeader>
 							<CardTitle className="text-card-foreground">
-								Course Performance
+								Performance des cours
 							</CardTitle>
 						</CardHeader>
 						<CardContent>

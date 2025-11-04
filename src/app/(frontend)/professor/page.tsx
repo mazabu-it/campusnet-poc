@@ -591,7 +591,7 @@ export default function ProfessorDashboard() {
 			}
 
 			if (Object.keys(newScores).length === 0) {
-				toast.error("No scores to save");
+				toast.error("Aucune note à enregistrer");
 				return;
 			}
 
@@ -781,7 +781,7 @@ export default function ProfessorDashboard() {
 		} catch (error) {
 			console.error("Error saving scores:", error);
 			toast.error(
-				`Failed to save scores: ${error instanceof Error ? error.message : "Unknown error"}`,
+				`Échec de l'enregistrement des notes : ${error instanceof Error ? error.message : "Erreur inconnue"}`,
 			);
 		} finally {
 			setIsSaving(false);
@@ -791,7 +791,7 @@ export default function ProfessorDashboard() {
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-background flex items-center justify-center">
-				<div className="text-card-foreground">Loading...</div>
+				<div className="text-card-foreground">Chargement...</div>
 			</div>
 		);
 	}
@@ -805,11 +805,11 @@ export default function ProfessorDashboard() {
 					className="mb-8"
 				>
 					<h1 className="text-3xl font-bold text-card-foreground mb-2">
-						Professor Dashboard
+						Tableau de bord professeur
 					</h1>
 					<p className="text-muted-foreground mb-6">
-						Welcome, {userStore.user?.name}. Manage your courses and
-						grade assessments.
+						Bienvenue, {userStore.user?.name}. Gérez vos cours et
+						évaluez les étudiants.
 					</p>
 
 					{/* Quick Navigation */}
@@ -824,7 +824,7 @@ export default function ProfessorDashboard() {
 								icon="lucide:bar-chart-3"
 								className="h-6 w-6 mb-2"
 							/>
-							<span className="text-sm">Track Progress</span>
+							<span className="text-sm">Suivre les progrès</span>
 						</Button>
 					</div>
 				</motion.div>
@@ -834,7 +834,7 @@ export default function ProfessorDashboard() {
 					<Card className="bg-card border-border">
 						<CardHeader>
 							<CardTitle className="text-card-foreground">
-								Course Instances
+								Instances de cours
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
@@ -860,7 +860,7 @@ export default function ProfessorDashboard() {
 														?.course?.name ||
 														course.courseVariation
 															?.titleVariant ||
-														"Course name not available"}
+														"Nom du cours non disponible"}
 												</p>
 											</CardHeader>
 											<CardContent>
@@ -876,7 +876,7 @@ export default function ProfessorDashboard() {
 																	.professors
 																	.length
 															}{" "}
-															Professor(s)
+															Professeur(s)
 														</span>
 													</div>
 													<Button
@@ -887,7 +887,7 @@ export default function ProfessorDashboard() {
 														}
 														className="w-full bg-blue-600 hover:bg-blue-700"
 													>
-														Select Course
+														Sélectionner le cours
 													</Button>
 												</div>
 											</CardContent>
@@ -902,7 +902,7 @@ export default function ProfessorDashboard() {
 						<Card className="bg-card border-border">
 							<CardHeader>
 								<CardTitle className="text-card-foreground">
-									Assessments
+									Évaluations
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
@@ -932,7 +932,7 @@ export default function ProfessorDashboard() {
 																		icon="lucide:calendar"
 																		className="w-4 h-4 inline mr-1"
 																	/>
-																	Due:{" "}
+																	Échéance :{" "}
 																	{assessment.dueDate
 																		? new Date(
 																				assessment.dueDate,
@@ -944,7 +944,7 @@ export default function ProfessorDashboard() {
 																		icon="lucide:target"
 																		className="w-4 h-4 inline mr-1"
 																	/>
-																	Max Score:{" "}
+																	Score max :{" "}
 																	{assessment
 																		.assessmentTemplate
 																		?.maxScore ||
@@ -955,7 +955,7 @@ export default function ProfessorDashboard() {
 																		icon="lucide:percent"
 																		className="w-4 h-4 inline mr-1"
 																	/>
-																	Weight:{" "}
+																	Pondération :{" "}
 																	{
 																		assessment
 																			.assessmentTemplate
@@ -973,7 +973,7 @@ export default function ProfessorDashboard() {
 															}
 															className="bg-green-600 hover:bg-green-700"
 														>
-															Start Grading
+															Commencer la notation
 														</Button>
 													</div>
 												</CardContent>
@@ -991,7 +991,7 @@ export default function ProfessorDashboard() {
 								<div className="flex items-center justify-between">
 									<div>
 										<CardTitle className="text-card-foreground">
-											Grade Students
+											Noter les étudiants
 										</CardTitle>
 										{(() => {
 											const selectedCourseData =
@@ -1023,17 +1023,17 @@ export default function ProfessorDashboard() {
 															}
 														</div>
 														<div className="text-gray-400">
-															Assessment:{" "}
+															Évaluation :{" "}
 															{
 																selectedAssessmentData?.title
 															}{" "}
-															(Max:{" "}
+															(Max :{" "}
 															{
 																selectedAssessmentData
 																	?.assessmentTemplate
 																	?.maxScore
 															}{" "}
-															points • Weight:{" "}
+															points • Pondération :{" "}
 															{
 																selectedAssessmentData
 																	?.assessmentTemplate
@@ -1062,9 +1062,9 @@ export default function ProfessorDashboard() {
 															htmlFor={checkboxId}
 															className="text-sm text-muted-foreground cursor-pointer"
 														>
-															Mark as completed
-															(include in final
-															grade)
+															Marquer comme terminé
+															(inclure dans la note
+															finale)
 														</Label>
 													</div>
 												</div>
@@ -1083,7 +1083,7 @@ export default function ProfessorDashboard() {
 													icon="lucide:edit"
 													className="w-4 h-4 mr-2"
 												/>
-												Start Grading
+												Commencer la notation
 											</Button>
 										) : (
 											<>
@@ -1094,7 +1094,7 @@ export default function ProfessorDashboard() {
 													variant="outline"
 													className="border-border text-muted-foreground hover:bg-card"
 												>
-													Cancel
+													Annuler
 												</Button>
 												<Button
 													onClick={saveScores}
@@ -1110,8 +1110,8 @@ export default function ProfessorDashboard() {
 														className={`w-4 h-4 mr-2 ${isSaving ? "animate-spin" : ""}`}
 													/>
 													{isSaving
-														? "Saving..."
-														: "Save All Scores"}
+														? "Enregistrement..."
+														: "Enregistrer toutes les notes"}
 												</Button>
 											</>
 										)}
@@ -1123,19 +1123,19 @@ export default function ProfessorDashboard() {
 									<TableHeader>
 										<TableRow className="border-border">
 											<TableHead className="text-muted-foreground">
-												Student
+												Étudiant
 											</TableHead>
 											<TableHead className="text-muted-foreground">
-												Student ID
+												ID étudiant
 											</TableHead>
 											<TableHead className="text-muted-foreground">
-												Score
+												Note
 											</TableHead>
 											<TableHead className="text-muted-foreground">
-												Percentage
+												Pourcentage
 											</TableHead>
 											<TableHead className="text-muted-foreground">
-												Feedback
+												Commentaire
 											</TableHead>
 										</TableRow>
 									</TableHeader>
@@ -1238,14 +1238,14 @@ export default function ProfessorDashboard() {
 																			.value,
 																	)
 																}
-																placeholder="Enter feedback..."
+																placeholder="Entrer un commentaire..."
 																className="w-64 bg-card border-border text-card-foreground"
 																rows={2}
 															/>
 														) : (
 															<span className="text-muted-foreground">
 																{currentFeedback ||
-																	"No feedback"}
+																	"Aucun commentaire"}
 															</span>
 														)}
 													</TableCell>

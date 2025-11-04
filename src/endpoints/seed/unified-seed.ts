@@ -1,5 +1,93 @@
 import { faker } from "@faker-js/faker";
 
+// Use French locale for faker-generated content
+try {
+	// Prefer modern API; if unavailable, ignore silently
+	(
+		faker as unknown as { setDefaultLocale?: (locale: string) => void }
+	).setDefaultLocale?.("fr");
+} catch {}
+
+// Congolese (DRC) names to improve realism of seeded users
+const congoleseFirstNames = [
+	"Jean-Claude",
+	"Jean-Pierre",
+	"Aimé",
+	"Junior",
+	"Dieudonné",
+	"Moïse",
+	"Alain",
+	"Blaise",
+	"Patrick",
+	"Célestin",
+	"Christian",
+	"François",
+	"Gédéon",
+	"Hervé",
+	"Jules",
+	"Kevin",
+	"Michel",
+	"Nicolas",
+	"Samuel",
+	"Trésor",
+	"Christelle",
+	"Nadine",
+	"Grace",
+	"Prisca",
+	"Amina",
+	"Chantal",
+	"Mado",
+	"Merveille",
+	"Divine",
+	"Clarisse",
+	"Deborah",
+	"Esther",
+	"Florence",
+	"Patricia",
+	"Naomi",
+];
+
+const congoleseLastNames = [
+	"Kabongo",
+	"Mbuyi",
+	"Mwamba",
+	"Kasongo",
+	"Kalala",
+	"Mutombo",
+	"Mbala",
+	"Manga",
+	"Kanku",
+	"Nsenga",
+	"Nkulu",
+	"Ilunga",
+	"Tshibangu",
+	"Tshisekedi",
+	"Lukusa",
+	"Kitenge",
+	"Kabila",
+	"Nzinga",
+	"Mukendi",
+	"Mbemba",
+];
+
+function pickCongoleseName() {
+	const firstName = faker.helpers.arrayElement(congoleseFirstNames);
+	const lastName = faker.helpers.arrayElement(congoleseLastNames);
+	return { firstName, lastName, fullName: `${firstName} ${lastName}` };
+}
+
+function slugifyName(input: string) {
+	const slugged = input
+		.toLowerCase()
+		.normalize("NFD")
+		.replace(/\p{Diacritic}/gu, "")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/-+/g, "-")
+		.replace(/^-|-$/g, "");
+	// Ensure we always return a valid slug (at least 1 character)
+	return slugged || "user";
+}
+
 export async function seedCampusnetUnifiedData(payload: any) {
 	try {
 		console.log("🌱 Starting unified Campusnet data seeding...");
@@ -265,36 +353,70 @@ export async function seedCampusnetUnifiedData(payload: any) {
 			},
 		});
 
-		// Create additional professors
+		// Create additional professors (Congolese names)
 		const professors = [testProfessor];
+		const usedEmails = new Set<string>(["professor@test.com"]);
 		for (let i = 0; i < 4; i++) {
+			const { firstName, lastName, fullName } = pickCongoleseName();
+			let email = `${slugifyName(firstName)}-${slugifyName(lastName)}${i > 0 ? `-${i + 1}` : ""}@example.cd`;
+			
+			// Ensure uniqueness
+			let attempts = 0;
+			while (usedEmails.has(email) && attempts < 10) {
+				email = `${slugifyName(firstName)}-${slugifyName(lastName)}-${Date.now()}-${i}@example.cd`;
+				attempts++;
+			}
+
+			if (usedEmails.has(email)) {
+				// Final fallback: use timestamp-based email
+				email = `prof-${Date.now()}-${i}@example.cd`;
+			}
+
+			usedEmails.add(email);
 			const professor = await payload.create({
 				collection: "users",
 				data: {
-					name: `${faker.person.firstName()} ${faker.person.lastName()}`,
-					email: faker.internet.email(),
+					name: fullName,
+					email,
 					password: "password123",
 					role: "professor",
-					firstName: faker.person.firstName(),
-					lastName: faker.person.lastName(),
+					firstName,
+					lastName,
 					isActive: true,
 				},
 			});
 			professors.push(professor);
 		}
 
-		// Create additional students
+		// Create additional students (Congolese names)
 		const students = [testStudent];
+		usedEmails.add("student@test.com");
 		for (let i = 0; i < 19; i++) {
+			const { firstName, lastName, fullName } = pickCongoleseName();
+			let email = `${slugifyName(firstName)}-${slugifyName(lastName)}-${i + 2}@example.cd`;
+			
+			// Ensure uniqueness
+			let attempts = 0;
+			while (usedEmails.has(email) && attempts < 10) {
+				email = `${slugifyName(firstName)}-${slugifyName(lastName)}-${Date.now()}-${i}@example.cd`;
+				attempts++;
+			}
+
+			if (usedEmails.has(email)) {
+				// Final fallback: use timestamp-based email
+				email = `student-${Date.now()}-${i}@example.cd`;
+			}
+
+			usedEmails.add(email);
 			const student = await payload.create({
 				collection: "users",
 				data: {
-					name: `${faker.person.firstName()} ${faker.person.lastName()}`,
-					email: faker.internet.email(),
+					name: fullName,
+					email,
 					password: "password123",
 					role: "student",
-					firstName: faker.person.firstName(),
-					lastName: faker.person.lastName(),
+					firstName,
+					lastName,
 					studentId: `STU${String(i + 2).padStart(3, "0")}`,
 					isActive: true,
 				},

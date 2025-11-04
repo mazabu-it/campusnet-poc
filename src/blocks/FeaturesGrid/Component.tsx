@@ -8,44 +8,44 @@ export const FeaturesGridComponent: React.FC = () => {
 	const features = [
 		{
 			icon: "lucide:brain",
-			title: "AI-Powered Learning",
+			title: "Apprentissage propulsé par l’IA",
 			description:
-				"Personalized learning paths powered by cutting-edge artificial intelligence technology.",
+				"Parcours d’apprentissage personnalisés grâce à une intelligence artificielle de pointe.",
 			color: "blue",
 		},
 		{
 			icon: "lucide:users-round",
-			title: "Expert Faculty",
+			title: "Enseignants experts",
 			description:
-				"Learn from industry leaders and world-renowned researchers with decades of experience.",
+				"Apprenez auprès de leaders de l’industrie et de chercheurs de renommée mondiale.",
 			color: "purple",
 		},
 		{
 			icon: "lucide:briefcase",
-			title: "Career Services",
+			title: "Services de carrière",
 			description:
-				"Comprehensive career support from resume building to interview prep and job placement.",
+				"Accompagnement complet : CV, préparation aux entretiens et insertion professionnelle.",
 			color: "green",
 		},
 		{
 			icon: "lucide:globe",
-			title: "Global Network",
+			title: "Réseau mondial",
 			description:
-				"Join a diverse community of students and alumni spanning over 40 countries worldwide.",
+				"Rejoignez une communauté d’étudiants et d’alumni présente dans plus de 40 pays.",
 			color: "indigo",
 		},
 		{
 			icon: "lucide:laptop",
-			title: "Modern Facilities",
+			title: "Infrastructures modernes",
 			description:
-				"State-of-the-art labs, libraries, and collaborative spaces designed for innovation.",
+				"Laboratoires, bibliothèques et espaces collaboratifs à la pointe de l’innovation.",
 			color: "orange",
 		},
 		{
 			icon: "lucide:trending-up",
-			title: "95% Success Rate",
+			title: "95% de taux de réussite",
 			description:
-				"Our graduates consistently secure positions at top companies within 6 months.",
+				"Nos diplômés intègrent des entreprises de premier plan en moins de 6 mois.",
 			color: "teal",
 		},
 	];
@@ -73,14 +73,14 @@ export const FeaturesGridComponent: React.FC = () => {
 					className="text-center mb-16"
 				>
 					<h2 className="text-4xl md:text-5xl font-bold mb-6">
-						Why Choose{" "}
+						Pourquoi choisir{" "}
 						<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 							Campusnet
 						</span>
 					</h2>
 					<p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-						Everything you need to succeed in your academic and
-						professional journey
+						Tout ce dont vous avez besoin pour réussir votre
+						parcours académique et professionnel
 					</p>
 				</motion.div>
 

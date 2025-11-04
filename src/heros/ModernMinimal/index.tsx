@@ -29,7 +29,7 @@ export const ModernMinimalHero: React.FC = () => {
 								icon="lucide:sparkles"
 								className="mr-2 h-4 w-4"
 							/>
-							Welcome to the Future of Education
+							Bienvenue dans l’avenir de l’éducation
 						</Badge>
 					</motion.div>
 
@@ -40,9 +40,9 @@ export const ModernMinimalHero: React.FC = () => {
 						transition={{ delay: 0.1, duration: 0.5 }}
 						className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 tracking-tight"
 					>
-						Transform Your
+						Transformez votre
 						<span className="block mt-2 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-							Future Today
+							avenir dès aujourd’hui
 						</span>
 					</motion.h1>
 
@@ -53,9 +53,10 @@ export const ModernMinimalHero: React.FC = () => {
 						transition={{ delay: 0.2, duration: 0.5 }}
 						className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed"
 					>
-						World-class education meets cutting-edge technology.
-						Join thousands of students building extraordinary
-						careers.
+						Une éducation de classe mondiale alliée à une
+						technologie de pointe. Rejoignez des milliers
+						d’étudiants qui construisent des carrières
+						extraordinaires.
 					</motion.p>
 
 					{/* CTA Buttons */}
@@ -75,7 +76,7 @@ export const ModernMinimalHero: React.FC = () => {
 									icon="lucide:rocket"
 									className="mr-2 h-5 w-5"
 								/>
-								Explore Programs
+								Découvrir les programmes
 							</Link>
 						</Button>
 						<Button
@@ -89,7 +90,7 @@ export const ModernMinimalHero: React.FC = () => {
 									icon="lucide:log-in"
 									className="mr-2 h-5 w-5"
 								/>
-								Student Portal
+								Espace étudiant
 							</Link>
 						</Button>
 					</motion.div>
@@ -104,22 +105,22 @@ export const ModernMinimalHero: React.FC = () => {
 						{[
 							{
 								icon: "lucide:users",
-								label: "Active Students",
+								label: "Étudiants actifs",
 								value: "10K+",
 							},
 							{
 								icon: "lucide:graduation-cap",
-								label: "Programs",
+								label: "Programmes",
 								value: "50+",
 							},
 							{
 								icon: "lucide:award",
-								label: "Success Rate",
+								label: "Taux de réussite",
 								value: "95%",
 							},
 							{
 								icon: "lucide:globe",
-								label: "Countries",
+								label: "Pays",
 								value: "40+",
 							},
 						].map((stat, index) => (

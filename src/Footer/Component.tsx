@@ -6,16 +6,16 @@ export async function Footer() {
 
 	const footerLinks = {
 		about: [
-			{ label: "About Us", href: "/university" },
-			{ label: "Programs", href: "/programs" },
-			{ label: "Faculty", href: "/faculty" },
-			{ label: "News & Events", href: "/news" },
+			{ label: "À propos", href: "/university" },
+			{ label: "Programmes", href: "/programs" },
+			{ label: "Enseignants", href: "/faculty" },
+			{ label: "Actualités & Événements", href: "/news" },
 		],
 		support: [
 			{ label: "Contact", href: "/contact" },
 			{ label: "FAQ", href: "/faq" },
-			{ label: "Help Center", href: "/help" },
-			{ label: "Terms", href: "/terms" },
+			{ label: "Centre d’aide", href: "/help" },
+			{ label: "Conditions", href: "/terms" },
 		],
 		connect: [
 			{
@@ -59,14 +59,14 @@ export async function Footer() {
 							<span>Campusnet</span>
 						</Link>
 						<p className="text-sm text-muted-foreground max-w-xs">
-							Excellence in education, empowering tomorrow's
-							leaders through innovative learning.
+							L’excellence académique au service des leaders de
+							demain grâce à un apprentissage innovant.
 						</p>
 					</div>
 
 					{/* About Links */}
 					<div>
-						<h3 className="mb-4 text-sm font-semibold">About</h3>
+						<h3 className="mb-4 text-sm font-semibold">À propos</h3>
 						<ul className="space-y-3">
 							{footerLinks.about.map((link) => (
 								<li key={link.href}>
@@ -83,7 +83,9 @@ export async function Footer() {
 
 					{/* Support Links */}
 					<div>
-						<h3 className="mb-4 text-sm font-semibold">Support</h3>
+						<h3 className="mb-4 text-sm font-semibold">
+							Assistance
+						</h3>
 						<ul className="space-y-3">
 							{footerLinks.support.map((link) => (
 								<li key={link.href}>
@@ -100,7 +102,7 @@ export async function Footer() {
 
 					{/* Connect Links */}
 					<div>
-						<h3 className="mb-4 text-sm font-semibold">Connect</h3>
+						<h3 className="mb-4 text-sm font-semibold">Réseaux</h3>
 						<ul className="space-y-3">
 							{footerLinks.connect.map((link) => (
 								<li key={link.href}>
@@ -125,21 +127,21 @@ export async function Footer() {
 				{/* Bottom Bar */}
 				<div className="flex flex-col items-center justify-between gap-4 border-t border-border py-6 md:flex-row">
 					<p className="text-sm text-muted-foreground">
-						© {currentYear} Campusnet University. All rights
-						reserved.
+						© {currentYear} Campusnet University. Tous droits
+						réservés.
 					</p>
 					<div className="flex items-center space-x-4">
 						<Link
 							href="/privacy"
 							className="text-sm text-muted-foreground transition-colors hover:text-foreground"
 						>
-							Privacy
+							Confidentialité
 						</Link>
 						<Link
 							href="/terms"
 							className="text-sm text-muted-foreground transition-colors hover:text-foreground"
 						>
-							Terms
+							Conditions
 						</Link>
 					</div>
 				</div>

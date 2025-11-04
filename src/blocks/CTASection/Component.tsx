@@ -28,7 +28,7 @@ export const CTASectionComponent: React.FC = () => {
 							transition={{ delay: 0.2, duration: 0.6 }}
 							className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
 						>
-							Ready to Start Your Journey?
+							Prêt à commencer ce parcours ?
 						</motion.h2>
 
 						<motion.p
@@ -38,8 +38,9 @@ export const CTASectionComponent: React.FC = () => {
 							transition={{ delay: 0.3, duration: 0.6 }}
 							className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-blue-100"
 						>
-							Join thousands of students who have transformed
-							their careers with our world-class programs
+							Rejoignez des milliers d’étudiants qui ont
+							transformé leur carrière grâce à nos programmes
+							d’excellence
 						</motion.p>
 
 						<motion.div
@@ -59,7 +60,7 @@ export const CTASectionComponent: React.FC = () => {
 										icon="lucide:rocket"
 										className="mr-2 h-5 w-5"
 									/>
-									Explore Programs
+									Découvrir les programmes
 								</Link>
 							</Button>
 							<Button
@@ -73,7 +74,7 @@ export const CTASectionComponent: React.FC = () => {
 										icon="lucide:calendar"
 										className="mr-2 h-5 w-5"
 									/>
-									Schedule a Visit
+									Planifier une visite
 								</Link>
 							</Button>
 						</motion.div>
@@ -87,10 +88,10 @@ export const CTASectionComponent: React.FC = () => {
 							className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-4xl mx-auto"
 						>
 							{[
-								{ value: "10K+", label: "Active Students" },
-								{ value: "50+", label: "Programs" },
-								{ value: "95%", label: "Success Rate" },
-								{ value: "40+", label: "Countries" },
+								{ value: "10K+", label: "Étudiants actifs" },
+								{ value: "50+", label: "Programmes" },
+								{ value: "95%", label: "Taux de réussite" },
+								{ value: "40+", label: "Pays" },
 							].map((stat) => (
 								<div key={stat.label} className="text-center">
 									<div className="text-3xl md:text-4xl font-bold mb-2">
