@@ -7,7 +7,8 @@
 	"scripts": {
 		"build": "bun run next build",
 		"postbuild": "bun run next-sitemap --config next-sitemap.config.cjs",
-		"ci": "bun run payload migrate && bun run build",
+		"ci": "bun run scripts/migrate.js && bun run build",
+		"migrate:ci": "bun run scripts/migrate.js",
 		"dev": "bun run next dev",
 		"dev:prod": "bun run rm -rf .next && bun run build && bun run start",
 		"generate:importmap": "bun run payload generate:importmap",

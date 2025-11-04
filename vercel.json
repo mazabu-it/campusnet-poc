@@ -1,6 +1,6 @@
 {
 	"installCommand": "bun install",
-	"buildCommand": "bun run payload migrate && bun run build",
+	"buildCommand": "bun run migrate:ci && bun run build",
 	"crons": [
 		{
 			"path": "/api/payload-jobs/run",
